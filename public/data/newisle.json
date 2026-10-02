@@ -1,0 +1,2235 @@
+{
+  "schemaVersion": 2,
+  "id": "newisle",
+  "names": {
+    "en": "Newisle",
+    "zh": "Newisle"
+  },
+  "preview": false,
+  "updated": {
+    "en": "Feb. 06, 2018",
+    "zh": "2018.02/06"
+  },
+  "ui": {
+    "enableDistance": true,
+    "enableFare": false
+  },
+  "sources": {
+    "legacy": "newisle_mcsubway.js",
+    "links": {
+      "en": [
+        {
+          "text": "Download Newisle",
+          "url": "https://www.planetminecraft.com/project/city-of-newisle-v-07032015-solo-modern-build/"
+        },
+        {
+          "text": "Blip Noir's PMC",
+          "url": "https://www.planetminecraft.com/member/blip_noir/"
+        }
+      ],
+      "zh": [
+        {
+          "text": "下載Newisle",
+          "url": "https://www.planetminecraft.com/project/city-of-newisle-v-07032015-solo-modern-build/"
+        },
+        {
+          "text": "Blip Noir首頁",
+          "url": "https://www.planetminecraft.com/member/blip_noir/"
+        }
+      ]
+    }
+  },
+  "options": {
+    "defaults": {
+      "criteria": "time",
+      "transferCoef": 1
+    },
+    "criteria": [
+      "time",
+      "transfers",
+      "transferTime",
+      "stops",
+      "mixed"
+    ],
+    "comparators": {
+      "time": [
+        {
+          "timeSec": 1
+        },
+        {
+          "transfers": 1
+        },
+        {
+          "transferTimeSec": 1
+        },
+        {
+          "stops": 1
+        }
+      ],
+      "transfers": [
+        {
+          "transfers": 1
+        },
+        {
+          "transferTimeSec": 1
+        },
+        {
+          "timeSec": 1
+        },
+        {
+          "stops": 1
+        }
+      ],
+      "transferTime": [
+        {
+          "transferTimeSec": 1
+        },
+        {
+          "transfers": 1
+        },
+        {
+          "timeSec": 1
+        },
+        {
+          "stops": 1
+        }
+      ],
+      "stops": [
+        {
+          "stops": 1
+        },
+        {
+          "timeSec": 1
+        },
+        {
+          "transfers": 1
+        },
+        {
+          "transferTimeSec": 1
+        }
+      ],
+      "mixed": [
+        {
+          "transfers": 1,
+          "timeSec": 0.05,
+          "transferTimeSec": 0.1,
+          "stops": 0.2
+        },
+        {
+          "timeSec": 1
+        }
+      ]
+    },
+    "transferCoefficients": [
+      1,
+      4,
+      7
+    ]
+  },
+  "fares": {
+    "type": "free",
+    "currency": null
+  },
+  "aliases": {
+    "AZ": "AZ",
+    "BS": "BS",
+    "BV": "BV",
+    "BW": "BW",
+    "CC": "CC",
+    "DW": "DW",
+    "EC": "EC",
+    "ET": "ET",
+    "FH": "FH",
+    "FR": "FR",
+    "GW": "GW",
+    "HA": "HA",
+    "HF": "HF",
+    "HO": "HO",
+    "HT": "HT",
+    "IS": "IS",
+    "LU": "LU",
+    "LV": "LV",
+    "MT": "MT",
+    "OT": "OT",
+    "PR": "PR",
+    "RC": "RC",
+    "RD": "RD",
+    "REH": "REH",
+    "RIH": "RIH",
+    "RP": "RP",
+    "SB": "SB",
+    "UN": "UN",
+    "VL": "VL",
+    "WF": "WF"
+  },
+  "lines": {
+    "L1": {
+      "id": "L1",
+      "names": {
+        "en": "Line 1",
+        "zh": "1號線"
+      },
+      "color": "#ffe800",
+      "interior": false
+    },
+    "L2": {
+      "id": "L2",
+      "names": {
+        "en": "Line 2",
+        "zh": "2號線"
+      },
+      "color": "#ff0033",
+      "interior": false
+    },
+    "L3": {
+      "id": "L3",
+      "names": {
+        "en": "Line 3",
+        "zh": "3號線"
+      },
+      "color": "#0066cc",
+      "interior": false
+    },
+    "L4": {
+      "id": "L4",
+      "names": {
+        "en": "Line 4",
+        "zh": "4號線"
+      },
+      "color": "#aa00cc",
+      "interior": false
+    },
+    "L5": {
+      "id": "L5",
+      "names": {
+        "en": "Line 5",
+        "zh": "5號線"
+      },
+      "color": "#559955",
+      "interior": false
+    },
+    "L6": {
+      "id": "L6",
+      "names": {
+        "en": "Line 6",
+        "zh": "6號線"
+      },
+      "color": "#bbbbbb",
+      "interior": false
+    },
+    "L7": {
+      "id": "L7",
+      "names": {
+        "en": "Line 7",
+        "zh": "7號線"
+      },
+      "color": "#f07000",
+      "interior": false
+    },
+    "L8": {
+      "id": "L8",
+      "names": {
+        "en": "Line 8",
+        "zh": "8號線"
+      },
+      "color": "#33dd00",
+      "interior": false
+    },
+    "L9": {
+      "id": "L9",
+      "names": {
+        "en": "Line 9",
+        "zh": "9號線"
+      },
+      "color": "#006677",
+      "interior": false
+    }
+  },
+  "stations": {
+    "AZ": {
+      "id": "AZ",
+      "names": {
+        "en": "Azalea",
+        "zh": "Azalea"
+      },
+      "aliases": [
+        "AZ",
+        "Azalea"
+      ],
+      "codes": [
+        "401",
+        "901"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 660,
+        "y": 399
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "BS": {
+      "id": "BS",
+      "names": {
+        "en": "Birch Shore",
+        "zh": "Birch Shore"
+      },
+      "aliases": [
+        "BS",
+        "Birch Shore"
+      ],
+      "codes": [
+        "101",
+        "801"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -191,
+        "y": -259
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "BV": {
+      "id": "BV",
+      "names": {
+        "en": "Bayview",
+        "zh": "Bayview"
+      },
+      "aliases": [
+        "BV",
+        "Bayview"
+      ],
+      "codes": [
+        "227"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 135,
+        "y": 117
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "BW": {
+      "id": "BW",
+      "names": {
+        "en": "Bridgewater",
+        "zh": "Bridgewater"
+      },
+      "aliases": [
+        "BW",
+        "Bridgewater"
+      ],
+      "codes": [
+        "703",
+        "903"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 529,
+        "y": -77
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "CC": {
+      "id": "CC",
+      "names": {
+        "en": "Castle Centre",
+        "zh": "Castle Centre"
+      },
+      "aliases": [
+        "CC",
+        "Castle Centre"
+      ],
+      "codes": [
+        "103",
+        "404"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -175,
+        "y": 479
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "DW": {
+      "id": "DW",
+      "names": {
+        "en": "Deadwolf",
+        "zh": "Deadwolf"
+      },
+      "aliases": [
+        "DW",
+        "Deadwolf"
+      ],
+      "codes": [
+        "223",
+        "313"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -18,
+        "y": 245
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "EC": {
+      "id": "EC",
+      "names": {
+        "en": "Eastcliff",
+        "zh": "Eastcliff"
+      },
+      "aliases": [
+        "EC",
+        "Eastcliff"
+      ],
+      "codes": [
+        "317"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -337,
+        "y": 983
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "ET": {
+      "id": "ET",
+      "names": {
+        "en": "Eterna",
+        "zh": "Eterna"
+      },
+      "aliases": [
+        "ET",
+        "Eterna"
+      ],
+      "codes": [
+        "228"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -127,
+        "y": 81
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "FH": {
+      "id": "FH",
+      "names": {
+        "en": "Foothill",
+        "zh": "Foothill"
+      },
+      "aliases": [
+        "FH",
+        "Foothill"
+      ],
+      "codes": [
+        "902"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 820,
+        "y": 166
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "FR": {
+      "id": "FR",
+      "names": {
+        "en": "Fremont",
+        "zh": "Fremont"
+      },
+      "aliases": [
+        "FR",
+        "Fremont"
+      ],
+      "codes": [
+        "224",
+        "403"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 85,
+        "y": 518
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "GW": {
+      "id": "GW",
+      "names": {
+        "en": "Greenwich",
+        "zh": "Greenwich"
+      },
+      "aliases": [
+        "GW",
+        "Greenwich"
+      ],
+      "codes": [
+        "222",
+        "601",
+        "701"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -278,
+        "y": -13
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "HA": {
+      "id": "HA",
+      "names": {
+        "en": "Hawthorne",
+        "zh": "Hawthorne"
+      },
+      "aliases": [
+        "HA",
+        "Hawthorne"
+      ],
+      "codes": [
+        "405"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -507,
+        "y": 593
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "HF": {
+      "id": "HF",
+      "names": {
+        "en": "Highfield",
+        "zh": "Highfield"
+      },
+      "aliases": [
+        "HF",
+        "Highfield"
+      ],
+      "codes": [
+        "603"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -733,
+        "y": 270
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "HO": {
+      "id": "HO",
+      "names": {
+        "en": "Horizon",
+        "zh": "Horizon"
+      },
+      "aliases": [
+        "HO",
+        "Horizon"
+      ],
+      "codes": [
+        "311"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 635,
+        "y": 73
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "HT": {
+      "id": "HT",
+      "names": {
+        "en": "Halcyon Tower",
+        "zh": "Halcyon Tower"
+      },
+      "aliases": [
+        "HT",
+        "Halcyon Tower"
+      ],
+      "codes": [
+        "102",
+        "314"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -259,
+        "y": 170
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "IS": {
+      "id": "IS",
+      "names": {
+        "en": "Iridium Square",
+        "zh": "Iridium Square"
+      },
+      "aliases": [
+        "IS",
+        "Iridium Square"
+      ],
+      "codes": [
+        "512"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -174,
+        "y": -444
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "LU": {
+      "id": "LU",
+      "names": {
+        "en": "Luna",
+        "zh": "Luna"
+      },
+      "aliases": [
+        "LU",
+        "Luna"
+      ],
+      "codes": [
+        "225"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 268,
+        "y": 677
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "LV": {
+      "id": "LV",
+      "names": {
+        "en": "Loma Vista",
+        "zh": "Loma Vista"
+      },
+      "aliases": [
+        "LV",
+        "Loma Vista"
+      ],
+      "codes": [
+        "511"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -445,
+        "y": -614
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "MT": {
+      "id": "MT",
+      "names": {
+        "en": "Midtown",
+        "zh": "Midtown"
+      },
+      "aliases": [
+        "MT",
+        "Midtown"
+      ],
+      "codes": [
+        "513",
+        "702"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 118,
+        "y": -135
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "OT": {
+      "id": "OT",
+      "names": {
+        "en": "Olde Town",
+        "zh": "Olde Town"
+      },
+      "aliases": [
+        "OT",
+        "Olde Town"
+      ],
+      "codes": [
+        "316"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -363,
+        "y": 697
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "PR": {
+      "id": "PR",
+      "names": {
+        "en": "Port Redpath",
+        "zh": "Port Redpath"
+      },
+      "aliases": [
+        "PR",
+        "Port Redpath"
+      ],
+      "codes": [
+        "804"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 11,
+        "y": -1199
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "RC": {
+      "id": "RC",
+      "names": {
+        "en": "Ravencroft",
+        "zh": "Ravencroft"
+      },
+      "aliases": [
+        "RC",
+        "Ravencroft"
+      ],
+      "codes": [
+        "904"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 694,
+        "y": -331
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "RD": {
+      "id": "RD",
+      "names": {
+        "en": "Riverdale",
+        "zh": "Riverdale"
+      },
+      "aliases": [
+        "RD",
+        "Riverdale"
+      ],
+      "codes": [
+        "704"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 565,
+        "y": 218
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "REH": {
+      "id": "REH",
+      "names": {
+        "en": "Regional Hospital",
+        "zh": "Regional Hospital"
+      },
+      "aliases": [
+        "REH",
+        "Regional Hospital"
+      ],
+      "codes": [
+        "802"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -76,
+        "y": -644
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "RIH": {
+      "id": "RIH",
+      "names": {
+        "en": "Riverview Heights",
+        "zh": "Riverview Heights"
+      },
+      "aliases": [
+        "RIH",
+        "Riverview Heights"
+      ],
+      "codes": [
+        "229",
+        "315",
+        "602"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -425,
+        "y": 289
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "RP": {
+      "id": "RP",
+      "names": {
+        "en": "Ridge Park",
+        "zh": "Ridge Park"
+      },
+      "aliases": [
+        "RP",
+        "Ridge Park"
+      ],
+      "codes": [
+        "221"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -575,
+        "y": -144
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "SB": {
+      "id": "SB",
+      "names": {
+        "en": "Scarborough",
+        "zh": "Scarborough"
+      },
+      "aliases": [
+        "SB",
+        "Scarborough"
+      ],
+      "codes": [
+        "803"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": -10,
+        "y": -940
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "UN": {
+      "id": "UN",
+      "names": {
+        "en": "Union",
+        "zh": "Union"
+      },
+      "aliases": [
+        "UN",
+        "Union"
+      ],
+      "codes": [
+        "312",
+        "402",
+        "514"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 325,
+        "y": 224
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "VL": {
+      "id": "VL",
+      "names": {
+        "en": "Verona Labs",
+        "zh": "Verona Labs"
+      },
+      "aliases": [
+        "VL",
+        "Verona Labs"
+      ],
+      "codes": [
+        "905"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 780,
+        "y": -574
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    },
+    "WF": {
+      "id": "WF",
+      "names": {
+        "en": "Waterfront",
+        "zh": "Waterfront"
+      },
+      "aliases": [
+        "WF",
+        "Waterfront"
+      ],
+      "codes": [
+        "104",
+        "226"
+      ],
+      "coordinates": null,
+      "position": {
+        "x": 160,
+        "y": 407
+      },
+      "labelOffset": {
+        "x": 12,
+        "y": -12
+      }
+    }
+  },
+  "edges": [
+    {
+      "id": "e00001",
+      "kind": "ride",
+      "from": "BS",
+      "to": "HT",
+      "lineId": "L1",
+      "direction": "L1_S",
+      "directionLabel": {
+        "en": "for Waterfront (South)",
+        "zh": "往 Waterfront (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L1_N",
+      "reverseDirectionLabel": {
+        "en": "for Birch Shore (North)",
+        "zh": "往 Birch Shore (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00002",
+      "kind": "ride",
+      "from": "BS",
+      "to": "REH",
+      "lineId": "L8",
+      "direction": "L8_N",
+      "directionLabel": {
+        "en": "for Port Redpath (North)",
+        "zh": "往 Port Redpath (北上)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L8_S",
+      "reverseDirectionLabel": {
+        "en": "for Birch Shore (South)",
+        "zh": "往 Birch Shore (南下)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00003",
+      "kind": "transfer",
+      "from": "BS",
+      "to": "BS",
+      "fromLine": "L1",
+      "toLine": "L8",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00004",
+      "kind": "ride",
+      "from": "HT",
+      "to": "CC",
+      "lineId": "L1",
+      "direction": "L1_S",
+      "directionLabel": {
+        "en": "for Waterfront (South)",
+        "zh": "往 Waterfront (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L1_N",
+      "reverseDirectionLabel": {
+        "en": "for Birch Shore (North)",
+        "zh": "往 Birch Shore (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00005",
+      "kind": "ride",
+      "from": "HT",
+      "to": "DW",
+      "lineId": "L3",
+      "direction": "L3_W",
+      "directionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L3_E",
+      "reverseDirectionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00006",
+      "kind": "ride",
+      "from": "HT",
+      "to": "RIH",
+      "lineId": "L3",
+      "direction": "L3_E",
+      "directionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L3_W",
+      "reverseDirectionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00007",
+      "kind": "transfer",
+      "from": "HT",
+      "to": "HT",
+      "fromLine": "L1",
+      "toLine": "L3",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00008",
+      "kind": "ride",
+      "from": "CC",
+      "to": "WF",
+      "lineId": "L1",
+      "direction": "L1_S",
+      "directionLabel": {
+        "en": "for Waterfront (South)",
+        "zh": "往 Waterfront (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L1_N",
+      "reverseDirectionLabel": {
+        "en": "for Birch Shore (North)",
+        "zh": "往 Birch Shore (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00009",
+      "kind": "ride",
+      "from": "CC",
+      "to": "FR",
+      "lineId": "L4",
+      "direction": "L4_W",
+      "directionLabel": {
+        "en": "for Azalea (West)",
+        "zh": "往 Azalea (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L4_E",
+      "reverseDirectionLabel": {
+        "en": "for Hawthorne (East)",
+        "zh": "往 Hawthorne (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00010",
+      "kind": "ride",
+      "from": "CC",
+      "to": "HA",
+      "lineId": "L4",
+      "direction": "L4_E",
+      "directionLabel": {
+        "en": "for Hawthorne (East)",
+        "zh": "往 Hawthorne (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L4_W",
+      "reverseDirectionLabel": {
+        "en": "for Azalea (West)",
+        "zh": "往 Azalea (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00011",
+      "kind": "transfer",
+      "from": "CC",
+      "to": "CC",
+      "fromLine": "L1",
+      "toLine": "L4",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00012",
+      "kind": "ride",
+      "from": "WF",
+      "to": "LU",
+      "lineId": "L2",
+      "direction": "L2_W",
+      "directionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_E",
+      "reverseDirectionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00013",
+      "kind": "ride",
+      "from": "WF",
+      "to": "BV",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00014",
+      "kind": "transfer",
+      "from": "WF",
+      "to": "WF",
+      "fromLine": "L1",
+      "toLine": "L2",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00015",
+      "kind": "ride",
+      "from": "RP",
+      "to": "GW",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00016",
+      "kind": "ride",
+      "from": "GW",
+      "to": "DW",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00017",
+      "kind": "ride",
+      "from": "GW",
+      "to": "RIH",
+      "lineId": "L6",
+      "direction": "L6_E",
+      "directionLabel": {
+        "en": "for Highfield (East)",
+        "zh": "往 Highfield (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L6_W",
+      "reverseDirectionLabel": {
+        "en": "for Greenwich (West)",
+        "zh": "往 Greenwich (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00018",
+      "kind": "ride",
+      "from": "GW",
+      "to": "MT",
+      "lineId": "L7",
+      "direction": "L7_W",
+      "directionLabel": {
+        "en": "for Riverdale (West)",
+        "zh": "往 Riverdale (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L7_E",
+      "reverseDirectionLabel": {
+        "en": "for Greenwich (East)",
+        "zh": "往 Greenwich (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00019",
+      "kind": "transfer",
+      "from": "GW",
+      "to": "GW",
+      "fromLine": "L2",
+      "toLine": "L6",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00020",
+      "kind": "transfer",
+      "from": "GW",
+      "to": "GW",
+      "fromLine": "L2",
+      "toLine": "L7",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00021",
+      "kind": "transfer",
+      "from": "GW",
+      "to": "GW",
+      "fromLine": "L6",
+      "toLine": "L7",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00022",
+      "kind": "ride",
+      "from": "DW",
+      "to": "FR",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00023",
+      "kind": "ride",
+      "from": "DW",
+      "to": "UN",
+      "lineId": "L3",
+      "direction": "L3_W",
+      "directionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L3_E",
+      "reverseDirectionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00024",
+      "kind": "transfer",
+      "from": "DW",
+      "to": "DW",
+      "fromLine": "L2",
+      "toLine": "L3",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00025",
+      "kind": "ride",
+      "from": "FR",
+      "to": "LU",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00026",
+      "kind": "ride",
+      "from": "FR",
+      "to": "UN",
+      "lineId": "L4",
+      "direction": "L4_W",
+      "directionLabel": {
+        "en": "for Azalea (West)",
+        "zh": "往 Azalea (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L4_E",
+      "reverseDirectionLabel": {
+        "en": "for Hawthorne (East)",
+        "zh": "往 Hawthorne (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00027",
+      "kind": "transfer",
+      "from": "FR",
+      "to": "FR",
+      "fromLine": "L2",
+      "toLine": "L4",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00028",
+      "kind": "ride",
+      "from": "BV",
+      "to": "ET",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00029",
+      "kind": "ride",
+      "from": "ET",
+      "to": "RIH",
+      "lineId": "L2",
+      "direction": "L2_E",
+      "directionLabel": {
+        "en": "for Riverview Heights (East)",
+        "zh": "往 Riverview Heights (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L2_W",
+      "reverseDirectionLabel": {
+        "en": "for Ridge Park (West)",
+        "zh": "往 Ridge Park (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00030",
+      "kind": "ride",
+      "from": "RIH",
+      "to": "OT",
+      "lineId": "L3",
+      "direction": "L3_E",
+      "directionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L3_W",
+      "reverseDirectionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00031",
+      "kind": "ride",
+      "from": "RIH",
+      "to": "HF",
+      "lineId": "L6",
+      "direction": "L6_E",
+      "directionLabel": {
+        "en": "for Highfield (East)",
+        "zh": "往 Highfield (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 30,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 30,
+      "reverseDirection": "L6_W",
+      "reverseDirectionLabel": {
+        "en": "for Greenwich (West)",
+        "zh": "往 Greenwich (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00032",
+      "kind": "transfer",
+      "from": "RIH",
+      "to": "RIH",
+      "fromLine": "L2",
+      "toLine": "L3",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00033",
+      "kind": "transfer",
+      "from": "RIH",
+      "to": "RIH",
+      "fromLine": "L2",
+      "toLine": "L6",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00034",
+      "kind": "transfer",
+      "from": "RIH",
+      "to": "RIH",
+      "fromLine": "L3",
+      "toLine": "L6",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00035",
+      "kind": "ride",
+      "from": "HO",
+      "to": "UN",
+      "lineId": "L3",
+      "direction": "L3_E",
+      "directionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L3_W",
+      "reverseDirectionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00036",
+      "kind": "ride",
+      "from": "UN",
+      "to": "AZ",
+      "lineId": "L4",
+      "direction": "L4_W",
+      "directionLabel": {
+        "en": "for Azalea (West)",
+        "zh": "往 Azalea (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L4_E",
+      "reverseDirectionLabel": {
+        "en": "for Hawthorne (East)",
+        "zh": "往 Hawthorne (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00037",
+      "kind": "ride",
+      "from": "UN",
+      "to": "MT",
+      "lineId": "L5",
+      "direction": "L5_N",
+      "directionLabel": {
+        "en": "for Loma Vista (North)",
+        "zh": "往 Loma Vista (北上)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L5_S",
+      "reverseDirectionLabel": {
+        "en": "for Union (South)",
+        "zh": "往 Union (南下)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00038",
+      "kind": "transfer",
+      "from": "UN",
+      "to": "UN",
+      "fromLine": "L3",
+      "toLine": "L4",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00039",
+      "kind": "transfer",
+      "from": "UN",
+      "to": "UN",
+      "fromLine": "L3",
+      "toLine": "L5",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00040",
+      "kind": "transfer",
+      "from": "UN",
+      "to": "UN",
+      "fromLine": "L4",
+      "toLine": "L5",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00041",
+      "kind": "ride",
+      "from": "OT",
+      "to": "EC",
+      "lineId": "L3",
+      "direction": "L3_E",
+      "directionLabel": {
+        "en": "for Eastcliff (East)",
+        "zh": "往 Eastcliff (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L3_W",
+      "reverseDirectionLabel": {
+        "en": "for Horizon (West)",
+        "zh": "往 Horizon (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00042",
+      "kind": "ride",
+      "from": "AZ",
+      "to": "FH",
+      "lineId": "L9",
+      "direction": "L9_N",
+      "directionLabel": {
+        "en": "for Verona Labs (North)",
+        "zh": "往 Verona Labs (北上)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L9_S",
+      "reverseDirectionLabel": {
+        "en": "for Azalea (South)",
+        "zh": "往 Azalea (南下)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00043",
+      "kind": "transfer",
+      "from": "AZ",
+      "to": "AZ",
+      "fromLine": "L4",
+      "toLine": "L9",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00044",
+      "kind": "ride",
+      "from": "LV",
+      "to": "IS",
+      "lineId": "L5",
+      "direction": "L5_S",
+      "directionLabel": {
+        "en": "for Union (South)",
+        "zh": "往 Union (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L5_N",
+      "reverseDirectionLabel": {
+        "en": "for Loma Vista (North)",
+        "zh": "往 Loma Vista (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00045",
+      "kind": "ride",
+      "from": "IS",
+      "to": "MT",
+      "lineId": "L5",
+      "direction": "L5_S",
+      "directionLabel": {
+        "en": "for Union (South)",
+        "zh": "往 Union (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L5_N",
+      "reverseDirectionLabel": {
+        "en": "for Loma Vista (North)",
+        "zh": "往 Loma Vista (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00046",
+      "kind": "ride",
+      "from": "MT",
+      "to": "BW",
+      "lineId": "L7",
+      "direction": "L7_W",
+      "directionLabel": {
+        "en": "for Riverdale (West)",
+        "zh": "往 Riverdale (西行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L7_E",
+      "reverseDirectionLabel": {
+        "en": "for Greenwich (East)",
+        "zh": "往 Greenwich (東行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00047",
+      "kind": "transfer",
+      "from": "MT",
+      "to": "MT",
+      "fromLine": "L5",
+      "toLine": "L7",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00048",
+      "kind": "ride",
+      "from": "RD",
+      "to": "BW",
+      "lineId": "L7",
+      "direction": "L7_E",
+      "directionLabel": {
+        "en": "for Greenwich (East)",
+        "zh": "往 Greenwich (東行)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 15,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 15,
+      "reverseDirection": "L7_W",
+      "reverseDirectionLabel": {
+        "en": "for Riverdale (West)",
+        "zh": "往 Riverdale (西行)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00049",
+      "kind": "ride",
+      "from": "BW",
+      "to": "RC",
+      "lineId": "L9",
+      "direction": "L9_N",
+      "directionLabel": {
+        "en": "for Verona Labs (North)",
+        "zh": "往 Verona Labs (北上)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 25,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 25,
+      "reverseDirection": "L9_S",
+      "reverseDirectionLabel": {
+        "en": "for Azalea (South)",
+        "zh": "往 Azalea (南下)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00050",
+      "kind": "ride",
+      "from": "BW",
+      "to": "FH",
+      "lineId": "L9",
+      "direction": "L9_S",
+      "directionLabel": {
+        "en": "for Azalea (South)",
+        "zh": "往 Azalea (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L9_N",
+      "reverseDirectionLabel": {
+        "en": "for Verona Labs (North)",
+        "zh": "往 Verona Labs (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00051",
+      "kind": "transfer",
+      "from": "BW",
+      "to": "BW",
+      "fromLine": "L7",
+      "toLine": "L9",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 12.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 12.5,
+      "transferSlope": 4.166667,
+      "reverseTransferSlope": 4.166667
+    },
+    {
+      "id": "e00052",
+      "kind": "ride",
+      "from": "PR",
+      "to": "SB",
+      "lineId": "L8",
+      "direction": "L8_S",
+      "directionLabel": {
+        "en": "for Birch Shore (South)",
+        "zh": "往 Birch Shore (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L8_N",
+      "reverseDirectionLabel": {
+        "en": "for Port Redpath (North)",
+        "zh": "往 Port Redpath (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00053",
+      "kind": "ride",
+      "from": "SB",
+      "to": "REH",
+      "lineId": "L8",
+      "direction": "L8_S",
+      "directionLabel": {
+        "en": "for Birch Shore (South)",
+        "zh": "往 Birch Shore (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L8_N",
+      "reverseDirectionLabel": {
+        "en": "for Port Redpath (North)",
+        "zh": "往 Port Redpath (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    },
+    {
+      "id": "e00054",
+      "kind": "ride",
+      "from": "VL",
+      "to": "RC",
+      "lineId": "L9",
+      "direction": "L9_S",
+      "directionLabel": {
+        "en": "for Azalea (South)",
+        "zh": "往 Azalea (南下)"
+      },
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "reverseTimeSec": 20,
+      "reverseDirection": "L9_N",
+      "reverseDirectionLabel": {
+        "en": "for Verona Labs (North)",
+        "zh": "往 Verona Labs (北上)"
+      },
+      "transferSlope": 0,
+      "reverseTransferSlope": 0,
+      "points": []
+    }
+  ]
+}

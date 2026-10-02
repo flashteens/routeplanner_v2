@@ -1,0 +1,27 @@
+{
+  "name": "ftmc-route-planner-v2",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "node server/index.js --dev",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "test": "node tests/routing.test.js && node tests/roft.test.js && node tests/editor-map.test.js && node tests/editor-history.test.js",
+    "migrate": "node scripts/migrate.js",
+    "verify": "node scripts/verify.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "1.55.1",
+    "vite": "^7.1.0"
+  }
+}

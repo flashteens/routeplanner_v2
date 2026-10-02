@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ftmc",
+    "names": {
+      "en": "Republic of FlashTeens",
+      "zh": "FlashTeens共和國"
+    },
+    "preview": false,
+    "stationCount": 288
+  },
+  {
+    "id": "ftmc_preview",
+    "names": {
+      "en": "Republic of FlashTeens · Preview",
+      "zh": "FlashTeens共和國 · 預覽版"
+    },
+    "preview": true,
+    "stationCount": 302
+  },
+  {
+    "id": "trtc",
+    "names": {
+      "en": "Taipei Metro",
+      "zh": "台北捷運"
+    },
+    "preview": false,
+    "stationCount": 119
+  },
+  {
+    "id": "newisle",
+    "names": {
+      "en": "Newisle",
+      "zh": "Newisle"
+    },
+    "preview": false,
+    "stationCount": 30
+  }
+]
