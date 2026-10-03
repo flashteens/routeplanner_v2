@@ -89,4 +89,4 @@ app.use((err,req,res,next)=>{
   if(status===500)console.error(err);
   res.status(status).json({success:false,error:status===500?'INTERNAL_ERROR':err.message});
 });
-if(process.env.NODE_ENV!=='test')app.listen(Number(process.env.PORT || 3000),process.env.HOST || '127.0.0.1',()=>console.log(`FTMC Route Planner v2: http://localhost:${process.env.PORT || 3000}${dev?' (development)':''}`));
+if(process.env.NODE_ENV!=='test')app.listen(Number(process.env.PORT || 3000),process.env.HOST || '0.0.0.0',()=>console.log(`FTMC Route Planner v2: http://localhost:${process.env.PORT || 3000}${dev?' (development)':''}`));
