@@ -15,7 +15,8 @@ let log='';server.stdout.on('data',chunk=>log+=chunk);server.stderr.on('data',ch
 let browser;
 const errors=[];
 async function checkOld(){
-  const hashes=JSON.parse(await fs.readFile(root+'docs/legacy-hashes.json','utf8'));
+  // Git metadata can change between machines; preserve the original website hashes.
+  const hashes=JSON.parse(await fs.readFile(root+'docs/legacy-hashes.json','utf8')).filter(item=>!item.file.startsWith('.git/'));
   for(const item of hashes){const actual=crypto.createHash('sha256').update(await fs.readFile(path.join(oldRoot,item.file))).digest('hex');assert.equal(actual,item.sha256,`Legacy file changed: ${item.file}`);}
   console.log(`Verified ${hashes.length} legacy files remain unchanged.`);
 }
