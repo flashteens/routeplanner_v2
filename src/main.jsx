@@ -2,6 +2,7 @@ import React,{useState,useEffect,useMemo,useRef} from 'react';
 import {createRoot} from 'react-dom/client';
 import Planner from './Planner.jsx';
 import Editor from './Editor.jsx';
+import {systemTitle,footerDescription,sourceLinks} from '../shared/presentation.js';
 import {nameOf} from '../shared/network.js';
 import {translator} from '../shared/format.js';
 import {editorSnapshot} from '../shared/editor-document.js';
@@ -36,7 +37,7 @@ function App(){
     const changed=()=>navigator.serviceWorker.controller?.postMessage({type:'SELECT_NETWORK',conf});navigator.serviceWorker.addEventListener('controllerchange',changed);
     return()=>{navigator.serviceWorker.removeEventListener('message',listener);navigator.serviceWorker.removeEventListener('controllerchange',changed);};
   },[conf]);
-  useEffect(()=>{const next=new URL(location.href);next.searchParams.set('conf',conf);next.searchParams.set('lang',lang);history.replaceState(null,'',next);document.documentElement.lang=lang==='zh'?'zh-Hant':lang;if(data)document.title=`${t('appTitle')} · ${nameOf(data,lang)}${data.preview?' · '+t('preview'):''}`;},[conf,lang,data?.preview,dicts,data?.id]);
+  useEffect(()=>{const next=new URL(location.href);next.searchParams.set('conf',conf);next.searchParams.set('lang',lang);history.replaceState(null,'',next);document.documentElement.lang=lang==='zh'?'zh-Hant':lang;if(data)document.title=`${t('appTitle')} · ${systemTitle(data,lang,t)}${data.preview?' · '+t('preview'):''}`;},[conf,lang,data?.preview,dicts,data?.id,data?.names,data?.ui?.unofficial]);
   if(!dicts)return <div className="initial-loading">FTMC Route Planner v2 <span>{error?'Unable to load language files.':'…'}</span></div>;
   return <div className={data?.preview?'app preview-theme':'app'}><header className="site-header"><a className="brand" href={`/?conf=${conf}&lang=${lang}`}><img src="/icon.svg" alt=""/><span><strong>FTMC</strong><small>ROUTE PLANNER <b>v2</b></small></span></a>
     <nav><a className={!isEditor?'current':''} href={`/?conf=${conf}&lang=${lang}`}>{t('planner')}</a><a className={isEditor?'current':''} href={`/editor?conf=${conf}&lang=${lang}`}>{t('editor')}</a><a href="/api">{t('api')}</a></nav>
@@ -44,7 +45,7 @@ function App(){
       <label><span className="sr-only">{t('language')}</span><select value={lang} onChange={e=>setLang(e.target.value)}><option value="en">English</option><option value="zh">繁體中文</option><option value="ja">日本語</option></select></label></div></header>
     <div className="status-bar"><span className={'status-dot '+(online?'':'offline')}/><span>{t(online?'online':'offline')}</span><span className="status-divider">·</span><span>{t(cached?'offlineReady':'offlineNotReady')}</span>{data?.preview&&<strong className="preview-badge">{t('preview')}</strong>}{unsaved&&<strong className="unsaved-status">{t('unsavedStatus')}</strong>}</div>
     {error?<main className="card load-error" role="alert">{t('loadError')}</main>:!data?<main className="card load-error">{t('loading')}</main>:isEditor&&!previewing?<Editor key={data.id} data={data} setData={setData} lang={lang} t={t} onPreview={()=>{setDraftDirty(false);setPreviewing(true);}} onDownloaded={downloaded} onDraftChange={setDraftDirty}/>:<>{isEditor&&<button className="back-editor" onClick={()=>setPreviewing(false)}>← {t('backEditor')}</button>}<Planner key={data.id} data={data} lang={lang} dict={dicts[lang]} t={t} localPreview={isEditor}/></>}
-    <footer><p>{t('footer')}</p>{data&&<><p>{t('dataUpdated',{date:data.updated?.[lang==='zh'?'zh':'en'] || ''})}</p><div>{(data.sources?.links?.[lang==='zh'?'zh':'en'] || []).filter(link=>/^https?:/.test(link.url)).map(link=><a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.text} ↗</a>)}</div></>}</footer>
+    <footer><p>{t('footer')}</p>{data&&<>{footerDescription(data,lang)&&<p className="network-description">{footerDescription(data,lang)}</p>}<p>{t('dataUpdated',{date:data.updated?.[lang==='zh'?'zh':'en'] || ''})}</p><div>{sourceLinks(data,lang).filter(link=>/^https?:/.test(link.url)).map(link=><a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.text} ↗</a>)}</div></>}</footer>
   </div>;
 }
 createRoot(document.getElementById('root')).render(<App/>);

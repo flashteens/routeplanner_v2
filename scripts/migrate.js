@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import {applyPresentation} from './presentation.js';
 import { root, oldRoot, systems, loadLegacy } from './legacy.js';
 import {correctRoft} from './roft-corrections.js';
 import {applyBenoLayout} from './beno-layout.js';
@@ -241,6 +242,7 @@ for (const id of Object.keys(systems)) {
     options, fares, aliases, lines, stations, edges };
   if(id.startsWith('ftmc'))applyBenoLayout(correctRoft(data),fs.readFileSync(path.join(root,'docs/roft-beno-20260920.txt'),'utf8'));
   if(id==='trtc')applyTrtcLayout(data,JSON.parse(fs.readFileSync(path.join(root,'docs/trtc-official-layout.json'),'utf8')));
+  applyPresentation(data);
   write(path.join(out, id + '.json'),data);
   registry.push({id,names,preview:data.preview,stationCount:Object.keys(stations).length});
   console.log(`${id}: ${Object.keys(stations).length} stations, ${Object.keys(lines).length} lines, ${edges.length} edges`);

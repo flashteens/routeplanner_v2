@@ -65,6 +65,9 @@ export function validateNetwork(data) {
   if (!Array.isArray(data.edges)) errors.push('edges must be an array.');
   if (errors.length) return errors;
   if (typeof data.ui?.enableDistance !== 'boolean' || typeof data.ui?.enableFare !== 'boolean') errors.push('ui.enableDistance and ui.enableFare must be booleans.');
+  if(data.ui?.unofficial!=null&&typeof data.ui.unofficial!=='boolean')errors.push('ui.unofficial must be boolean.');
+  if(data.footer!=null&&(!object(data.footer)||!object(data.footer.description)||Object.values(data.footer.description).some(v=>typeof v!=='string')))errors.push('footer.description must contain language strings.');
+  if(data.sources?.wikiSearchUrl!=null&&(typeof data.sources.wikiSearchUrl!=='string'||!/^https?:\/\//.test(data.sources.wikiSearchUrl)))errors.push('sources.wikiSearchUrl must be an HTTP(S) URL.');
   if(data.preview!=null&&typeof data.preview!=='boolean')errors.push('preview must be boolean.');
   if(data.updated!=null&&(!object(data.updated)||Object.values(data.updated).some(v=>typeof v!=='string')))errors.push('updated must contain language strings.');
   if(data.sources!=null&&!object(data.sources))errors.push('sources must be an object.');

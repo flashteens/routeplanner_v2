@@ -45,11 +45,11 @@ npm start
 
 開啟 `/editor?conf=ftmc&lang=zh`：
 
-1. 可貼上 JSON 或開啟 JSON 檔案；載入前會驗證資料。
+1. 用「開啟 JSON 檔案」載入本機檔案；載入前會驗證路網與操作歷史。
 2. 新增、修改、刪除車站、路線、連接及站內轉乘，並設定名稱、搜尋代碼、單雙向、方向、向量、選項、票價及顯示開關。
 3. 拖曳車站位置與站名標籤。選取線段後可直接拖曳圓形轉折點；按「新增轉折點」後點選線段，或 Shift 點選線段新增。右鍵／Delete 刪除，方向鍵微調；側欄也可新增、刪除及修改轉折點座標。
 4. 新增區間預設啟用「自動更新方向與里程預設值」，更換車站或路線會參考既有方向設定與遊戲 XYZ 座標；手動修改方向或里程會關閉自動更新。既有區間可按「推算方向與里程」套用建議。站內轉乘與缺少 XYZ 座標的里程為 0。
-5. 「儲存 JSON 至文字框」輸出目前內容，「下載 JSON」另存檔案。用「試算此路網」可直接在瀏覽器預覽。
+5. 用「下載 JSON」保存路網與操作歷史，用「試算此路網」在瀏覽器預覽。開檔與編輯不會改動網站的預設路線圖。
 
 Editor 的變更保留在目前頁面的記憶體；重新整理前請匯出。Editor 不會寫入伺服器、資料庫或舊專案。要發布新的內容，請將匯出的 JSON 放到 `public/data/<conf>.json`，新增系統時亦更新 `public/data/systems.json`，再重新 build。圖上 `position` / `labelOffset` 與遊戲 `coordinates` 分開保存，拖曳不改變遊戲座標或里程。RoFT 正式版與預覽版的站位及可對應的路線折點參照 `docs/roft-beno-20260920.txt`（2026-09-20 Beno 原稿）；未對應區間使用水平、垂直或 45° 折線。畫面使用圓角，重疊路段會自動平行偏移，包含跨過中間站的快速路線；可用 editor 持續調整。
 
@@ -104,3 +104,16 @@ node scripts/locales.js
 ```
 
 遷移會重新產生四套 JSON；**會覆寫已在新專案手動編輯的 JSON**，請先保存編輯結果。網站執行本身不依賴 PHP 或舊資料夾。
+
+## 公開測試與搬機驗證
+
+公開測試站為 https://routeplanner-v2.onrender.com/。Render 使用 Node runtime，追蹤 GitHub 的 `main` 分支；push 後自動部署，Build Command 為 `npm ci && npm run build`，Start Command 為 `npm run start`。程式維持 Node.js 22.12+ 相容性，Dockerfile 亦保留供自行建置。
+
+舊專案不在預設的 `../routeplanner_old/` 時，可用 `LEGACY_ROOT` 指定唯讀舊站根目錄；相對路徑以新版專案根目錄為準。例如此電腦：
+
+```sh
+LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap npm test
+LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap npm run verify
+```
+
+不要把 `npm run migrate` 當作啟動步驟。它會覆寫四套路網 JSON；`LEGACY_ROOT` 亦適用於遷移。

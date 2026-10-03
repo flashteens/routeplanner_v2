@@ -12,7 +12,8 @@
   },
   "ui": {
     "enableDistance": true,
-    "enableFare": false
+    "enableFare": false,
+    "unofficial": false
   },
   "sources": {
     "legacy": "preview/ft_mcsubway.js",
@@ -36,6 +37,16 @@
           "text": "部落格",
           "url": "http://flashteensmc.blogspot.tw/"
         }
+      ],
+      "ja": [
+        {
+          "text": "ワールドをダウンロード",
+          "url": "http://www.planetminecraft.com/project/my-first-minecraft-world-republic-of-flashteens/"
+        },
+        {
+          "text": "The Blog",
+          "url": "http://flashteensmc.blogspot.tw/"
+        }
       ]
     },
     "beno": {
@@ -44,7 +55,8 @@
       "editor": "https://beno.uk/metromapcreator/",
       "matchedStations": 299,
       "tracedEdges": 461
-    }
+    },
+    "wikiSearchUrl": "https://flashteens.fandom.com/wiki/Special:Search"
   },
   "options": {
     "defaults": {

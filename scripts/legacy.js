@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const root = fileURLToPath(new URL('../', import.meta.url));
-export const oldRoot = path.resolve(root, '../routeplanner_old');
+export const oldRoot = path.resolve(root, process.env.LEGACY_ROOT || '../routeplanner_old');
 export const systems = {
   ftmc: ['ft_mcsubway.js', 'config.ftmc.json'],
   ftmc_preview: ['preview/ft_mcsubway.js', 'preview/config.ftmc.json'],

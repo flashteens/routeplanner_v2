@@ -12,7 +12,8 @@
   },
   "ui": {
     "enableDistance": true,
-    "enableFare": false
+    "enableFare": false,
+    "unofficial": true
   },
   "sources": {
     "legacy": "newisle_mcsubway.js",
@@ -36,6 +37,16 @@
           "text": "Blip Noir首頁",
           "url": "https://www.planetminecraft.com/member/blip_noir/"
         }
+      ],
+      "ja": [
+        {
+          "text": "Newisle をダウンロード",
+          "url": "https://www.planetminecraft.com/project/city-of-newisle-v-07032015-solo-modern-build/"
+        },
+        {
+          "text": "Blip Noir's PMC",
+          "url": "https://www.planetminecraft.com/member/blip_noir/"
+        }
       ]
     }
   },
@@ -47,7 +58,6 @@
     "criteria": [
       "time",
       "transfers",
-      "transferTime",
       "stops",
       "mixed"
     ],

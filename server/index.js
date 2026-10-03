@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import express from 'express';
 import {findRoute} from '../shared/router.js';
+import {systemTitle,sourceLinks,footerDescription} from '../shared/presentation.js';
 import {nameOf} from '../shared/network.js';
 import {translator,routeText} from '../shared/format.js';
 
@@ -24,7 +25,7 @@ const params=req=>Object.fromEntries(['criteria','transferCoef','horseSpeedClass
 }));
 const shell=(title,body,lang='en')=>`<!doctype html><html lang="${lang==='zh'?'zh-Hant':lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(title)}</title><link rel="icon" href="/icon.svg"><style>body{font:16px/1.7 system-ui,sans-serif;max-width:960px;padding:32px;margin:auto;background:#f4f8fa;color:#18313c}a{color:#176b76}pre{white-space:pre-wrap;background:white;border:1px solid #d9e4e8;border-radius:12px;padding:24px}select,button{padding:10px;margin:4px}table{border-collapse:collapse}td,th{border:1px solid #ccd9dc;padding:10px}</style></head><body>${body}</body></html>`;
 function routeHtml(data,result,lang){
-  const dict=dictionaries[lang],t=translator(dict),title=`${nameOf(data.stations[result.from],lang)} → ${nameOf(data.stations[result.to],lang)} · ${nameOf(data,lang)}${data.preview?' · '+t('preview'):''}`;
+  const dict=dictionaries[lang],t=translator(dict),title=`${nameOf(data.stations[result.from],lang)} → ${nameOf(data.stations[result.to],lang)} · ${systemTitle(data,lang,t)}${data.preview?' · '+t('preview'):''}`;
   const query=new URLSearchParams({conf:data.id,from:result.from,to:result.to,lang,...Object.fromEntries(Object.entries(result.options).map(([k,v])=>[k,String(v)]))});
   const schema={'@context':'https://schema.org','@type':'WebPage',name:title,description:result.success?routeText(data,result,lang,dict):t('noRoute')};
   return {title,body:`<main><p><a href="/?${escape(query)}">${escape(t('recalculate'))}</a> · <a href="/api">API</a></p><h1>${escape(title)}</h1><pre>${escape(routeText(data,result,lang,dict))}</pre>${data.fares.source?`<p><a href="${escape(data.fares.source)}">${escape(t('fareSource'))}</a></p>`:''}<script type="application/ld+json">${JSON.stringify(schema).replace(/</g,'\\u003c')}</script></main>`};
@@ -71,8 +72,8 @@ let vite;
 if(dev){const {createServer}=await import('vite');vite=await createServer({root,server:{middlewareMode:true},appType:'custom'});}
 app.get(['/', '/editor'],async(req,res)=>{
   const data=await loadNetwork(req.query.conf),lang=locale(req),t=translator(dictionaries[lang]);
-  let content=`<main><h1>${escape(t('appTitle'))} · ${escape(nameOf(data,lang))}${data.preview?' · '+escape(t('preview')):''}</h1><p>${escape(t('subtitle'))}</p><form action="/route"><input type="hidden" name="conf" value="${escape(data.id)}"><input type="hidden" name="lang" value="${lang}">${['from','to'].map(key=>`<label>${escape(t(key))}<select name="${key}">${Object.values(data.stations).map(s=>`<option value="${escape(s.id)}">${escape(nameOf(s,lang))}</option>`).join('')}</select></label>`).join('')}<button>${escape(t('plan'))}</button></form><p><a href="/api">API</a></p></main>`;
-  let title=`${t('appTitle')} · ${nameOf(data,lang)}${data.preview?' · '+t('preview'):''}`;
+  let content=`<main><h1>${escape(t('appTitle'))} · ${escape(systemTitle(data,lang,t))}${data.preview?' · '+escape(t('preview')):''}</h1><p>${escape(t('subtitle'))}</p>${footerDescription(data,lang)?`<p>${escape(footerDescription(data,lang))}</p>`:''}${sourceLinks(data,lang).slice(0,1).filter(link=>/^https?:\/\//.test(link.url)).map(link=>`<p><a href="${escape(link.url)}">${escape(link.text)}</a></p>`).join('')}<form action="/route"><input type="hidden" name="conf" value="${escape(data.id)}"><input type="hidden" name="lang" value="${lang}">${['from','to'].map(key=>`<label>${escape(t(key))}<select name="${key}">${Object.values(data.stations).map(s=>`<option value="${escape(s.id)}">${escape(nameOf(s,lang))}</option>`).join('')}</select></label>`).join('')}<button>${escape(t('plan'))}</button></form><p><a href="/api">API</a></p></main>`;
+  let title=`${t('appTitle')} · ${systemTitle(data,lang,t)}${data.preview?' · '+t('preview'):''}`;
   if(req.query.from && req.query.to && req.path!=='/editor'){
     const rendered=routeHtml(data,findRoute(data,req.query.from,req.query.to,params(req)),lang);content=rendered.body;title=rendered.title;
   }

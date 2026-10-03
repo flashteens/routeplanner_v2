@@ -32,9 +32,9 @@ for(const id of Object.keys(systems)){
     pairs.push(...Array.from({length:8},(_,i)=>[ids[i*7%ids.length],ids[(i*11+19)%ids.length]]));
     for(const options of [d.options.defaults,{...d.options.defaults,transferCoef:d.options.transferCoefficients[1]},...(d.options.horseSpeeds?[{...d.options.defaults,horseSpeedClass:'_NEX',enableExpressCarts:0},{...d.options.defaults,horseSpeedClass:'_SH',enableExpressCarts:-1}]:[])]){
       c.reconstructTheSubwayMap(options);
-      for(const [index,criteria]of d.options.criteria.entries())for(const[from,to]of pairs){
+      for(const criteria of d.options.criteria)for(const[from,to]of pairs){
         if(!d.stations[from]||!d.stations[to])continue;
-        const old=new c.MyPathResult(from,to,null,c.sortByOptionVals[index]);
+        const old=new c.MyPathResult(from,to,null,c.sortByOptionVals[(c.sortByOptionVals.length===5?['time','transfers','transferTime','stops','mixed']:['time','transfers','stops','mixed']).indexOf(criteria)]);
         const result=findRoute(d,from,to,{...options,criteria});
         assert.equal(result.success,old.isFound,`${from}→${to} ${criteria}`);
         const legacyLines=[];for(let step=old;step;step=step.nextStep)legacyLines.push(step.fromLineSyntax);

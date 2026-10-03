@@ -29,3 +29,17 @@
 ## 搬機後的舊檔檢查範圍（2026-10-03）
 
 經使用者確認，舊網站雜湊檢查排除 `.git/` 下的版本控制與工具設定，仍以原始 `docs/legacy-hashes.json` 基準檢查其餘全部檔案；不重建基準，也不修改舊專案。搬機核對時，1,437 個基準項目中唯一差異是 `.git/sourcetreeconfig.json`；65 個非 `.git` 檔案全部一致。上述 2026-10-02 驗證結果是原電腦紀錄，不代表新電腦已完成完整驗證。
+
+## 公開測試改善驗證（2026-10-03）
+
+本次環境為 Node.js 22.22.1、Playwright 1.55.1、Chromium Headless Shell 140.0.7339.186。主機是 Ubuntu 26.04；保留 lockfile 的 Playwright 版本，安裝及驗證時以 `PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64` 使用其 Ubuntu 24.04 瀏覽器版本，並補齊 `libnspr4`、`libnss3`、`libasound2t64`。中日字型仍唯讀使用 Windows 主機字型。這些是本機測試準備，不是網站執行相依。
+
+- `LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap npm test`：51 項通過、0 失敗、0 跳過，包含舊版路由比對及新增的呈現／自訂頁尾歷史測試。移除預設偏好後，舊版比對仍依條件名稱對應原始選項，避免索引偏移造成錯誤比對。
+- `npm run build`：正式建置成功。
+- `LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64 npm run verify`：API、CORS、參數、爬蟲文字頁、原有瀏覽器互動及離線流程全部通過；四套系統、三種語言的主要連結、非官方標題及四種偏好均已核對。
+- 單選起點或終點時的多語站名、代碼、XYZ、可搭乘路線及 RoFT Wiki 搜尋連結，地圖起訖模式切換，以及附圖案例的三語走道／直通措辭通過。文字路線頁使用同一套措辭。
+- 編輯器只保留開檔／下載，檔案讀取完成前停用按鈕；驗證使用實際 JSON 檔案載入與下載，保留無效內容保護、草稿、歷史修復、復原／重做及未下載提醒。JSON 頁尾說明可編輯、預覽並復原。
+- 390 × 844 Chromium 觸控模擬：透過原生 CDP touch events 驗證查詢頁雙指放大／縮小、縮放中心維持、編輯器從車站開始雙指縮放不移動車站或新增歷史，以及縮放後單指拖曳車站可復原。手機編輯器地圖在設定欄之前，控制鈕移到圖外，避免選站後地圖位移及控制鈕遮住端點站。這是 Chromium 觸控模擬，不代表已在所有實體手機或 Safari 上驗證。
+- 排除 `.git/` 後，65 個舊網站檔案均符合原始 SHA-256；未改動舊專案，未執行資料遷移。
+
+新增截圖為 `test-results/planner-touch.png` 與 `test-results/editor-touch.png`，不加入 Git。此次僅執行本機驗證與提交，沒有 push 或觸發 Render 部署。

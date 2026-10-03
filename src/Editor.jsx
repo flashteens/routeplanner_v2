@@ -11,10 +11,10 @@ function JsonField({label,value,onChange,t}){
   return <label className="field-label">{label}<DraftField as="textarea" aria-label={label} className="json-field" value={JSON.stringify(value,null,2)} onCommit={text=>onChange(JSON.parse(text))} t={t}/></label>;
 }
 export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDraftChange}){
-  const [tab,setTab]=useState('stations'),[selected,setSelected]=useState(null),[text,setText]=useState(''),[notice,setNotice]=useState(''),[filter,setFilter]=useState('');
-  const [automatic,setAutomatic]=useState({});
+  const [tab,setTab]=useState('stations'),[selected,setSelected]=useState(null),[notice,setNotice]=useState(''),[filter,setFilter]=useState('');
+  const [opening,setOpening]=useState(false),[automatic,setAutomatic]=useState({});
   const [draftCount,setDraftCount]=useState(0);
-  const drafts=useRef(new Map()),current=useRef(data),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=data;
+  const fileInput=useRef(null),drafts=useRef(new Map()),current=useRef(data),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=data;
   const draftContext=useMemo(()=>({register:(id,value)=>{if(value)drafts.current.set(id,value);else drafts.current.delete(id);setDraftCount(drafts.current.size);}}),[]);
   const errors=useMemo(()=>validateNetwork(withoutHistory(data)),[data]);
   useEffect(()=>{onDraftChange?.(draftCount>0);},[draftCount,onDraftChange]);
@@ -76,7 +76,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
       return next;
     },{kind:'delete',target:`${selected.tab}:${selected.id}`});setSelected(null);
   }
-  function load(value=text){try{
+  function load(value){try{
     let parsed=JSON.parse(value);const problems=validateNetwork(parsed);
     if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return;}
     const historyProblems=validateEditorHistory(parsed,validateNetwork);
@@ -86,16 +86,16 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
       if(!confirm(t('historyLoadWarning',counts)+'\n\n'+historyProblems.join('\n'))){setNotice(t('historyLoadRejected'));return;}
       parsed={...parsed,editorHistory:recovery.history};loadedNotice=t('historyLoadRecovered',counts);
     }
-    discardDrafts();activeGroup.current=null;historyNeedsRepair.current=false;current.current=parsed;setData(parsed);setSelected(null);setNotice(loadedNotice);setText(value);
+    discardDrafts();activeGroup.current=null;historyNeedsRepair.current=false;current.current=parsed;setData(parsed);setSelected(null);setNotice(loadedNotice);
   }catch(error){setNotice(error instanceof SyntaxError?t('invalidJson'):t('invalidNetwork')+'\n'+error.message);}}
-  function serialize(){if(!flushDrafts())return null;const d=current.current,problems=[...validateNetwork(withoutHistory(d)),...validateEditorHistory(d,validateNetwork)];if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return null;}const value=JSON.stringify({...d,editorHistory:d.editorHistory??emptyHistory()},null,2)+'\n';setText(value);setNotice(t('saved'));return value;}
+  function serialize(){if(!flushDrafts())return null;const d=current.current,problems=[...validateNetwork(withoutHistory(d)),...validateEditorHistory(d,validateNetwork)];if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return null;}const value=JSON.stringify({...d,editorHistory:d.editorHistory??emptyHistory()},null,2)+'\n';setNotice(t('saved'));return value;}
   function download(){const value=serialize();if(!value)return;const url=URL.createObjectURL(new Blob([value],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=data.id+'.json';onDownloaded?.(current.current);a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   const stationSelect=(key,value,onChange)=><label className="field-label">{t(key)}<DraftField key={key} as="select" immediate aria-label={t(key)} value={value} onCommit={onChange} t={t}>{Object.values(data.stations).map(s=><option key={s.id} value={s.id}>{nameOf(s,lang)} · {s.id}</option>)}</DraftField></label>;
   const lineSelect=(key,value,onChange)=><label className="field-label">{t(key)}<DraftField key={key} aria-label={t(key)} list="editor-lines" value={value || ''} onCommit={onChange} t={t}/></label>;
   return <DraftContext.Provider value={draftContext}><main><div className="page-intro editor-intro"><div><span className="eyebrow">{t('editor')}</span><h1>{t('editorTitle')}</h1><p>{t('editorSubtitle')}</p></div><button className="primary" onClick={()=>{if(!flushDrafts())return;errors.length?setNotice(t('invalidNetwork')):onPreview();}}>{t('viewPlanner')} →</button></div>
     <section className="history-toolbar card" aria-label={t('editHistory')}><button onClick={()=>replay(false)} disabled={!history.cursor}>{t('undo')}</button><button onClick={()=>replay(true)} disabled={history.cursor>=history.entries.length}>{t('redo')}</button><span>{t('historyCount',{count:history.entries.length})}</span><button className="danger" onClick={clearHistory} disabled={!history.entries.length}>{t('clearHistory')}</button>{draftCount>0&&<button onClick={discardDrafts}>{t('discardDrafts')}</button>}</section>
-    <section className="json-workbench card"><details><summary>{t('json')}</summary><p>{t('jsonHint')}</p><textarea aria-label={t('json')} className="network-json" value={text} onChange={e=>setText(e.target.value)} placeholder="{ … }" spellCheck={false}/></details>
-      <div className="json-actions"><button onClick={()=>load()}>{t('loadJson')}</button><label className="file-button">{t('loadFile')}<input type="file" accept="application/json,.json" onChange={async e=>{if(e.target.files[0])load(await e.target.files[0].text());e.target.value='';}}/></label><button onClick={serialize}>{t('saveJson')}</button><button className="primary" onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className={notice.includes(t('invalid'))?'error':'notice'} role="status">{notice}</pre>}
+    <section className="json-workbench card" aria-busy={opening}>
+      <div className="json-actions"><button disabled={opening} onClick={()=>fileInput.current.click()}>{t('loadFile')}</button><input ref={fileInput} className="sr-only" tabIndex={-1} aria-label={t('loadFile')} type="file" accept="application/json,.json" onChange={async e=>{const input=e.target,file=input.files[0];if(!file)return;setOpening(true);try{load(await file.text());}catch{setNotice(t('fileReadError'));}finally{input.value='';setOpening(false);}}}/><button className="primary" disabled={opening} onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className="notice" role="status">{notice}</pre>}
     </section>
     <div className="editor-grid"><section className="editor-panel card"><nav className="editor-tabs">{['stations','lines','edges','settings'].map(name=><button className={tab===name?'selected':''} key={name} onClick={()=>{if(!flushDrafts())return;setTab(name);setFilter('');}}>{t(name)}</button>)}</nav>
       {tab!=='settings'&&<><div className="editor-list-tools"><input aria-label={t('searchPlaceholder')} placeholder={t('searchPlaceholder')} value={filter} onChange={e=>setFilter(e.target.value)}/><button onClick={add}>{t('add')} ＋</button></div>
@@ -106,6 +106,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
         {input('nameEn',data.names.en,value=>commitNetwork(d=>({...d,names:{...d.names,en:value}})))}{input('nameZh',data.names.zh,value=>commitNetwork(d=>({...d,names:{...d.names,zh:value}})))}
         {toggle('enableDistance',data.ui.enableDistance,value=>commitNetwork(d=>({...d,ui:{...d.ui,enableDistance:value}})))}{toggle('enableFare',data.ui.enableFare,value=>commitNetwork(d=>({...d,ui:{...d.ui,enableFare:value}})))}{toggle('previewSetting',data.preview,value=>commitNetwork(d=>({...d,preview:value})))}
         <label className="field-label">{t('fareType')}<DraftField as="select" immediate value={data.fares.type} onCommit={value=>commitNetwork(d=>({...d,fares:{...d.fares,type:value}}))} t={t}>{['free','additive','origin-destination'].map(type=><option key={type} value={type}>{t(type)}</option>)}</DraftField></label>
+        <JsonField label={t('footerDescription')} value={data.footer?.description||{}} onChange={description=>commitNetwork(d=>({...d,footer:{...d.footer,description}}))} t={t}/>
         {input('currency',data.fares.currency,value=>commitNetwork(d=>({...d,fares:{...d.fares,currency:value || null}})))}
         <JsonField key={data.id+'fares'} label={t('fareMatrix')} value={data.fares} onChange={value=>checked({...data,fares:value})} t={t}/>
         <JsonField key={data.id+'options'} label={t('advanced')} value={data.options} onChange={value=>checked({...data,options:value})} t={t}/>

@@ -1,5 +1,5 @@
 const LIMIT=100;
-const roots=new Set(['names','preview','updated','ui','sources','options','fares','aliases','map']);
+const roots=new Set(['names','preview','updated','ui','sources','footer','options','fares','aliases','map']);
 const forbidden=new Set(['__proto__','prototype','constructor','editorHistory']);
 const orderedCollections={stationOrder:'stations',lineOrder:'lines',edgeOrder:'edges'};
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);

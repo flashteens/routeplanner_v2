@@ -10,7 +10,7 @@
     "dev": "node server/index.js --dev",
     "build": "vite build",
     "start": "node server/index.js",
-    "test": "node tests/routing.test.js && node tests/roft.test.js && node tests/editor-map.test.js && node tests/editor-history.test.js",
+    "test": "node tests/routing.test.js && node tests/roft.test.js && node tests/editor-map.test.js && node tests/editor-history.test.js && node tests/presentation.test.js",
     "migrate": "node scripts/migrate.js",
     "verify": "node scripts/verify.js"
   },

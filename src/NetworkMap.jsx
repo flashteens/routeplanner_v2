@@ -5,11 +5,11 @@ import {mapPaths,insertControlPoint} from '../shared/map-geometry.js';
 import {stationAppearance,labelDirection,stationDefaultType} from '../shared/station-symbol.js';
 
 function bounds(stations,edges=[]){const p=[...Object.values(stations).map(s=>s.position),...edges.flatMap(e=>e.points||[])];if(!p.length)return{x:0,y:0,w:1000,h:800};const xs=p.map(v=>v.x),ys=p.map(v=>v.y),x=Math.min(...xs)-90,y=Math.min(...ys)-90;return{x,y,w:Math.max(400,Math.max(...xs)-x+90),h:Math.max(300,Math.max(...ys)-y+90)};}
-export default function NetworkMap({data,result,lang,t,from,to,activeField,onSelect,editable=false,setData,selected,onSelectEdge,options}){
+export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options}){
   const [zoom,setZoom]=useState(1),[pan,setPan]=useState({x:0,y:0}),[lineFilter,setLineFilter]=useState(''),[labels,setLabels]=useState(false),[hover,setHover]=useState(null);
   const [addingPoint,setAddingPoint]=useState(false);
   const [fitRevision,setFitRevision]=useState(0),[fitRoute,setFitRoute]=useState(false);
-  const svgRef=useRef(),gesture=useRef(null),maxZoom=editable?128:32;
+  const svgRef=useRef(),gesture=useRef(null),pointers=useRef(new Map()),maxZoom=editable?128:32;
   useEffect(()=>{setZoom(1);setPan({x:0,y:0});setLineFilter('');},[data.id]);
   const enabled=useMemo(()=>{try{return new Set(expandEdges(data,options).map(e=>e.sourceEdgeId));}catch{return new Set();}},[data.edges,data.options,options]);
   const edges=useMemo(()=>data.edges.filter(e=>e.kind!=='transfer'&&(editable||enabled.has(e.id))&&(!lineFilter||(e.displayLineId||e.lineId)===lineFilter)),[data.edges,enabled,lineFilter,editable]);
@@ -29,22 +29,48 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onSel
   const lineList=Object.values(data.lines).filter(l=>!l.interior&&data.edges.some(e=>e.kind==='ride'&&(e.displayLineId||e.lineId)===l.id));
   function point(e){const matrix=svgRef.current.getScreenCTM();return new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse());}
   function appearance(station){return stationAppearance(station,stationDefaultType(data,station.id));}
+  function capturePointer(e){
+    if(e.button!==0)return;
+    try{svgRef.current.setPointerCapture(e.pointerId);}catch{return;}
+    pointers.current.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.current.size>=2){
+      e.stopPropagation();e.preventDefault();
+      const [a,b]=[...pointers.current.values()],mid={clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2};
+      gesture.current={type:'pinch',zoom,distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),anchor:point(mid),center:{x:base.x+base.w/2,y:base.y+base.h/2},units};
+    }
+  }
   function start(e,type,id,index){
     if(e.button!==0)return;e.stopPropagation();
     if(editable&&(type==='station'||type==='label')&&onSelect(id)===false)return;
     const p=point(e),label=type==='label'?appearance(data.stations[id]):null;
-    gesture.current={type,id,index,start:p,pan:{...pan},moved:false,origin:type==='station'?{...data.stations[id].position}:type==='label'?{x:label.x*units,y:label.y*units}:type==='point'?{...controlPoints[index]}:p,...(type==='label'?{stationType:label.type}: {}),...(type==='point'?{points:controlPoints}: {})};
+    gesture.current={type,id,index,start:p,screenX:e.clientX,screenY:e.clientY,pan:{...pan},moved:false,origin:type==='station'?{...data.stations[id].position}:type==='label'?{x:label.x*units,y:label.y*units}:type==='point'?{...controlPoints[index]}:p,...(type==='label'?{stationType:label.type}: {}),...(type==='point'?{points:controlPoints}: {})};
     svgRef.current.setPointerCapture(e.pointerId);
   }
-  function move(e){const g=gesture.current;if(!g)return;const p=point(e);if(Math.hypot(p.x-g.start.x,p.y-g.start.y)>2*units)g.moved=true;
-    if(g.type==='pan'){setPan({x:g.pan.x-(e.clientX-g.screenX)*units,y:g.pan.y-(e.clientY-g.screenY)*units});return;}
+  function move(e){
+    if(pointers.current.has(e.pointerId))pointers.current.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    const g=gesture.current;if(!g)return;
+    if(g.type==='pinch'){
+      const [a,b]=[...pointers.current.values()];if(!a||!b)return;
+      const nextZoom=Math.max(.5,Math.min(maxZoom,g.zoom*Math.hypot(a.x-b.x,a.y-b.y)/g.distance)),nextUnits=g.units*g.zoom/nextZoom;
+      const rect=svgRef.current.getBoundingClientRect(),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+      setZoom(nextZoom);setPan({x:g.anchor.x-g.center.x-(mid.x-rect.x-rect.width/2)*nextUnits,y:g.anchor.y-g.center.y-(mid.y-rect.y-rect.height/2)*nextUnits});return;
+    }
+    const p=point(e);if(Math.hypot(p.x-g.start.x,p.y-g.start.y)>2*units)g.moved=true;
+    if(g.type==='pan'||!editable&&g.type==='station'&&g.moved){setPan({x:g.pan.x-(e.clientX-g.screenX)*units,y:g.pan.y-(e.clientY-g.screenY)*units});return;}
     if(!editable||!g.moved)return;
     const pos={x:Math.round(g.origin.x+p.x-g.start.x),y:Math.round(g.origin.y+p.y-g.start.y)};
     if(g.type==='station')setData(d=>({...d,stations:{...d.stations,[g.id]:{...d.stations[g.id],position:pos}}}),{kind:'move',target:`station:${g.id}:position`});
     if(g.type==='label')setData(d=>{const s={...d.stations[g.id],symbol:`${g.stationType}-${labelDirection(g.origin.x+p.x-g.start.x,g.origin.y+p.y-g.start.y)}`};delete s.labelOffset;delete s.labelAnchor;return{...d,stations:{...d.stations,[g.id]:s}};},{kind:'move',target:`station:${g.id}:label`});
     if(g.type==='point')setData(d=>({...d,edges:d.edges.map(edge=>edge.id===g.id?{...edge,points:g.points.map((v,i)=>i===g.index?pos:v)}:edge)}),{kind:'move',target:`edge:${g.id}:point:${g.index}`});
   }
-  function finish(e){const g=gesture.current;if(!editable&&g?.type==='station'&&!g.moved)onSelect(g.id);gesture.current=null;if(svgRef.current.hasPointerCapture(e.pointerId))svgRef.current.releasePointerCapture(e.pointerId);}
+  function finish(e,cancelled=false){
+    const g=gesture.current;pointers.current.delete(e.pointerId);
+    if(!cancelled&&!editable&&g?.type==='station'&&!g.moved)onSelect(g.id);
+    if(g?.type==='pinch'&&pointers.current.size===1){
+      const remaining=[...pointers.current.values()][0];gesture.current={type:'pan',start:point({clientX:remaining.x,clientY:remaining.y}),screenX:remaining.x,screenY:remaining.y,pan:{...pan},moved:true};
+    }else gesture.current=null;
+    if(svgRef.current.hasPointerCapture(e.pointerId))svgRef.current.releasePointerCapture(e.pointerId);
+  }
   function addControlPoint(edge,e){
     const points=insertControlPoint(data,edge,point(e));
     setData(d=>({...d,edges:d.edges.map(v=>v.id===edge.id?{...v,points}:v)}),{kind:'edit',target:`edge:${edge.id}:points`});setAddingPoint(false);
@@ -54,8 +80,9 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onSel
   return <section className="map-card card"><div className="map-heading"><div><span className="eyebrow">{t('map')}</span><h2>{nameOf(data,lang)}</h2></div>
     <select aria-label={t('line')} value={lineFilter} onChange={e=>{setLineFilter(e.target.value);setFitRoute(false);setZoom(1);setPan({x:0,y:0});}}><option value="">{t('allLines')}</option>{lineList.map(l=><option key={l.id} value={l.id}>{nameOf(l,lang)}</option>)}</select></div>
     <div className="map-canvas"><svg ref={svgRef} role="group" aria-label={t('map')} viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`}
+      onPointerDownCapture={capturePointer}
       onPointerDown={e=>{if(e.button!==0)return;const p=point(e);gesture.current={type:'pan',start:p,screenX:e.clientX,screenY:e.clientY,pan:{...pan}};svgRef.current.setPointerCapture(e.pointerId);}}
-      onPointerMove={move} onPointerUp={finish} onPointerCancel={()=>gesture.current=null}>
+      onPointerMove={move} onPointerUp={finish} onPointerCancel={e=>finish(e,true)} onLostPointerCapture={e=>{if(pointers.current.has(e.pointerId))finish(e,true);}}>
       <defs><pattern id="map-grid" width={50*units} height={50*units} patternUnits="userSpaceOnUse"><circle r={0.8*units} cx={1*units} cy={1*units} fill="#c3d4d9"/></pattern><marker id="oneway" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3" markerHeight="3" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
       <rect x={box.x} y={box.y} width={box.w} height={box.h} fill="url(#map-grid)"/>
       {edges.toSorted((a,b)=>Number(highlight.has(a.id))-Number(highlight.has(b.id))).map(edge=><path key={edge.id} data-edge={edge.id} d={paths.get(edge.id)} fill="none" stroke={data.lines[edge.displayLineId||edge.lineId]?.color || '#9aa7ad'}
@@ -78,7 +105,7 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onSel
     {editable&&<div className="map-edit-controls"><button aria-pressed={addingPoint} onClick={()=>setAddingPoint(v=>!v)}>{t(addingPoint?'cancelPoint':'addPoint')}</button>{addingPoint&&<span>{t('clickPoint')}</span>}</div>}
     <div className="map-controls"><button onClick={()=>setZoom(z=>Math.min(maxZoom,z*1.4))} aria-label={t('zoomIn')}>+</button><button onClick={()=>setZoom(z=>Math.max(.5,z/1.4))} aria-label={t('zoomOut')}>−</button>{result?.success&&<button onClick={()=>{setLineFilter('');setFitRoute(true);setZoom(1);setPan({x:0,y:0});setFitRevision(v=>v+1);}}>{t('fitRoute')}</button>}<button onClick={()=>{setFitRoute(false);setZoom(1);setPan({x:0,y:0});setFitRevision(v=>v+1);}}>{t('fit')}</button></div>
     <label className="map-label-toggle"><input type="checkbox" checked={labels} onChange={e=>setLabels(e.target.checked)}/>{t('labels')}</label>
-    {!editable&&<span className={'map-field '+activeField}>{t(activeField==='from'?'selectFrom':'selectTo')}</span>}
+    {!editable&&<button className={'map-field '+activeField} onClick={onActiveFieldChange} aria-label={t(activeField==='from'?'selectFrom':'selectTo')} title={t(activeField==='from'?'selectTo':'selectFrom')}>{t(activeField==='from'?'selectFrom':'selectTo')} ⇄</button>}
     </div><p className="map-hint">{t(editable?'mapEditorHint':'mapHint')}</p>
     <div className="legend">{lineList.filter(l=>edges.some(e=>(e.displayLineId||e.lineId)===l.id)).map(l=><button key={l.id} className={lineFilter===l.id?'selected':''} onClick={()=>{setLineFilter(f=>f===l.id?'':l.id);setFitRoute(false);setPan({x:0,y:0});setZoom(1);}}><span style={{background:l.color}}/>{nameOf(l,lang)}</button>)}</div>
   </section>;

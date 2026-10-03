@@ -1,4 +1,4 @@
-const VERSION='ftmc-v2-6';
+const VERSION='ftmc-v2-7';
 const SHELL=VERSION+'-shell',NETWORK=VERSION+'-network';
 let activeConf=null;
 let mutations=Promise.resolve();

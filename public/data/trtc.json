@@ -12,15 +12,16 @@
   },
   "ui": {
     "enableDistance": false,
-    "enableFare": true
+    "enableFare": true,
+    "unofficial": true
   },
   "sources": {
     "legacy": "trtc_routes.js",
     "links": {
       "en": [
         {
-          "text": "TRTC Website",
-          "url": "https://english.metro.taipei"
+          "text": "Taipei Metro website",
+          "url": "https://english.metro.taipei/"
         },
         {
           "text": "FTMC Planner",
@@ -35,6 +36,12 @@
         {
           "text": "FTMC地鐵小幫手",
           "url": "?lang=zh&conf="
+        }
+      ],
+      "ja": [
+        {
+          "text": "台北メトロ公式サイト",
+          "url": "https://www.metro.taipei/"
         }
       ]
     },
@@ -54,7 +61,6 @@
     "criteria": [
       "time",
       "transfers",
-      "transferTime",
       "stops",
       "mixed"
     ],
@@ -25857,5 +25863,12 @@
   "map": {
     "cornerRadius": 12,
     "parallelGap": 5
+  },
+  "footer": {
+    "description": {
+      "en": "Travel times do not include any waiting time for trains. Route estimates are for reference only.",
+      "zh": "旅程時間完全不考慮等車時間，路線查詢結果僅供參考。",
+      "ja": "所要時間には列車の待ち時間を一切含みません。経路検索の結果は参考情報です。"
+    }
   }
 }
