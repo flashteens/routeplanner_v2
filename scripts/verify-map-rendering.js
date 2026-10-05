@@ -27,7 +27,7 @@ export async function verifyMapRendering(browser,origin,root){
       return [];
     }));
     assert.deepEqual(invalidSlopes,[],'Every rendered straight SVG segment must be horizontal, vertical or exactly 45 degrees');
-    for(const [name,cx,cy] of [['north',410,-7525],['central',260,-40]]){
+    for(const [name,cx,cy] of [['north',410,-7525],['central',260,-40],['sal-west',2280,-120],['sal-south',2160,135]]){
       const view=`${cx-dimensions[2]/2} ${cy-dimensions[3]/2} ${dimensions[2]} ${dimensions[3]}`;
       // Crop the actual SVG DOM without changing JSON or triggering editor edits.
       await page.locator('.map-canvas svg').evaluate((svg,view)=>svg.setAttribute('viewBox',view),view);
@@ -35,6 +35,10 @@ export async function verifyMapRendering(browser,origin,root){
     }
     assert.equal(await page.locator('g[data-station="GB"] [data-station-marker="M"]').count(),1);
     for(const id of ['GH','NWM'])assert.equal(await page.locator(`g[data-station="${id}"] [data-station-marker="I"]`).count(),1);
+    const megaStroke=Number(await page.locator('g[data-station="GB"] [data-station-marker]').getAttribute('stroke-width'));
+    const mediumStroke=Number(await page.locator('g[data-station="GH"] [data-station-marker]').getAttribute('stroke-width'));
+    assert.equal(megaStroke,mediumStroke*2,'Mega stations have a visibly thicker circular outline');
+    assert.equal(await page.locator('g[data-station="SE12"] [data-station-marker]').getAttribute('data-station-marker'),'L');
     await page.getByRole('button',{name:'Fit map',exact:true}).click();
     const downloads=page.waitForEvent('download');await page.locator('.json-actions button.primary').click();await downloads;
     assert.deepEqual(errors,[]);

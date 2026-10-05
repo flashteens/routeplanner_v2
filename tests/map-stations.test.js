@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapPaths,nearestSegment} from '../shared/map-geometry.js';
+import {mapPaths,nearestSegment,reversePath} from '../shared/map-geometry.js';
 import {stationAppearance} from '../shared/station-symbol.js';
 import {mapStationLayout,stationContains,sampleMapPath,showStationLabel,stationLabelOffset} from '../shared/map-stations.js';
 
@@ -132,4 +132,23 @@ test('passing detours use only the four straight slopes and the configured round
     const actual=sampleMapPath(path),original=sampleMapPath(raw.get('passing'));
     for(const index of [0,-1]){const a=actual.at(index),b=original.at(index);assert.ok(Math.hypot(a.x-b.x,a.y-b.y)<1e-7,'Passing endpoints must remain in place');}
   }
+});
+
+
+for(const conf of ['ftmc','ftmc_preview'])test(`${conf}: reverse circular branches coincide and SE12 stays a connected small station`,()=>{
+  const data=JSON.parse(fs.readFileSync(new URL(`../public/data/${conf}.json`,import.meta.url))),snapshot=JSON.stringify(data);
+  for(const units of [.125,1,2,8,32]){
+    const rendered=layout(data,units),edges=data.edges.filter(e=>e.kind!=='transfer');
+    for(const [branch,main] of [['SAL2','SAL'],['SAL0','SAL'],['ACL5','ACL'],['ACL0','ACL'],['RHL6','RHL']]){
+      for(const edge of edges.filter(e=>e.lineId===branch&&e.displayLineId===main)){
+        const counterpart=edges.find(e=>e.lineId===main&&e.from===edge.to&&e.to===edge.from&&JSON.stringify(e.points)===JSON.stringify(edge.points.toReversed()));
+        if(counterpart)assert.equal(rendered.paths.get(edge.id),reversePath(rendered.paths.get(counterpart.id)),`${edge.id}/${counterpart.id}: reversed shared route`);
+      }
+    }
+    const station=rendered.markers.get('SE12');assert.equal(station.type,'L');assert.equal(station.radius,3*units);
+    const stops=edges.filter(e=>(e.displayLineId||e.lineId)==='SAL'&&(e.from==='SE12'||e.to==='SE12')).map(e=>{const points=sampleMapPath(rendered.paths.get(e.id));return e.from==='SE12'?points[0]:points.at(-1);});
+    if(conf==='ftmc_preview')assert.ok(stops.length>=2);
+    for(const point of stops){assert.ok(Math.hypot(point.x-stops[0].x,point.y-stops[0].y)<1e-6,'Both sides must meet at the same rendered station point');assert.ok(stationContains(station,point));}
+  }
+  assert.equal(JSON.stringify(data),snapshot);
 });

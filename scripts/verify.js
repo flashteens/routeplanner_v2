@@ -304,7 +304,8 @@ try{
     let replayWarning='';page.once('dialog',async dialog=>{replayWarning=dialog.message();await dialog.accept();});
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.match(replayWarning,/Invalid edit history/);
     assert.equal(await a.getAttribute('aria-label'),`Station: ${portable.stations.BR01.names.en}`,'Failed replay preserves the current station name.');
-    assert.equal(await a.getAttribute('transform'),`translate(${portable.stations.BR01.position.x},${portable.stations.BR01.position.y})`,'Failed replay preserves the current map position.');
+    const replayPosition=await a.evaluate(station=>{const m=station.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f};});
+    assert.ok(Math.hypot(replayPosition.x-portable.stations.BR01.position.x,replayPosition.y-portable.stations.BR01.position.y)<1e-6,'Failed replay preserves the current map position.');
     await b.press('Enter');await page.getByLabel('Official English name',{exact:true}).fill('Edited after history failure');
     const afterFailure=await exportEditor();assert.equal(afterFailure.editorHistory.entries.length,1);assert.equal(afterFailure.editorHistory.cursor,1);
     assert.deepEqual(afterFailure.stations.BR01,portable.stations.BR01);assert.equal(afterFailure.stations.BR02.names.en,'Edited after history failure');

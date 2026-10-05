@@ -1,3 +1,4 @@
+import {stationSymbol,stationDefaultType} from './station-symbol.js';
 const epsilon=1e-6;
 const same=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<epsilon;
 export function simplifyPoints(points) {
@@ -11,6 +12,11 @@ export function simplifyPoints(points) {
   return out;
 }
 // Preserve anchors while restricting straight portions to horizontal, vertical or 45°.
+const comparePoints=(a,b)=>a.x-b.x||a.y-b.y;
+function reverseAnchors(anchors) {
+  for(let i=0;i<anchors.length;i++){const compared=comparePoints(anchors[i],anchors.at(-1-i));if(compared)return compared>0;}
+  return false;
+}
 export function octilinearPoints(anchors) {
   const out=[];
   for(const b of anchors){const a=out.at(-1);if(a){const dx=b.x-a.x,dy=b.y-a.y,ax=Math.abs(dx),ay=Math.abs(dy);
@@ -21,6 +27,15 @@ export function octilinearPoints(anchors) {
   }
   return simplifyPoints(out);
 }
+// Reverse the SVG commands themselves, retaining exactly the same curve controls.
+export function reversePath(path) {
+  const tokens=path.match(/[MLQ]|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)||[],pieces=[];
+  let i=0,previous;const point=()=>({x:Number(tokens[i++]),y:Number(tokens[i++])});
+  while(i<tokens.length){const command=tokens[i++];if(command==='M'){previous=point();continue;}const control=command==='Q'?point():null,end=point();pieces.push({command,start:previous,control});previous=end;}
+  if(!previous)return '';
+  return `M ${previous.x} ${previous.y}`+pieces.toReversed().map(p=>p.command==='Q'?` Q ${p.control.x} ${p.control.y} ${p.start.x} ${p.start.y}`:` L ${p.start.x} ${p.start.y}`).join('');
+}
+
 export function edgeAnchors(data,edge){return [data.stations[edge.from].position,...(edge.points||[]),data.stations[edge.to].position];}
 export function roundedPath(points,radius=12,{startCorner=false,endCorner=false}={}) {
   if(!points.length)return '';
@@ -47,12 +62,12 @@ export function nearestSegment(points,p) {
   return best;
 }
 // Simplify only the drawing copy where short traced joins cannot fit a curve.
-function renderPoints(anchors,gap,radius) {
+function renderPoints(anchors,gap,radius,{keepStart=false,keepEnd=false}={}) {
   const points=octilinearPoints(anchors),spurLimit=Math.max(gap,radius/4);
   // A sub-gap station attachment cannot accommodate a parallel bundle's turn.
   // End on the through track beneath the station symbol instead of drawing a hook.
-  if(points.length>2&&Math.hypot(points[1].x-points[0].x,points[1].y-points[0].y)<=spurLimit)points.shift();
-  if(points.length>2&&Math.hypot(points.at(-1).x-points.at(-2).x,points.at(-1).y-points.at(-2).y)<=spurLimit)points.pop();
+  if(!keepStart&&points.length>2&&Math.hypot(points[1].x-points[0].x,points[1].y-points[0].y)<=spurLimit)points.shift();
+  if(!keepEnd&&points.length>2&&Math.hypot(points.at(-1).x-points.at(-2).x,points.at(-1).y-points.at(-2).y)<=spurLimit)points.pop();
   // Traced maps contain one-unit doglegs between long sections. Once tracks
   // are separated these become reversed inner joins; merge only such tiny,
   // doglegs or short corner bevels in the rendering copy, leaving anchors intact.
@@ -134,6 +149,12 @@ export function mapPaths(data,edges,gap=5,radius=12) {
   // Overview zoom must not expand lane spacing beyond the available corner
   // radius: oversized offsets can fold an inner track back across its neighbours.
   if(radius>0)gap=Math.min(gap,radius);
+  // Canonicalize before any greedy simplification or join selection. The final
+  // SVG is reversed for operational direction; geometry never depends on it.
+  const reversed=new Set();
+  edges=edges.map(e=>{if(!reverseAnchors(edgeAnchors(data,e)))return e;reversed.add(e.id);return {...e,from:e.to,to:e.from,points:(e.points||[]).toReversed()};});
+  const typeData={...data,edges:data.edges||edges,lines:data.lines||{}};
+  const limited=new Set(Object.entries(data.stations).filter(([id,s])=>stationSymbol(s,stationDefaultType(typeData,id)).type==='L').map(([id])=>id));
   const orientations=new Map(),segments=new Map();
   const attachments=new Map();
   for(const e of edges){const anchors=edgeAnchors(data,e),line=e.displayLineId||e.lineId;
@@ -145,9 +166,9 @@ export function mapPaths(data,edges,gap=5,radius=12) {
     // A shared station attachment is a spur, not a turn of the through line.
     // Let the station marker span the track rather than pulling both edges in.
     const trim=(id,a,b)=>attachments.get(`${id}:${line}:${b.x},${b.y}`)>1&&Math.hypot(a.x-b.x,a.y-b.y)<=radius;
-    const first=trim(e.from,anchors[0],anchors[1]),last=trim(e.to,anchors.at(-1),anchors.at(-2));
+    const first=!limited.has(e.from)&&trim(e.from,anchors[0],anchors[1]),last=!limited.has(e.to)&&trim(e.to,anchors.at(-1),anchors.at(-2));
     if(anchors.length>2){if(last)anchors=anchors.slice(0,-1);if(first)anchors=anchors.slice(1);}
-    const points=renderPoints(anchors,gap,radius),list=[];
+    const points=renderPoints(anchors,gap,radius,{keepStart:limited.has(e.from),keepEnd:limited.has(e.to)}),list=[];
     for(let i=1;i<points.length;i++){
       const a=points[i-1],b=points[i],dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);
       if(!len)continue;
@@ -204,7 +225,7 @@ export function mapPaths(data,edges,gap=5,radius=12) {
     const extended=[...(before?[reverse(before)]:[]),...route,...(after?[after]:[])];
     paths.set(e.id,roundedPath(joinedPoints(extended),radius,{startCorner:!!before,endCorner:!!after}));
   }
-  return paths;
+  return new Map([...paths].map(([id,path])=>[id,reversed.has(id)?reversePath(path):path]));
 }
 
 // Add one user anchor; automatic 45° elbows are rendering details, not editable nodes.

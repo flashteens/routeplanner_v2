@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mapPaths} from '../shared/map-geometry.js';
+import {mapPaths,reversePath} from '../shared/map-geometry.js';
 
 // Sample the SVG curves as geometry, so a lane reversal fails even if the
 // generated string still contains rounded corners and distinct line offsets.
@@ -103,4 +103,20 @@ test('separate corridors and real forks retain their own geometry',()=>{
   const paths=mapPaths(data,data.edges,5),fork=sample(paths.get('L3'));
   assert.equal(fork.at(-1).x,200);
   assert.ok(sample(paths.get('L1')).at(-1).y===100);
+});
+
+
+test('reversed anchors share one geometry even with implicit elbows, tiny bevels and closed endpoints',()=>{
+  for(const points of [
+    [{x:0,y:0},{x:19,y:7},{x:19,y:12},{x:22,y:23}],
+    [{x:0,y:0},{x:1,y:0},{x:1,y:50},{x:20,y:69},{x:25,y:69},{x:30,y:74}],
+    [{x:0,y:0},{x:40,y:13},{x:40,y:40},{x:0,y:0}]
+  ]){
+    const data=fixture(points),edge=data.edges[0];
+    const reversed={...edge,id:'reverse',from:edge.to,to:edge.from,points:edge.points.toReversed()};
+    for(const gap of [1,5,12]){
+      const paths=mapPaths(data,[edge,reversed],gap);
+      assert.equal(paths.get(edge.id),reversePath(paths.get('reverse')));
+    }
+  }
 });

@@ -1,4 +1,4 @@
-import {octilinearPoints,roundedPath,simplifyPoints,nearestSegment} from './map-geometry.js';
+import {octilinearPoints,roundedPath,simplifyPoints,nearestSegment,reversePath} from './map-geometry.js';
 import {stationAppearance,stationDefaultType} from './station-symbol.js';
 
 export const stationLabelThresholds={M:3,I:6,L:12};
@@ -160,7 +160,10 @@ export function mapStationLayout(data,edges,paths,units=1) {
     if(!obstacles.some(shape=>hitsPath(points,shape)))continue;
     // Include nearby hubs for the search; a detour must not enter another hub.
     const nearby=obstacles.filter(shape=>hitsPath(points,shape,radius+3*units));
-    rendered.set(edge.id,avoidMarkers(paths.get(edge.id),nearby,radius,Math.min(3*units,...nearby.map(s=>s.radius*.65))));
+    const first=points[0],last=points.at(-1),backward=first.x>last.x||first.x===last.x&&first.y>last.y;
+    const canonical=backward?reversePath(paths.get(edge.id)):paths.get(edge.id);
+    const avoided=avoidMarkers(canonical,nearby,radius,Math.min(3*units,...nearby.map(s=>s.radius*.65)));
+    rendered.set(edge.id,backward?reversePath(avoided):avoided);
   }
   return {markers,paths:rendered};
 }
