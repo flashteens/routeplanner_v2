@@ -2,6 +2,7 @@ import React,{useState,useMemo,useRef,useEffect} from 'react';
 import {nameOf} from '../shared/network.js';
 import {expandEdges} from '../shared/router.js';
 import {mapPaths,insertControlPoint} from '../shared/map-geometry.js';
+import {mapStationLayout,showStationLabel,stationLabelOffset} from '../shared/map-stations.js';
 import {stationAppearance,labelDirection,stationDefaultType} from '../shared/station-symbol.js';
 
 function bounds(stations,edges=[]){const p=[...Object.values(stations).map(s=>s.position),...edges.flatMap(e=>e.points||[])];if(!p.length)return{x:0,y:0,w:1000,h:800};const xs=p.map(v=>v.x),ys=p.map(v=>v.y),x=Math.min(...xs)-90,y=Math.min(...ys)-90;return{x,y,w:Math.max(400,Math.max(...xs)-x+90),h:Math.max(300,Math.max(...ys)-y+90)};}
@@ -23,7 +24,8 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onAct
   useEffect(()=>{const observer=new ResizeObserver(entries=>setSize({width:entries[0].contentRect.width,height:entries[0].contentRect.height}));observer.observe(svgRef.current);return()=>observer.disconnect();},[]);
   useEffect(()=>{const svg=svgRef.current,handler=e=>{e.preventDefault();setZoom(z=>Math.max(.5,Math.min(maxZoom,z*(e.deltaY<0?1.16:.86))));};svg.addEventListener('wheel',handler,{passive:false});return()=>svg.removeEventListener('wheel',handler);},[maxZoom]);
   const units=Math.max(box.w/size.width,box.h/size.height),highlight=new Set(result?.success?result.steps.map(s=>s.edgeId):[]),pathStations=new Set(result?.success?result.steps.flatMap(s=>[s.from,s.to]):[]);
-  const paths=useMemo(()=>mapPaths(data,edges,(data.map?.parallelGap??5)*units,data.map?.cornerRadius??12),[data.stations,edges,units,data.map]);
+  const rawPaths=useMemo(()=>mapPaths(data,edges,(data.map?.parallelGap??5)*units,data.map?.cornerRadius??12),[data.stations,edges,units,data.map]);
+  const {paths,markers}=useMemo(()=>mapStationLayout(data,edges,rawPaths,units),[data.stations,data.lines,edges,rawPaths,units]);
   const selectedEdge=edges.find(e=>e.id===selected?.id&&selected?.tab==='edges');
   const controlPoints=selectedEdge?.points||[];
   const lineList=Object.values(data.lines).filter(l=>!l.interior&&data.edges.some(e=>e.kind==='ride'&&(e.displayLineId||e.lineId)===l.id));
@@ -90,13 +92,13 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onAct
         markerEnd={!edge.bidirectional?'url(#oneway)':undefined}
         onPointerDown={e=>{if(editable&&e.button===0){e.stopPropagation();onSelectEdge?.(edge.id);if(e.shiftKey||addingPoint)addControlPoint(edge,e);}}}>
         <title>{nameOf(data.lines[edge.displayLineId||edge.lineId],lang)}{edge.boardingAllowed===false?` · ${t('alightingOnly')}`:''} · {nameOf(data.stations[edge.from],lang)} → {nameOf(data.stations[edge.to],lang)}</title></path>)}
-      {Object.values(stations).map(s=>{const chosen=s.id===from||s.id===to,colors=stationLineColors(s.id),style=appearance(s),r=style.radius*units,show=labels||zoom>=2.5||chosen||hover===s.id||editable&&selected?.id===s.id;
-        return <g key={s.id} data-station={s.id} transform={`translate(${s.position.x},${s.position.y})`} role="button" tabIndex={0} aria-label={`${t('station')}: ${nameOf(s,lang)}`}
+      {Object.values(stations).map(s=>{const chosen=s.id===from||s.id===to,colors=stationLineColors(s.id),style=appearance(s),marker=markers.get(s.id),offset=stationLabelOffset(style,marker,units),show=showStationLabel(style.type,zoom,{all:labels,chosen,hovered:hover===s.id,selected:editable&&selected?.id===s.id});
+        return <g key={s.id} data-station={s.id} data-station-type={style.type} transform={`translate(${marker.x},${marker.y})`} role="button" tabIndex={0} aria-label={`${t('station')}: ${nameOf(s,lang)}`}
           onPointerDown={e=>start(e,'station',s.id)} onMouseEnter={()=>setHover(s.id)} onMouseLeave={()=>setHover(null)} onKeyDown={e=>{if(editable&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();if(onSelect(s.id)===false)return;const step=e.shiftKey?10:1;setData(d=>({...d,stations:{...d.stations,[s.id]:{...d.stations[s.id],position:{x:d.stations[s.id].position.x+(e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0),y:d.stations[s.id].position.y+(e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0)}}}}),{kind:'move',target:`station:${s.id}:position`});}else if(e.key==='Enter'||e.key===' '){e.preventDefault();onSelect(s.id);}}}>
           {chosen&&<circle r={14*units} fill={s.id===from?'#176b76':'#d28a32'} opacity="0.15"/>}
-          <circle r={r} fill={chosen?(s.id===from?'#176b76':'#d28a32'):'#fff'} stroke={colors.length===1?colors[0]:'#304858'} strokeWidth={1.5*units} opacity={result?.success&&!pathStations.has(s.id)&&!chosen?0.4:1}/>
+          {style.type==='I'?<rect data-station-marker="I" x={-marker.halfWidth} y={-marker.halfHeight} width={2*marker.halfWidth} height={2*marker.halfHeight} rx={marker.corner} transform={`rotate(${Math.atan2(marker.uy,marker.ux)*180/Math.PI})`} fill={chosen?(s.id===from?'#176b76':'#d28a32'):'#fff'} stroke={colors.length===1?colors[0]:'#304858'} strokeWidth={1.5*units} opacity={result?.success&&!pathStations.has(s.id)&&!chosen?0.4:1}/>:<circle data-station-marker={style.type} r={marker.radius} fill={chosen?(s.id===from?'#176b76':'#d28a32'):'#fff'} stroke={colors.length===1?colors[0]:'#304858'} strokeWidth={1.5*units} opacity={result?.success&&!pathStations.has(s.id)&&!chosen?0.4:1}/>}
           <circle r={10*units} fill="transparent"/>
-          {show&&<text x={style.x*units} y={style.y*units} textAnchor={style.anchor} dominantBaseline={style.baseline} fontSize={12*units} fontWeight={chosen?'700':'500'} fill="#263d49" paintOrder="stroke" stroke="#fff" strokeWidth={3*units} strokeLinejoin="round"
+          {show&&<text x={offset.x} y={offset.y} textAnchor={style.anchor} dominantBaseline={style.baseline} fontSize={12*units} fontWeight={chosen?'700':'500'} fill="#263d49" paintOrder="stroke" stroke="#fff" strokeWidth={3*units} strokeLinejoin="round"
             onPointerDown={e=>editable?start(e,'label',s.id):start(e,'station',s.id)}>{nameOf(s,lang)}</text>}
           <title>{nameOf(s,lang)} · {(s.codes || []).join(' / ')}</title></g>;})}
       {editable&&controlPoints.map((p,i)=><circle key={i} data-point={i} cx={p.x} cy={p.y} r={7*units} fill="#fff" stroke="#176b76" strokeWidth={2*units} role="button" tabIndex={0} aria-label={`${t('points')} ${i+1}`}

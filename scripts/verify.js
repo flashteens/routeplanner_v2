@@ -7,6 +7,7 @@ import {root,oldRoot} from './legacy.js';
 import {findRoute} from '../shared/router.js';
 import {validateNetwork} from '../shared/network.js';
 import {verifyImprovements} from './verify-improvements.js';
+import {verifyMapRendering} from './verify-map-rendering.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
@@ -164,9 +165,10 @@ try{
       assert.equal(await label.getAttribute('text-anchor'),stationAppearance(after).anchor);
     }
     await page.locator('.header-settings select').nth(1).selectOption('en');
-    const labelScreenGap=()=>sta.locator('text').evaluate(text=>{const m=text.getScreenCTM(),x=Number(text.getAttribute('x')),y=Number(text.getAttribute('y'));return Math.hypot(m.a*x+m.c*y,m.b*x+m.d*y);});
+    const labelScreenDistance=()=>sta.locator('text').evaluate(text=>{const m=text.getScreenCTM(),x=Number(text.getAttribute('x')),y=Number(text.getAttribute('y'));return Math.hypot(m.a*x+m.c*y,m.b*x+m.d*y);});
+    const labelScreenGap=async()=>await labelScreenDistance()-(await sta.locator('[data-station-marker]').boundingBox()).width/2;
     const initialGap=await labelScreenGap();await page.getByRole('button',{name:'Zoom in',exact:true}).click();
-    assert.ok(Math.abs(await labelScreenGap()-initialGap)<0.01,'The station/label gap stays constant in screen pixels when zooming.');
+    assert.ok(Math.abs(await labelScreenGap()-initialGap)<0.01,'The gap from the expanded station boundary to its label stays constant in screen pixels when zooming.');
     await page.getByRole('button',{name:'Fit map',exact:true}).click();
     const initialView=await page.locator('.map-canvas svg').getAttribute('viewBox');
     for(let i=0;i<13;i++)await page.getByRole('button',{name:'Zoom in',exact:true}).click();
@@ -191,7 +193,13 @@ try{
     const movedBend=lastExport;
     assert.notDeepEqual(movedBend.edges.find(e=>e.id===edge).points[bend.index],saved.edges.find(e=>e.id===edge).points[bend.index]);
     assert.deepEqual(movedBend.edges.find(e=>e.id===edge).metrics,saved.edges.find(e=>e.id===edge).metrics);
-    await page.locator(`circle[data-point="${bend.index}"]`).click({button:'right'});
+    const removeHit=await page.locator(`circle[data-point="${bend.index}"]`).evaluate(circle=>{
+      const r=circle.getBoundingClientRect();
+      for(const dx of [0,-.3,.3])for(const dy of [0,-.3,.3]){const p={x:r.x+r.width*(.5+dx),y:r.y+r.height*(.5+dy)};if(document.elementFromPoint(p.x,p.y)===circle)return p;}
+      return null;
+    });
+    assert.ok(removeHit,'A visible part of the dragged control point must be available.');
+    await page.mouse.click(removeHit.x,removeHit.y,{button:'right'});
     await exportEditor();saved=lastExport;
     assert.equal(saved.edges.find(e=>e.id===edge).points.length,movedBend.edges.find(e=>e.id===edge).points.length-1);
     await page.screenshot({path:root+'test-results/editor-desktop.png',fullPage:true});
@@ -337,6 +345,7 @@ try{
     console.log('Browser: multilingual/coordinate search, map selection/highlight, local routing, copy, editor edits/drag/bends/JSON roundtrip, preview and mobile passed.');
     console.log('Offline: reload, station search, local routing, language switching and one-system cache passed.');
     await verifyImprovements(browser,origin,root);
+    await verifyMapRendering(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}

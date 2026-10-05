@@ -135,7 +135,19 @@ export function mapPaths(data,edges,gap=5,radius=12) {
   // radius: oversized offsets can fold an inner track back across its neighbours.
   if(radius>0)gap=Math.min(gap,radius);
   const orientations=new Map(),segments=new Map();
-  for(const e of edges){const points=renderPoints(edgeAnchors(data,e),gap,radius),list=[];
+  const attachments=new Map();
+  for(const e of edges){const anchors=edgeAnchors(data,e),line=e.displayLineId||e.lineId;
+    for(const [id,p] of [[e.from,anchors[1]],[e.to,anchors.at(-2)]]){
+      const key=`${id}:${line}:${p.x},${p.y}`;attachments.set(key,(attachments.get(key)||0)+1);
+    }
+  }
+  for(const e of edges){let anchors=edgeAnchors(data,e);const line=e.displayLineId||e.lineId;
+    // A shared station attachment is a spur, not a turn of the through line.
+    // Let the station marker span the track rather than pulling both edges in.
+    const trim=(id,a,b)=>attachments.get(`${id}:${line}:${b.x},${b.y}`)>1&&Math.hypot(a.x-b.x,a.y-b.y)<=radius;
+    const first=trim(e.from,anchors[0],anchors[1]),last=trim(e.to,anchors.at(-1),anchors.at(-2));
+    if(anchors.length>2){if(last)anchors=anchors.slice(0,-1);if(first)anchors=anchors.slice(1);}
+    const points=renderPoints(anchors,gap,radius),list=[];
     for(let i=1;i<points.length;i++){
       const a=points[i-1],b=points[i],dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy);
       if(!len)continue;

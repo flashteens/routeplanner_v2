@@ -16,6 +16,6 @@ export function stationSymbol(station,defaultType='L'){
 }
 export function stationAppearance(station,defaultType='L'){
   const {type,direction}=stationSymbol(station,defaultType),radius={L:3,I:4.5,M:7}[type];
-  const [dx,dy]=directions[direction],gap=radius+7;
+  const [dx,dy]=directions[direction],gap=(radius+7)/Math.hypot(dx,dy);
   return {type,direction,radius,x:dx*gap,y:dy*gap,anchor:dx<0?'end':dx>0?'start':'middle',baseline:dy<0?'auto':dy>0?'hanging':'middle'};
 }
