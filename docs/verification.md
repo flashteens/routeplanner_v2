@@ -125,3 +125,17 @@ Service worker 更新至 `ftmc-v2-12`，空白地圖直接使用本機文件，�
 | 駱駝島 CMI → 甘蔗北鎮 NSV | L6 | e00614／e00622 | L6_CAMEL → L6_S |
 | 駱駝島 CMI → 起司狗旅館 CH | L6 | e00615／e00623 | L6_N → L6_S；反向 CH → CMI 明確設定 L6_CAMEL → L6_CAMEL（與省略時相同） |
 | 神鎬之碑 YY03 → 翡翠西站 YY02（反向） | YYL | e01088／e01087 | YYL_BRANCH_E → YYL_W |
+
+
+## 撤回 arrival 文字，改為代碼欄位圖解（2026-10-06）
+
+使用者要求查核 arrival 文字是否由查詢頁使用。搜尋顯示新增文字只在編輯器、資料驗證與測試被讀寫；`shared/router.js` 使用 arrival 代碼切換抵達後的方向狀態，產生查詢步驟時仍只讀一般 `directionLabel`／`displayDirectionLabel`。因此以本機 revert commit `a97622c` 完整撤回 `cdcba4a`，包括 arrival 文字、批次與額外驗證，恢復原本兩個 optional 代碼欄位。四套 JSON 不變。
+
+原本正向與反向 arrival 代碼標籤右側加入問號按鈕，以三語說明其直通用途、留白時沿用 direction／reverseDirection，以及不直接顯示在查詢結果的性質。簡單 inline SVG 用 9 字形環線＋幹線展示 A → J 的 IN 行車狀態在 J 改為 LOOP，繼續直通 J → B。圖例有語言化的圖像描述與說明文字，不改路由或資料結構。
+
+滑鼠停留可展開、移開收合；點擊可固定或收合。手機以點擊開關，並可用關閉按鈕或點外部關閉；鍵盤可開啟，Escape 關閉。問號與輸入 label 分開，閱讀說明不會編輯資料、操作歷史或增加未儲存狀態。
+
+- 既有方向文字、空白地圖、編輯歷史、editor-map、geometry、station rendering 與 presentation 測試通過，`npm run build` 與完整 `npm run verify` 通過。
+- 新增 `verify-arrival-help.js`：三語滑鼠停留與鍵盤操作、兩個原欄位值及 optional 行為不變、9 字形 SVG／圖像描述、閱讀不產生歷史或未儲存狀態；真實 touch context 驗證點擊開關、關閉按鈕、點外部收合及手機無水平溢出。手機截圖在忽略的 `test-results/editor-arrival-help-mobile.png`。無 JavaScript runtime error，65 個舊檔雜湊不變。
+
+Service worker 更新至 `ftmc-v2-15`，避免 revert 暫時回到舊快取版本。既有資料比對差異仍保留。只做本機提交，不 push。

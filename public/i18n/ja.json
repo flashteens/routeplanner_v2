@@ -224,5 +224,10 @@
   "directionLabelEmpty": "（未設定）",
   "directionLabelsApplied": "{count} 区間に方向の案内文を適用しました。元に戻す操作で一括上書きを取り消せます。",
   "directionRequired": "乗車区間の方向識別子は必須です。",
-  "directionsDistinct": "正方向と逆方向の識別子は異なる値にしてください。"
+  "directionsDistinct": "正方向と逆方向の識別子は異なる値にしてください。",
+  "fieldHelp": "項目の説明",
+  "arrivalHelpForward": "任意：この区間の走行後、次の区間へ同じ車両で直通するための方向コードです。乗換には数えません。空欄なら direction を引き継ぎます。このコード自体は検索結果の方向案内文には表示されません。",
+  "arrivalHelpReverse": "任意：この区間を逆向きに走行した後、次の区間へ同じ車両で直通するための方向コードです。乗換には数えません。空欄なら reverseDirection を引き継ぎます。図の考え方は逆向きにも適用できます。このコード自体は方向案内文には表示されません。",
+  "arrivalHelpDiagram": "数字9の形の直通路線：AからJまではIN、JでLOOPに切り替えて、乗換なしでBへ進みます。",
+  "arrivalHelpExample": "数字9の形の例：A → J は direction = IN、arrivalDirection = LOOP。J到着後は乗換なしで J → B の LOOP 区間へ直通します。IN と LOOP は例示用のコードです。"
 }

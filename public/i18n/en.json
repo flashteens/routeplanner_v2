@@ -224,5 +224,10 @@
   "directionLabelEmpty": "(Not set)",
   "directionLabelsApplied": "Direction text applied to {count} sections. Undo reverses the entire overwrite.",
   "directionRequired": "A direction identifier is required for a ride section.",
-  "directionsDistinct": "Forward and reverse direction identifiers must differ."
+  "directionsDistinct": "Forward and reverse direction identifiers must differ.",
+  "fieldHelp": "Field help",
+  "arrivalHelpForward": "Optional: after this section, use this direction code to continue on the same vehicle without a transfer. Leave blank to keep direction. This code is not shown as direction text in planner results.",
+  "arrivalHelpReverse": "Optional: after travelling this section in reverse, use this direction code to continue on the same vehicle without a transfer. Leave blank to keep reverseDirection. The diagram also applies to reverse travel. This code is not shown as direction text in planner results.",
+  "arrivalHelpDiagram": "A figure-9 through route: travel from A to J using IN, switch to LOOP at J, then continue to B without changing vehicles.",
+  "arrivalHelpExample": "Figure-9 example: A → J uses direction = IN and arrivalDirection = LOOP. At J, continue straight onto the J → B LOOP section without a transfer. IN and LOOP are example codes."
 }

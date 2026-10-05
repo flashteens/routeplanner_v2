@@ -10,6 +10,7 @@ import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
 import {verifyBlankEditor} from './verify-blank-editor.js';
 import {verifyEditorDirections} from './verify-editor-directions.js';
+import {verifyArrivalHelp} from './verify-arrival-help.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
@@ -351,6 +352,7 @@ try{
     await verifyMapRendering(browser,origin,root);
     await verifyBlankEditor(browser,origin,root);
     await verifyEditorDirections(browser,origin,root);
+    await verifyArrivalHelp(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}

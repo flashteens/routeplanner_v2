@@ -224,5 +224,10 @@
   "directionLabelEmpty": "（未設定）",
   "directionLabelsApplied": "已套用方向文字到 {count} 個路段。可按復原取消整次覆蓋。",
   "directionRequired": "搭車路段的方向識別代碼必填。",
-  "directionsDistinct": "正向與反向方向識別代碼不能相同。"
+  "directionsDistinct": "正向與反向方向識別代碼不能相同。",
+  "fieldHelp": "欄位說明",
+  "arrivalHelpForward": "選填：車輛走完此路段後，改用這個方向代碼銜接下一段，仍視為同車直通、不算換車。一般情況留白即可沿用 direction；此代碼不會直接顯示為查詢頁的方向文字。",
+  "arrivalHelpReverse": "選填：反向走完此路段後，改用這個方向代碼銜接下一段，仍視為同車直通、不算換車。留白會沿用 reverseDirection；圖例的概念也適用反向行進。此代碼不會直接顯示為查詢頁的方向文字。",
+  "arrivalHelpDiagram": "9 字形直通路線：A 往 J 使用 IN，抵達 J 後改為 LOOP，繼續往 B，不需換車。",
+  "arrivalHelpExample": "9 字形圖例：A → J 的 direction = IN、arrivalDirection = LOOP。抵達 J 後可直通 J → B 的 LOOP 區間，不需換車。IN 與 LOOP 只是示例代碼。"
 }

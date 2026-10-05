@@ -57,7 +57,7 @@ npm start
 
 搭車路段的 `direction` 必填；啟用雙向時 `reverseDirection` 也必填。步行方向代碼為選填，但任何已填的正反向代碼皆不可相同。匯入資料可以先修正，但編輯器會阻止帶有這些驗證錯誤的下載與試算。
 
-`arrivalDirection`／`reverseArrivalDirection` 是搭完路段後所使用的方向狀態，通常省略而沿用 `direction`／`reverseDirection`。它們用於同車直通到另一方向的區間，讓下一段不必透過轉乘切換方向；本次新增的批次文字覆蓋不改動這兩個欄位。
+`arrivalDirection`／`reverseArrivalDirection` 是搭完路段後所使用的方向狀態，通常省略而沿用 `direction`／`reverseDirection`。它們用於同車直通到另一方向的區間，讓下一段不必透過轉乘切換方向；一般方向文字的批次覆蓋不改動這兩個欄位。欄位標籤右側的問號可用滑鼠停留、鍵盤或手機點擊開啟說明及 9 字形直通圖例；點擊問號、關閉按鈕、說明外部或按 Escape 可關閉。抵達後方向代碼只控制路由銜接，不是查詢結果的顯示文字。
 
 Editor 的變更保留在目前頁面的記憶體；重新整理前請匯出。Editor 不會寫入伺服器、資料庫或舊專案。要發布新的內容，請將匯出的 JSON 放到 `public/data/<conf>.json`，新增系統時亦更新 `public/data/systems.json`，再重新 build。圖上 `position` / `labelOffset` 與遊戲 `coordinates` 分開保存，拖曳不改變遊戲座標或里程。RoFT 正式版與預覽版的站位及可對應的路線折點參照 `docs/roft-beno-20260920.txt`（2026-09-20 Beno 原稿）；未對應區間使用水平、垂直或 45° 折線。畫面使用圓角，重疊路段會自動平行偏移，包含跨過中間站的快速路線；可用 editor 持續調整。車站標記會依畫出的圓角與停靠線位置自動校正；中型站延展成長圓形／圓角矩形，大型站維持圓形並擴大，未停靠的路線在標記旁避讓。總覽時依鄰站距離限制標記最小尺寸。這些只影響畫面，不寫回 JSON 位置或新增欄位。
 
