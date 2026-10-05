@@ -3,6 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import express from 'express';
+import {createBlankNetwork} from '../shared/blank-network.js';
 import {findRoute} from '../shared/router.js';
 import {systemTitle,sourceLinks,footerDescription} from '../shared/presentation.js';
 import {nameOf} from '../shared/network.js';
@@ -71,7 +72,7 @@ app.get('/sw.js',async(req,res)=>{
 let vite;
 if(dev){const {createServer}=await import('vite');vite=await createServer({root,server:{middlewareMode:true},appType:'custom'});}
 app.get(['/', '/editor'],async(req,res)=>{
-  const data=await loadNetwork(req.query.conf),lang=locale(req),t=translator(dictionaries[lang]);
+  const data=req.path==='/editor'&&req.query.conf==='_blank'?createBlankNetwork():await loadNetwork(req.query.conf),lang=locale(req),t=translator(dictionaries[lang]);
   let content=`<main><h1>${escape(t('appTitle'))} · ${escape(systemTitle(data,lang,t))}${data.preview?' · '+escape(t('preview')):''}</h1><p>${escape(t('subtitle'))}</p>${footerDescription(data,lang)?`<p>${escape(footerDescription(data,lang))}</p>`:''}${sourceLinks(data,lang).slice(0,1).filter(link=>/^https?:\/\//.test(link.url)).map(link=>`<p><a href="${escape(link.url)}">${escape(link.text)}</a></p>`).join('')}<form action="/route"><input type="hidden" name="conf" value="${escape(data.id)}"><input type="hidden" name="lang" value="${lang}">${['from','to'].map(key=>`<label>${escape(t(key))}<select name="${key}">${Object.values(data.stations).map(s=>`<option value="${escape(s.id)}">${escape(nameOf(s,lang))}</option>`).join('')}</select></label>`).join('')}<button>${escape(t('plan'))}</button></form><p><a href="/api">API</a></p></main>`;
   let title=`${t('appTitle')} · ${systemTitle(data,lang,t)}${data.preview?' · '+t('preview'):''}`;
   if(req.query.from && req.query.to && req.path!=='/editor'){

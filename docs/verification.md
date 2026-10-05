@@ -92,3 +92,16 @@ Service worker 更新至 `ftmc-v2-9`。環境沿用 Node.js 22.22.1、Playwright
 - 既有 RoFT 測試單獨重跑為 12 通過、1 失敗；本次開始前的 `56c82f9` 已把預覽版 NX02 的圖上位置改為 (-484, -143)，因此固定舊位置 (-500, 0) 的斷言失敗。前節的路由時間資料差異仍未處理。本次保留既有 JSON，不改路由，也不放寬既有資料斷言。
 
 Service worker 更新至 `ftmc-v2-11`。未改 JSON 結構或內容；只做本機修改與提交，不 push。
+
+
+## 空白地圖編輯器（2026-10-05）
+
+`/editor?conf=_blank` 及編輯器右上角的「(空白地圖)」會建立一份獨立、符合 schemaVersion 2 的空文件。共用工廠提供伺服器 HTML 與瀏覽器初始資料，不新增第五個公開 JSON 或系統登錄；查詢首頁與 API 清單仍為原本四套地圖。空白文件可下載、重新開啟及在編輯器內試算，重新整理會回到空白，編輯成果仍須下載保存。
+
+車站、路線與路段的新增規則抽出為編輯器與單元測試共用函式。瀏覽器三站兩段的試算發現既有方向推算在 90° 轉彎處可能改用不同方位代碼，使同一條線無法直通；已讓相接的既有行車方向優先於幾何方位，仍保留既有不透明方向代碼及 XYZ 里程推算。
+
+- 新增 8 項單元測試：空文件驗證與渲染、文件彼此獨立、不完整路網的新增防護、先加站或先加線與初始重疊站位、移動站位／折點／雙向試算、Undo 回到空白與 Redo／JSON 往返、不合法或重複 ID，以及同線轉彎直通。`node tests/blank-editor.test.js` 全部通過，並納入 `npm test`。既有 editor-map、editor-history、geometry、station rendering 與 presentation 測試亦通過。
+- 既有 RoFT 測試重跑為 12 通過、1 失敗；仍為前節記錄的 NX02 位置資料與固定舊斷言不符。本次未修改四套地圖 JSON 或既有資料斷言。
+- `npm run build` 與完整 `npm run verify` 通過；新增實際瀏覽器三語直接入口、首頁隱藏／編輯器切換、過早新增路段防護、三站兩段加折點、Undo／Redo、JSON 下載重開、同線轉彎試算及離線重新載入／新增車站。瀏覽器無 JavaScript runtime error，也未請求不存在的 `/data/_blank.json`。實際編輯截圖為忽略的 `test-results/editor-blank.png`。65 個舊網站檔案雜湊不變。
+
+Service worker 更新至 `ftmc-v2-12`，空白地圖直接使用本機文件，不抓取不存在的 JSON。只做本機修改與提交，不 push。

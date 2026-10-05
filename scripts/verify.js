@@ -8,6 +8,7 @@ import {findRoute} from '../shared/router.js';
 import {validateNetwork} from '../shared/network.js';
 import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
+import {verifyBlankEditor} from './verify-blank-editor.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
@@ -347,6 +348,7 @@ try{
     console.log('Offline: reload, station search, local routing, language switching and one-system cache passed.');
     await verifyImprovements(browser,origin,root);
     await verifyMapRendering(browser,origin,root);
+    await verifyBlankEditor(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}

@@ -1,4 +1,4 @@
-const VERSION='ftmc-v2-11';
+const VERSION='ftmc-v2-12';
 const SHELL=VERSION+'-shell',NETWORK=VERSION+'-network';
 let activeConf=null;
 let mutations=Promise.resolve();
@@ -23,6 +23,7 @@ self.addEventListener('message',event=>{
   mutations=mutations.then(async()=>{
     if(activeConf!==event.data.conf)return;
     await selectNetwork(event.data.conf);
+    if(event.data.conf==='_blank'){event.source?.postMessage({type:'CACHE_STATUS',conf:'_blank',ready:true});return;}
     const response=await fetch(`/data/${event.data.conf}.json`,{cache:'no-cache'}).catch(()=>null);
     if(response?.ok && activeConf===event.data.conf)await(await caches.open(NETWORK)).put(`/data/${event.data.conf}.json`,response);
     const ready=Boolean(await(await caches.open(NETWORK)).match(`/data/${event.data.conf}.json`));

@@ -6,6 +6,7 @@ import {systemTitle,footerDescription,sourceLinks} from '../shared/presentation.
 import {nameOf} from '../shared/network.js';
 import {translator} from '../shared/format.js';
 import {editorSnapshot} from '../shared/editor-document.js';
+import {createBlankNetwork} from '../shared/blank-network.js';
 import './style.css';
 
 const url=new URL(location.href);
@@ -26,7 +27,8 @@ function App(){
   useEffect(()=>{
     setData(null);setError(false);setCached(false);setPreviewing(false);setDraftDirty(false);
     const abort=new AbortController();
-    fetch(`/data/${encodeURIComponent(conf)}.json`,{signal:abort.signal}).then(r=>{if(!r.ok)throw new Error('network');return r.json();}).then(next=>{if(abort.signal.aborted)return;setData(next);setSavedSnapshot(editorSnapshot(next));}).catch(e=>{if(e.name!=='AbortError')setError(true);});
+    if(isEditor&&conf==='_blank'){const next=createBlankNetwork();setData(next);setSavedSnapshot(editorSnapshot(next));}
+    else fetch(`/data/${encodeURIComponent(conf)}.json`,{signal:abort.signal}).then(r=>{if(!r.ok)throw new Error('network');return r.json();}).then(next=>{if(abort.signal.aborted)return;setData(next);setSavedSnapshot(editorSnapshot(next));}).catch(e=>{if(e.name!=='AbortError')setError(true);});
     if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(reg=>{if(!abort.signal.aborted)reg.active?.postMessage({type:'SELECT_NETWORK',conf});});
     return()=>abort.abort();
   },[conf]);
@@ -39,9 +41,10 @@ function App(){
   },[conf]);
   useEffect(()=>{const next=new URL(location.href);next.searchParams.set('conf',conf);next.searchParams.set('lang',lang);history.replaceState(null,'',next);document.documentElement.lang=lang==='zh'?'zh-Hant':lang;if(data)document.title=`${t('appTitle')} · ${systemTitle(data,lang,t)}${data.preview?' · '+t('preview'):''}`;},[conf,lang,data?.preview,dicts,data?.id,data?.names,data?.ui?.unofficial]);
   if(!dicts)return <div className="initial-loading">FTMC Route Planner v2 <span>{error?'Unable to load language files.':'…'}</span></div>;
-  return <div className={data?.preview?'app preview-theme':'app'}><header className="site-header"><a className="brand" href={`/?conf=${conf}&lang=${lang}`}><img src="/icon.svg" alt=""/><span><strong>FTMC</strong><small>ROUTE PLANNER <b>v2</b></small></span></a>
-    <nav><a className={!isEditor?'current':''} href={`/?conf=${conf}&lang=${lang}`}>{t('planner')}</a><a className={isEditor?'current':''} href={`/editor?conf=${conf}&lang=${lang}`}>{t('editor')}</a><a href="/api">{t('api')}</a></nav>
-    <div className="header-settings"><label><span className="sr-only">{t('system')}</span><select value={conf} onChange={e=>{if(unsavedRef.current&&!confirm(t('unsavedChanges'))){e.target.value=conf;return;}const next=new URL(location.href);for(const key of ['from','to','criteria','transferCoef','horseSpeedClass','enableExpressCarts'])next.searchParams.delete(key);history.replaceState(null,'',next);setConf(e.target.value);}}>{systems.map(system=><option key={system.id} value={system.id}>{nameOf(system,lang)}</option>)}</select></label>
+  const plannerConf=conf==='_blank'?'ftmc':conf;
+  return <div className={data?.preview?'app preview-theme':'app'}><header className="site-header"><a className="brand" href={`/?conf=${plannerConf}&lang=${lang}`}><img src="/icon.svg" alt=""/><span><strong>FTMC</strong><small>ROUTE PLANNER <b>v2</b></small></span></a>
+    <nav><a className={!isEditor?'current':''} href={`/?conf=${plannerConf}&lang=${lang}`}>{t('planner')}</a><a className={isEditor?'current':''} href={`/editor?conf=${conf}&lang=${lang}`}>{t('editor')}</a><a href="/api">{t('api')}</a></nav>
+    <div className="header-settings"><label><span className="sr-only">{t('system')}</span><select value={conf} onChange={e=>{if(unsavedRef.current&&!confirm(t('unsavedChanges'))){e.target.value=conf;return;}const next=new URL(location.href);for(const key of ['from','to','criteria','transferCoef','horseSpeedClass','enableExpressCarts'])next.searchParams.delete(key);history.replaceState(null,'',next);setConf(e.target.value);}}>{isEditor&&<option value="_blank">{t('blankMap')}</option>}{systems.map(system=><option key={system.id} value={system.id}>{nameOf(system,lang)}</option>)}</select></label>
       <label><span className="sr-only">{t('language')}</span><select value={lang} onChange={e=>setLang(e.target.value)}><option value="en">English</option><option value="zh">繁體中文</option><option value="ja">日本語</option></select></label></div></header>
     <div className="status-bar"><span className={'status-dot '+(online?'':'offline')}/><span>{t(online?'online':'offline')}</span><span className="status-divider">·</span><span>{t(cached?'offlineReady':'offlineNotReady')}</span>{data?.preview&&<strong className="preview-badge">{t('preview')}</strong>}{unsaved&&<strong className="unsaved-status">{t('unsavedStatus')}</strong>}</div>
     {error?<main className="card load-error" role="alert">{t('loadError')}</main>:!data?<main className="card load-error">{t('loading')}</main>:isEditor&&!previewing?<Editor key={data.id} data={data} setData={setData} lang={lang} t={t} onPreview={()=>{setDraftDirty(false);setPreviewing(true);}} onDownloaded={downloaded} onDraftChange={setDraftDirty}/>:<>{isEditor&&<button className="back-editor" onClick={()=>setPreviewing(false)}>← {t('backEditor')}</button>}<Planner key={data.id} data={data} lang={lang} dict={dicts[lang]} t={t} localPreview={isEditor}/></>}

@@ -1,7 +1,7 @@
 import React,{useState,useMemo,useEffect,useRef} from 'react';
 import NetworkMap from './NetworkMap.jsx';
 import {nameOf,validateNetwork} from '../shared/network.js';
-import {edgeDefaults} from '../shared/editor-defaults.js';
+import {edgeDefaults,addEditorItem} from '../shared/editor-defaults.js';
 import {insertControlPoint,midpointControlPoint} from '../shared/map-geometry.js';
 import {emptyHistory,recordEdit,replayHistory,validateEditorHistory,recoverEditorHistory,withoutHistory,checkHistoryShape} from '../shared/editor-history.js';
 import DraftField,{DraftContext} from './DraftField.jsx';
@@ -47,17 +47,9 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   function add(){
     if(!flushDrafts())return;
     const id=prompt(t('newId'))?.trim();if(!id)return;
-    if(!/^[\w:#.-]+$/.test(id)||['__proto__','constructor','prototype','editorHistory'].includes(id)||(tab==='edges'?data.edges.some(e=>e.id===id):data[tab]?.[id])){setNotice(t('duplicateId'));return;}
-    let added=false;
-    if(tab==='stations')added=editNetwork(d=>({...d,stations:{...d.stations,[id]:{id,names:{en:id,zh:id},aliases:[],codes:[],coordinates:null,position:{x:0,y:0},symbol:'L-3'}}}),{kind:'add',target:`stations:${id}`});
-    if(tab==='lines')added=editNetwork(d=>({...d,lines:{...d.lines,[id]:{id,names:{en:id,zh:id},color:'#176b76',interior:false}}}),{kind:'add',target:`lines:${id}`});
-    if(tab==='edges'){
-      const stations=Object.keys(data.stations),lineId=Object.keys(data.lines).find(id=>!data.lines[id].interior)||Object.keys(data.lines)[0];
-      if(stations.length<2||!lineId){setNotice(t('invalidNetwork'));return;}
-      const edge={id,kind:'ride',from:stations[0],to:stations[1],lineId,bidirectional:true,metrics:{timeSec:30,distanceKm:0,price:0},points:[]};
-      added=editNetwork(d=>({...d,edges:[...d.edges,{...edge,...edgeDefaults(d,edge)}]}),{kind:'add',target:`edges:${id}`});
-      if(added)setAutomatic(v=>({...v,[id]:true}));
-    }
+    let next;try{next=addEditorItem(current.current,tab,id);}catch(error){setNotice(t(error.message));return;}
+    const added=editNetwork(next,{kind:'add',target:`${tab}:${id}`});
+    if(added&&tab==='edges')setAutomatic(v=>({...v,[id]:true}));
     if(added){select(tab,id);setNotice('');}
   }
   function remove(){

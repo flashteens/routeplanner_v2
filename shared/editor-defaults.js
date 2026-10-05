@@ -12,7 +12,9 @@ export function inferDirection(data,lineId,from,to,excludeId) {
     if(edge.bidirectional)candidates.push({from:edge.to,to:edge.from,direction:edge.reverseDirection,label:edge.reverseDirectionLabel});
     for(const c of candidates){if(c.direction==null)continue;const v=vector(data,c.from,c.to),size=v&&Math.hypot(v.x,v.y);
       const similarity=length&&size?(v.x*target.x+v.y*target.y)/(length*size):1;
-      const proximity=c.from===from||c.to===to?4:1,score=Math.max(0,similarity)**4*proximity;
+      // Transit direction continues across a bend; compass direction does not.
+      const continuation=c.to===from||c.from===to,exact=c.from===from&&c.to===to;
+      const proximity=c.from===from||c.to===to?4:1,score=(exact?16:continuation?8:0)+Math.max(0,similarity)**4*proximity;
       const previous=scores.get(c.direction)||{score:0,label:c.label};previous.score+=score;scores.set(c.direction,previous);
     }
   }
@@ -39,4 +41,18 @@ export function edgeDefaults(data,edge) {
   if(edge.kind==='walk')return {direction:'',reverseDirection:'',directionLabel:{},reverseDirectionLabel:{},metrics:{...edge.metrics,distanceKm:0}};
   const forward=inferDirection(data,edge.lineId,edge.from,edge.to,edge.id),reverse=inferDirection(data,edge.lineId,edge.to,edge.from,edge.id);
   return {...forward,reverseDirection:reverse.direction,reverseDirectionLabel:reverse.directionLabel,metrics:{...edge.metrics,distanceKm:stationDistanceKm(data,edge.from,edge.to)}};
+}
+
+// The same creation rules serve the editor UI and blank-document tests.
+export function addEditorItem(data,tab,id) {
+  if(!/^[\w:#.-]+$/.test(id)||['__proto__','constructor','prototype','editorHistory'].includes(id)||(tab==='edges'?data.edges.some(e=>e.id===id):Object.hasOwn(data[tab]||{},id)))throw new Error('duplicateId');
+  if(tab==='stations')return {...data,stations:{...data.stations,[id]:{id,names:{en:id,zh:id},aliases:[],codes:[],coordinates:null,position:{x:0,y:0},symbol:'L-3'}}};
+  if(tab==='lines')return {...data,lines:{...data.lines,[id]:{id,names:{en:id,zh:id},color:'#176b76',interior:false}}};
+  if(tab==='edges'){
+    const stations=Object.keys(data.stations),lineId=Object.keys(data.lines).find(id=>!data.lines[id].interior)||Object.keys(data.lines)[0];
+    if(stations.length<2||!lineId)throw new Error('invalidNetwork');
+    const edge={id,kind:'ride',from:stations[0],to:stations[1],lineId,bidirectional:true,metrics:{timeSec:30,distanceKm:0,price:0},points:[]};
+    return {...data,edges:[...data.edges,{...edge,...edgeDefaults(data,edge)}]};
+  }
+  throw new Error('invalidNetwork');
 }
