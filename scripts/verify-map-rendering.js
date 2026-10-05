@@ -20,6 +20,13 @@ export async function verifyMapRendering(browser,origin,root){
     await toggle.uncheck();
     for(let i=0;i<8;i++)await page.getByRole('button',{name:'Zoom in',exact:true}).click();
     const dimensions=(await page.locator('.map-canvas svg').getAttribute('viewBox')).split(' ').map(Number);
+    const invalidSlopes=await page.locator('path[data-edge]').evaluateAll(paths=>paths.flatMap(path=>{
+      const tokens=path.getAttribute('d').match(/[MLQ]|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)||[];let i=0,previous;
+      const point=()=>({x:Number(tokens[i++]),y:Number(tokens[i++])});
+      while(i<tokens.length){const command=tokens[i++];if(command==='Q'){point();previous=point();continue;}const next=point();if(command==='L'){const dx=Math.abs(next.x-previous.x),dy=Math.abs(next.y-previous.y);if(dx>1e-6&&dy>1e-6&&Math.abs(dx-dy)>1e-6)return[path.dataset.edge];}previous=next;}
+      return [];
+    }));
+    assert.deepEqual(invalidSlopes,[],'Every rendered straight SVG segment must be horizontal, vertical or exactly 45 degrees');
     for(const [name,cx,cy] of [['north',410,-7525],['central',260,-40]]){
       const view=`${cx-dimensions[2]/2} ${cy-dimensions[3]/2} ${dimensions[2]} ${dimensions[3]}`;
       // Crop the actual SVG DOM without changing JSON or triggering editor edits.
@@ -31,6 +38,6 @@ export async function verifyMapRendering(browser,origin,root){
     await page.getByRole('button',{name:'Fit map',exact:true}).click();
     const downloads=page.waitForEvent('download');await page.locator('.json-actions button.primary').click();await downloads;
     assert.deepEqual(errors,[]);
-    console.log('Map rendering: progressive labels, label toggle, three marker types and real SVG station screenshots passed.');
+    console.log('Map rendering: progressive labels, label toggle, three marker types, octilinear straight segments and real SVG station screenshots passed.');
   }finally{await context.close();}
 }

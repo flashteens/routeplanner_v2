@@ -1,3 +1,4 @@
+import {octilinearPoints,roundedPath,simplifyPoints,nearestSegment} from './map-geometry.js';
 import {stationAppearance,stationDefaultType} from './station-symbol.js';
 
 export const stationLabelThresholds={M:3,I:6,L:12};
@@ -22,7 +23,6 @@ export function sampleMapPath(path) {
   return points;
 }
 const local=(shape,p)=>{const dx=p.x-shape.x,dy=p.y-shape.y;return{x:dx*shape.ux+dy*shape.uy,y:-dx*shape.uy+dy*shape.ux};};
-const world=(shape,p)=>({x:shape.x+p.x*shape.ux-p.y*shape.uy,y:shape.y+p.x*shape.uy+p.y*shape.ux});
 export function stationContains(shape,p,padding=0) {
   const q=local(shape,p);
   if(shape.type==='M'||shape.type==='L')return Math.hypot(q.x,q.y)<=shape.radius+padding;
@@ -52,48 +52,87 @@ function marker(station,style,stops,units) {
   return {x:x*ux-y*uy,y:x*uy+y*ux,type:'I',radius:r,halfWidth,halfHeight,corner,ux,uy,stops};
 }
 
-// Route a passing trace around an enclosing ellipse. For an interchange this
-// ellipse encloses its rounded rectangle, so a pass-through cannot look like a
-// stop. Tangent joins avoid introducing a V-shaped excursion toward the station.
-function avoidMarker(points,shape,clearance) {
-  const circle=shape.type==='M',rx=(shape.halfWidth+clearance)*(circle?1:Math.SQRT2),ry=(shape.halfHeight+clearance)*(circle?1:Math.SQRT2);
-  const normalized=p=>{const q=local(shape,p);return{x:q.x/rx,y:q.y/ry};};
-  const at=p=>world(shape,{x:p.x*rx,y:p.y*ry});
-  const out=[];let changed=false;
-  for(let i=1;i<points.length;i++){
-    const begin=i,a=points[i-1];let last=i;
-    // Consume an entire inside run, including curve samples, as one bypass.
-    const initial=normalized(a);
-    if(Math.hypot(initial.x,initial.y)>=1){
-      while(last<points.length-1){const v=normalized(points[last]);if(Math.hypot(v.x,v.y)>=1)break;last++;}
-    }
-    const b=points[last],p=normalized(a),q=normalized(b);i=last;
-    const dx=q.x-p.x,dy=q.y-p.y,A=dx*dx+dy*dy,B=2*(p.x*dx+p.y*dy),C=p.x*p.x+p.y*p.y-1,disc=B*B-4*A*C;
-    if(!out.length)out.push(a);
-    const insideRun=last>begin;
-    if(!insideRun&&(!A||disc<=0)){out.push(...points.slice(begin,last+1));continue;}
-    const lo=insideRun?0:Math.max(0,(-B-Math.sqrt(disc))/(2*A)),hi=insideRun?1:Math.min(1,(-B+Math.sqrt(disc))/(2*A));
-    if(hi<=lo||lo>=1||hi<=0){out.push(...points.slice(begin,last+1));continue;}
-    // Only detour through edges with endpoints outside the symbol. Stops at
-    // another nearby station must retain their real endpoint rather than move.
-    if(Math.hypot(p.x,p.y)<1||Math.hypot(q.x,q.y)<1){out.push(...points.slice(begin,last+1));continue;}
-    const entry=insideRun?normalized(points[begin]):{x:p.x+lo*dx,y:p.y+lo*dy},exit=insideRun?normalized(points[last-1]):{x:p.x+hi*dx,y:p.y+hi*dy};
-    let start=Math.atan2(entry.y,entry.x),end=Math.atan2(exit.y,exit.x),delta=Math.atan2(Math.sin(end-start),Math.cos(end-start));
-    // Tangency from the outside endpoints to a slightly larger ellipse yields
-    // smooth approach/departure and keeps the approximated arc outside it.
-    const direction=delta>=0?1:-1;
-    const tangent=(v,near)=>{
-      const angle=Math.atan2(v.y,v.x),offset=Math.acos(Math.min(1,1/Math.hypot(v.x,v.y))),candidates=[angle-offset,angle+offset];
-      return candidates.toSorted((a,b)=>Math.abs(Math.atan2(Math.sin(a-near),Math.cos(a-near)))-Math.abs(Math.atan2(Math.sin(b-near),Math.cos(b-near))))[0];
-    };
-    start=tangent(p,start);end=tangent(q,end);delta=end-start;
-    while(direction*delta<0)delta+=direction*2*Math.PI;
-    while(direction*delta>2*Math.PI)delta-=direction*2*Math.PI;
-    const steps=Math.max(2,Math.ceil(Math.abs(delta)/(Math.PI/24))),inflate=1/Math.cos(Math.abs(delta)/steps/2)+.002;
-    for(let j=0;j<=steps;j++){const angle=start+delta*j/steps;out.push(at({x:Math.cos(angle)*inflate,y:Math.sin(angle)*inflate}));}
-    out.push(b);changed=true;
+// Recover sharp corners from the original quadratic controls. Sampling a curve
+// into straight pieces changes its slopes; keep samples only for collision tests.
+function pathAnchors(path) {
+  const tokens=path.match(/[MLQ]|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)||[],points=[];
+  let i=0;const point=()=>({x:Number(tokens[i++]),y:Number(tokens[i++])});
+  while(i<tokens.length){const command=tokens[i++];if(command==='Q')points.push(point(),point());else points.push(point());}
+  return octilinearPoints(simplifyPoints(points));
+}
+function hitsSegment(a,b,shape,padding=0) {
+  const hxWorld=Math.abs(shape.ux)*shape.halfWidth+Math.abs(shape.uy)*shape.halfHeight+padding;
+  const hyWorld=Math.abs(shape.uy)*shape.halfWidth+Math.abs(shape.ux)*shape.halfHeight+padding;
+  if(Math.min(a.x,b.x)>shape.x+hxWorld||Math.max(a.x,b.x)<shape.x-hxWorld||Math.min(a.y,b.y)>shape.y+hyWorld||Math.max(a.y,b.y)<shape.y-hyWorld)return false;
+  const p=local(shape,a),q=local(shape,b);
+  if(shape.type==='M')return nearestSegment([p,q],{x:0,y:0}).distance<shape.radius+padding-1e-7;
+  // A capsule is the Minkowski sum of its inner rectangle and corner circle.
+  const hx=shape.halfWidth-shape.corner,hy=shape.halfHeight-shape.corner,r=shape.corner+padding;
+  const corners=[{x:-hx,y:-hy},{x:hx,y:-hy},{x:hx,y:hy},{x:-hx,y:hy}];
+  if(stationContains(shape,a,padding)||stationContains(shape,b,padding))return true;
+  for(let i=0;i<4;i++){
+    const c=corners[i],d=corners[(i+1)%4];
+    const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+    if(cross(p,q,c)*cross(p,q,d)<0&&cross(c,d,p)*cross(c,d,q)<0)return true;
+    if(Math.min(nearestSegment([p,q],c).distance,nearestSegment([p,q],d).distance,nearestSegment([c,d],p).distance,nearestSegment([c,d],q).distance)<r-1e-7)return true;
   }
-  return {points:out,changed};
+  return false;
+}
+const hitsPath=(points,shape,padding=0)=>points.some((p,i)=>i&&hitsSegment(points[i-1],p,shape,padding));
+
+// A small visibility grid routes around the hub using only the four permitted
+// slopes. Clearance includes the configured corner radius, so rounding the
+// resulting elbows does not cut through the station marker.
+function bypass(a,b,obstacles,radius,clearance,scale=1) {
+  const xs=new Set([a.x,b.x]),ys=new Set([a.y,b.y]);
+  for(const shape of obstacles){
+    const margin=clearance+radius*scale;
+    const hx=Math.abs(shape.ux)*shape.halfWidth+Math.abs(shape.uy)*shape.halfHeight+margin;
+    const hy=Math.abs(shape.uy)*shape.halfWidth+Math.abs(shape.ux)*shape.halfHeight+margin;
+    xs.add(shape.x-hx);xs.add(shape.x+hx);ys.add(shape.y-hy);ys.add(shape.y+hy);
+  }
+  const nodes=[...xs].flatMap(x=>[...ys].map(y=>({x,y}))).filter(p=>!obstacles.some(shape=>stationContains(shape,p,clearance)));
+  const start=nodes.findIndex(p=>Math.hypot(p.x-a.x,p.y-a.y)<1e-7),end=nodes.findIndex(p=>Math.hypot(p.x-b.x,p.y-b.y)<1e-7);
+  if(start<0||end<0)return null;
+  const distance=nodes.map(()=>Infinity),previous=new Map(),pending=new Set(nodes.map((_,i)=>i));distance[start]=0;
+  while(pending.size){
+    const current=[...pending].reduce((a,b)=>distance[a]<distance[b]?a:b);pending.delete(current);
+    if(!Number.isFinite(distance[current]))break;
+    if(current===end){const points=[];for(let n=end;n!==undefined;n=previous.get(n))points.push(nodes[n]);return simplifyPoints(points.toReversed());}
+    const p=nodes[current];
+    for(const next of pending){
+      const q=nodes[next],dx=Math.abs(p.x-q.x),dy=Math.abs(p.y-q.y);
+      if(dx>1e-7&&dy>1e-7&&Math.abs(dx-dy)>1e-7)continue;
+      if(obstacles.some(shape=>hitsSegment(p,q,shape,clearance)))continue;
+      const alignment=Math.abs((q.x-p.x)*(b.y-a.y)-(q.y-p.y)*(b.x-a.x));
+      const endpointTurn=(current===start||next===end)&&alignment>1e-7?Math.max(radius,1)*.01:0;
+      const cost=distance[current]+Math.hypot(dx,dy)+endpointTurn;
+      if(cost<distance[next]){distance[next]=cost;previous.set(next,current);}
+    }
+  }
+  return null;
+}
+function avoidMarkers(path,obstacles,radius,clearance) {
+  let anchors=pathAnchors(path),changed=false;
+  // Work on whole runs through obstacles, including nearby corners. Endpoints
+  // at another station stay fixed; unrelated parts keep their original anchors.
+  for(let attempt=1;attempt<=4;attempt++){
+    const output=[anchors[0]];let repaired=false;
+    for(let i=1;i<anchors.length;i++){
+      const a=output.at(-1),b=anchors[i],active=obstacles.filter(shape=>hitsSegment(a,b,shape,clearance));
+      if(!active.length){output.push(b);continue;}
+      let end=i;
+      while(end<anchors.length-1&&active.some(shape=>stationContains(shape,anchors[end],clearance)))end++;
+      const target=anchors[end],relevant=obstacles.filter(shape=>hitsPath(anchors.slice(i-1,end+1),shape,clearance));
+      const detour=bypass(a,target,relevant,radius,clearance,attempt);
+      if(detour){output.push(...detour.slice(1));i=end;repaired=true;}
+      else output.push(b);
+    }
+    anchors=simplifyPoints(output);changed||=repaired;
+    const rendered=roundedPath(anchors,radius);
+    if(!obstacles.some(shape=>hitsPath(sampleMapPath(rendered),shape)))return changed?rendered:path;
+  }
+  return changed?roundedPath(anchors,radius):path;
 }
 
 export function mapStationLayout(data,edges,paths,units=1) {
@@ -113,17 +152,15 @@ export function mapStationLayout(data,edges,paths,units=1) {
     const markerUnits=style.type==='L'?units:Math.min(units,Math.min(...neighbours)/24);
     markers.set(station.id,marker(station,style,incident.get(station.id)||[],markerUnits));
   }
-  const rendered=new Map(paths);
+  const rendered=new Map(paths),radius=data.map?.cornerRadius??12;
   for(const edge of edges){
-    let points=traces.get(edge.id),changed=false;
-    for(const [id,shape] of markers){
-      if(!incident.has(id)||shape.type==='L'||id===edge.from||id===edge.to||points.length<2)continue;
-      const padding=Math.min(3*units,shape.radius*.65);
-      // Cheap bounds rejection keeps overview rendering practical.
-      if(!points.some((p,i)=>i&&Math.min(p.x,points[i-1].x)<=shape.x+shape.halfWidth+shape.halfHeight+padding&&Math.max(p.x,points[i-1].x)>=shape.x-shape.halfWidth-shape.halfHeight-padding&&Math.min(p.y,points[i-1].y)<=shape.y+shape.halfWidth+shape.halfHeight+padding&&Math.max(p.y,points[i-1].y)>=shape.y-shape.halfWidth-shape.halfHeight-padding))continue;
-      const result=avoidMarker(points,shape,padding);points=result.points;changed||=result.changed;
-    }
-    if(changed)rendered.set(edge.id,points.map((p,i)=>`${i?'L':'M'} ${p.x} ${p.y}`).join(' '));
+    const points=traces.get(edge.id);
+    if(points.length<2)continue;
+    const obstacles=[...markers].filter(([id,shape])=>incident.has(id)&&shape.type!=='L'&&id!==edge.from&&id!==edge.to).map(([,shape])=>shape);
+    if(!obstacles.some(shape=>hitsPath(points,shape)))continue;
+    // Include nearby hubs for the search; a detour must not enter another hub.
+    const nearby=obstacles.filter(shape=>hitsPath(points,shape,radius+3*units));
+    rendered.set(edge.id,avoidMarkers(paths.get(edge.id),nearby,radius,Math.min(3*units,...nearby.map(s=>s.radius*.65))));
   }
   return {markers,paths:rendered};
 }

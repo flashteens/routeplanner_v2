@@ -17,6 +17,22 @@ function assertOutside(path,marker){
   }
 }
 
+function assertOctilinear(path) {
+  const tokens=path.match(/[MLQ]|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)||[];
+  let i=0,previous;
+  const point=()=>({x:Number(tokens[i++]),y:Number(tokens[i++])});
+  while(i<tokens.length){
+    const command=tokens[i++];
+    if(command==='Q'){point();previous=point();continue;}
+    const next=point();
+    if(command==='L'){
+      const dx=Math.abs(next.x-previous.x),dy=Math.abs(next.y-previous.y);
+      assert.ok(dx<1e-6||dy<1e-6||Math.abs(dx-dy)<1e-6,`Non-octilinear straight segment: ${JSON.stringify(previous)} → ${JSON.stringify(next)}`);
+    }
+    previous=next;
+  }
+}
+
 test('unchecked labels progressively reveal mega, interchange, then limited stations',()=>{
   for(const [zoom,expected] of [[1,[]],[2.5,[]],[3,['M']],[5,['M']],[6,['M','I']],[11,['M','I']],[12,['M','I','L']]]){
     assert.deepEqual(['M','I','L'].filter(type=>showStationLabel(type,zoom)),expected);
@@ -67,6 +83,7 @@ for(const conf of ['ftmc','ftmc_preview'])test(`${conf}: screenshot stations cov
   const data=JSON.parse(fs.readFileSync(new URL(`../public/data/${conf}.json`,import.meta.url))),before=JSON.stringify(data);
   for(const units of [.125,1,2,4,16,32]){
     const rendered=layout(data,units);
+    for(const path of rendered.paths.values())assertOctilinear(path);
     for(const id of ['NWM','GH','GB']){
       const marker=rendered.markers.get(id);
       assert.equal(marker.type,id==='GB'?'M':'I');
@@ -96,4 +113,23 @@ test('a curved passing trace that dips into a station detours without cutting aw
   assert.ok(sampleMapPath(paths.get('curve')).some(p=>stationContains(render.markers.get('A'),p)),'Fixture must pass through the original marker');
   assertOutside(render.paths.get('curve'),render.markers.get('A'));
   assert.notEqual(render.paths.get('curve'),paths.get('curve'));
+});
+
+test('passing detours use only the four straight slopes and the configured rounded corners',()=>{
+  for(const type of ['I','M'])for(let rotation=0;rotation<8;rotation++)for(const radius of [3,12,24]){
+    const data=fixture();data.stations.A.symbol=`${type}-3`;data.map={cornerRadius:radius};
+    data.stations.P={id:'P',position:{x:0,y:-100},symbol:'L-3'};data.stations.Q={id:'Q',position:{x:0,y:200},symbol:'L-3'};
+    data.edges.push({id:'passing',lineId:'L2',from:'P',to:'Q'});
+    const angle=rotation*Math.PI/4,c=Math.cos(angle),s=Math.sin(angle);
+    for(const station of Object.values(data.stations)){const p=station.position;station.position={x:p.x*c-p.y*s,y:p.x*s+p.y*c};}
+    const raw=mapPaths(data,data.edges,5,radius),rendered=mapStationLayout(data,data.edges,raw),path=rendered.paths.get('passing');
+    assertOctilinear(path);assertOutside(path,rendered.markers.get('A'));
+    assert.ok(path.includes(' Q '),'Bypass elbows must be rounded rather than sampled into straight facets');
+    const tokens=path.match(/[MLQ]|-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi);let index=0,previous;
+    const point=()=>({x:Number(tokens[index++]),y:Number(tokens[index++])});
+    while(index<tokens.length){const command=tokens[index++];if(command==='Q'){const control=point(),end=point();assert.ok(Math.hypot(previous.x-control.x,previous.y-control.y)<=radius+1e-6);assert.ok(Math.hypot(end.x-control.x,end.y-control.y)<=radius+1e-6);previous=end;}else previous=point();}
+
+    const actual=sampleMapPath(path),original=sampleMapPath(raw.get('passing'));
+    for(const index of [0,-1]){const a=actual.at(index),b=original.at(index);assert.ok(Math.hypot(a.x-b.x,a.y-b.y)<1e-7,'Passing endpoints must remain in place');}
+  }
 });
