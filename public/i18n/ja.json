@@ -124,7 +124,7 @@
   "price": "この区間だけを利用する場合の運賃",
   "fromLine": "乗換元の路線・方向",
   "toLine": "乗換先の路線・方向",
-  "direction": "方向識別子",
+  "direction": "正方向の識別子",
   "reverseDirection": "逆方向の識別子",
   "reverseTimeSec": "逆方向の所要時間（秒）",
   "transferSlope": "駅への慣れの各段階で追加する秒数",
@@ -211,5 +211,18 @@
   "availableLines": "利用できる路線",
   "wikiSearch": "RoFT Wiki を検索",
   "footerDescription": "フッターの多言語説明（JSON）",
-  "fileReadError": "この JSON ファイルを読み込めません。"
+  "fileReadError": "この JSON ファイルを読み込めません。",
+  "directionLabel": "正方向の案内文",
+  "reverseDirectionLabel": "逆方向の案内文",
+  "labelLanguageZh": "繁体字中国語",
+  "labelLanguageEn": "英語",
+  "labelLanguageJa": "日本語",
+  "directionLabelPlaceholder": "例：中央駅方面／2番ホーム",
+  "applyDirectionLabels": "路線 {line} の方向 {direction} にある全 {count} 区間に適用",
+  "applyDirectionLabelsConfirm": "路線 {line} の方向 {direction} には {count} 区間があり、次の案内文が設定されています：",
+  "applyDirectionLabelsWarning": "同じ路線と方向識別子に一致する正方向・逆方向の案内文を、現在編集中の内容で上書きします（すべての言語を含む）。他の路線や方向は変更しません。上書きしますか？",
+  "directionLabelEmpty": "（未設定）",
+  "directionLabelsApplied": "{count} 区間に方向の案内文を適用しました。元に戻す操作で一括上書きを取り消せます。",
+  "directionRequired": "乗車区間の方向識別子は必須です。",
+  "directionsDistinct": "正方向と逆方向の識別子は異なる値にしてください。"
 }

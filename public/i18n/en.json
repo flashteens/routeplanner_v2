@@ -124,7 +124,7 @@
   "price": "Standalone segment fare",
   "fromLine": "From line / direction",
   "toLine": "To line / direction",
-  "direction": "Direction identifier",
+  "direction": "Forward direction identifier",
   "reverseDirection": "Reverse direction identifier",
   "reverseTimeSec": "Reverse time (seconds)",
   "transferSlope": "Additional seconds per transfer familiarity level",
@@ -211,5 +211,18 @@
   "availableLines": "Available lines",
   "wikiSearch": "Search the RoFT wiki",
   "footerDescription": "Footer descriptions (JSON)",
-  "fileReadError": "Unable to read this JSON file."
+  "fileReadError": "Unable to read this JSON file.",
+  "directionLabel": "Forward direction text",
+  "reverseDirectionLabel": "Reverse direction text",
+  "labelLanguageZh": "Traditional Chinese",
+  "labelLanguageEn": "English",
+  "labelLanguageJa": "Japanese",
+  "directionLabelPlaceholder": "e.g. Towards Central station / Platform 2",
+  "applyDirectionLabels": "Apply to all {count} sections of line {line}, direction {direction}",
+  "applyDirectionLabelsConfirm": "Line {line}, direction {direction} has {count} sections with these existing texts:",
+  "applyDirectionLabelsWarning": "Matching forward and reverse texts will be replaced by the currently edited text, including all languages. Other lines and directions remain unchanged. Overwrite?",
+  "directionLabelEmpty": "(Not set)",
+  "directionLabelsApplied": "Direction text applied to {count} sections. Undo reverses the entire overwrite.",
+  "directionRequired": "A direction identifier is required for a ride section.",
+  "directionsDistinct": "Forward and reverse direction identifiers must differ."
 }

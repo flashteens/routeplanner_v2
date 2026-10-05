@@ -124,7 +124,7 @@
   "price": "單獨搭乘此區間的票價",
   "fromLine": "轉乘來源路線／方向",
   "toLine": "轉乘目標路線／方向",
-  "direction": "方向識別代碼",
+  "direction": "正向方向識別代碼",
   "reverseDirection": "反向方向識別代碼",
   "reverseTimeSec": "反向時間（秒）",
   "transferSlope": "熟悉程度每級增加的秒數",
@@ -211,5 +211,18 @@
   "availableLines": "可搭乘路線",
   "wikiSearch": "搜尋 RoFT Wiki",
   "footerDescription": "頁尾多語說明（JSON）",
-  "fileReadError": "無法讀取此 JSON 檔案。"
+  "fileReadError": "無法讀取此 JSON 檔案。",
+  "directionLabel": "正向方向文字內容",
+  "reverseDirectionLabel": "反向方向文字內容",
+  "labelLanguageZh": "繁體中文",
+  "labelLanguageEn": "英文",
+  "labelLanguageJa": "日文",
+  "directionLabelPlaceholder": "例如：往某某站方向／第二月台",
+  "applyDirectionLabels": "套用到 {line} 路線的 {direction} 方向上所有 {count} 個路段",
+  "applyDirectionLabelsConfirm": "{line} 路線的 {direction} 方向共有 {count} 個路段，目前包含下列文字內容：",
+  "applyDirectionLabelsWarning": "同一路線＋方向代碼的正向或反向文字內容都會被覆蓋為目前編輯的內容（包含所有語言）。其他路線或方向不會改動。確定要覆蓋嗎？",
+  "directionLabelEmpty": "（未設定）",
+  "directionLabelsApplied": "已套用方向文字到 {count} 個路段。可按復原取消整次覆蓋。",
+  "directionRequired": "搭車路段的方向識別代碼必填。",
+  "directionsDistinct": "正向與反向方向識別代碼不能相同。"
 }

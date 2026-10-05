@@ -6,6 +6,7 @@ import {insertControlPoint,midpointControlPoint} from '../shared/map-geometry.js
 import {emptyHistory,recordEdit,replayHistory,validateEditorHistory,recoverEditorHistory,withoutHistory,checkHistoryShape} from '../shared/editor-history.js';
 import DraftField,{DraftContext} from './DraftField.jsx';
 import {stationSymbol,stationDefaultType} from '../shared/station-symbol.js';
+import {directionCodeProblem,editorDirectionProblems,directionLabelTargets,directionLabelSummary,applyDirectionLabels} from '../shared/editor-directions.js';
 
 function JsonField({label,value,onChange,t}){
   return <label className="field-label">{label}<DraftField as="textarea" aria-label={label} className="json-field" value={JSON.stringify(value,null,2)} onCommit={text=>onChange(JSON.parse(text))} t={t}/></label>;
@@ -16,7 +17,8 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   const [draftCount,setDraftCount]=useState(0);
   const fileInput=useRef(null),drafts=useRef(new Map()),current=useRef(data),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=data;
   const draftContext=useMemo(()=>({register:(id,value)=>{if(value)drafts.current.set(id,value);else drafts.current.delete(id);setDraftCount(drafts.current.size);}}),[]);
-  const errors=useMemo(()=>validateNetwork(withoutHistory(data)),[data]);
+  const directionErrors=d=>editorDirectionProblems(d).map(issue=>`${issue.edgeId} · ${t(issue.key)}: ${t(issue.problem)}`);
+  const errors=useMemo(()=>[...validateNetwork(withoutHistory(data)),...directionErrors(data)],[data,t]);
   useEffect(()=>{onDraftChange?.(draftCount>0);},[draftCount,onDraftChange]);
   let history;try{history=checkHistoryShape(data.editorHistory??emptyHistory());}catch{history=emptyHistory();}
   function flushDrafts(){let okay=true;for(const draft of [...drafts.current.values()])if(!draft.commit())okay=false;if(!okay)setNotice(t('invalidDraft'));return okay;}
@@ -44,6 +46,26 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   const toggle=(key,checked,change)=><label className="checkbox-label"><input type="checkbox" checked={Boolean(checked)} onChange={e=>{if(!flushDrafts())return;try{change(e.target.checked);}catch(error){setNotice(t('invalidNetwork')+'\n'+error.message);}}}/>{t(key)}</label>;
   function names(){return <>{input('nameEn',item.names.en,value=>update({names:{...item.names,en:value}}))}{input('nameZh',item.names.zh,value=>update({names:{...item.names,zh:value}}))}</>;}
   function changeSymbol(change){const style=stationSymbol(current.current.stations[selected.id],stationDefaultType(current.current,selected.id));update({symbol:`${change.type??style.type}-${change.direction??style.direction}`,labelOffset:undefined,labelAnchor:undefined});}
+  function directionCode(key){return <label className="field-label">{t(key)}<DraftField aria-label={t(key)} required={item.kind==='ride'&&(key==='direction'||item.bidirectional)} validationError={directionCodeProblem(item,key,item[key])?t(directionCodeProblem(item,key,item[key])):''} value={item[key]??''} onCommit={value=>{const trimmed=value.trim(),edge=current.current.edges.find(e=>e.id===selected.id),problem=directionCodeProblem(edge,key,trimmed);if(problem)throw new Error(t(problem));manualEdge({[key]:trimmed});}} t={t}/></label>;}
+  function applyLabels(reverse){
+    if(!flushDrafts())return;
+    const d=current.current,edge=d.edges.find(e=>e.id===selected.id),direction=edge[reverse?'reverseDirection':'direction'],targets=directionLabelTargets(d,edge.lineId,direction);
+    const count=new Set(targets.map(target=>target.edgeId)).size;
+    if(!count){setNotice(t('directionRequired'));return;}
+    const variants=directionLabelSummary(targets,lang).map(group=>`• ${group.text||t('directionLabelEmpty')}${group.extra?` [${group.extra.language}: ${group.extra.text||t('directionLabelEmpty')}]`:''}`).join('\n');
+    if(!confirm(t('applyDirectionLabelsConfirm',{line:edge.lineId,direction,count})+'\n\n'+variants+'\n\n'+t('applyDirectionLabelsWarning')))return;
+    commitNetwork(applyDirectionLabels(d,edge.id,reverse),{kind:'edit',target:`directionLabels:${edge.lineId}:${direction}`});
+    setAutomatic(values=>({...values,...Object.fromEntries(targets.map(target=>[target.edgeId,false]))}));setNotice(t('directionLabelsApplied',{count}));
+  }
+  function directionLabels(reverse=false){
+    const key=reverse?'reverseDirectionLabel':'directionLabel',code=reverse?'reverseDirection':'direction',labels=item[key]||{};
+    const languages=[...new Set(['zh','en',...Object.keys(labels)])],names={zh:t('labelLanguageZh'),en:t('labelLanguageEn'),ja:t('labelLanguageJa')};
+    const count=new Set(directionLabelTargets(data,item.lineId,item[code]).map(target=>target.edgeId)).size;
+    return <details className="options direction-labels" data-direction-label={key}><summary>{t(key)}</summary>
+      {languages.map(language=><label className="field-label" key={language}>{names[language]||language}<DraftField aria-label={`${t(key)} · ${names[language]||language}`} placeholder={t('directionLabelPlaceholder')} value={labels[language]??''} onCommit={value=>{const edge=current.current.edges.find(e=>e.id===selected.id),next={...edge[key]};if(value)next[language]=value;else delete next[language];manualEdge({[key]:next});}} t={t}/></label>)}
+      <button className="apply-direction-labels" disabled={!count} onClick={()=>applyLabels(reverse)}>{t('applyDirectionLabels',{line:item.lineId||'—',direction:item[code]||'—',count})}</button>
+    </details>;
+  }
   function add(){
     if(!flushDrafts())return;
     const id=prompt(t('newId'))?.trim();if(!id)return;
@@ -80,11 +102,11 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
     }
     discardDrafts();activeGroup.current=null;historyNeedsRepair.current=false;current.current=parsed;setData(parsed);setSelected(null);setNotice(loadedNotice);
   }catch(error){setNotice(error instanceof SyntaxError?t('invalidJson'):t('invalidNetwork')+'\n'+error.message);}}
-  function serialize(){if(!flushDrafts())return null;const d=current.current,problems=[...validateNetwork(withoutHistory(d)),...validateEditorHistory(d,validateNetwork)];if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return null;}const value=JSON.stringify({...d,editorHistory:d.editorHistory??emptyHistory()},null,2)+'\n';setNotice(t('saved'));return value;}
+  function serialize(){if(!flushDrafts())return null;const d=current.current,problems=[...validateNetwork(withoutHistory(d)),...directionErrors(d),...validateEditorHistory(d,validateNetwork)];if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return null;}const value=JSON.stringify({...d,editorHistory:d.editorHistory??emptyHistory()},null,2)+'\n';setNotice(t('saved'));return value;}
   function download(){const value=serialize();if(!value)return;const url=URL.createObjectURL(new Blob([value],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=data.id+'.json';onDownloaded?.(current.current);a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   const stationSelect=(key,value,onChange)=><label className="field-label">{t(key)}<DraftField key={key} as="select" immediate aria-label={t(key)} value={value} onCommit={onChange} t={t}>{Object.values(data.stations).map(s=><option key={s.id} value={s.id}>{nameOf(s,lang)} · {s.id}</option>)}</DraftField></label>;
   const lineSelect=(key,value,onChange)=><label className="field-label">{t(key)}<DraftField key={key} aria-label={t(key)} list="editor-lines" value={value || ''} onCommit={onChange} t={t}/></label>;
-  return <DraftContext.Provider value={draftContext}><main><div className="page-intro editor-intro"><div><span className="eyebrow">{t('editor')}</span><h1>{t('editorTitle')}</h1><p>{t('editorSubtitle')}</p></div><button className="primary" onClick={()=>{if(!flushDrafts())return;errors.length?setNotice(t('invalidNetwork')):onPreview();}}>{t('viewPlanner')} →</button></div>
+  return <DraftContext.Provider value={draftContext}><main><div className="page-intro editor-intro"><div><span className="eyebrow">{t('editor')}</span><h1>{t('editorTitle')}</h1><p>{t('editorSubtitle')}</p></div><button className="primary" onClick={()=>{if(!flushDrafts())return;[...validateNetwork(withoutHistory(current.current)),...directionErrors(current.current)].length?setNotice(t('invalidNetwork')):onPreview();}}>{t('viewPlanner')} →</button></div>
     <section className="history-toolbar card" aria-label={t('editHistory')}><button onClick={()=>replay(false)} disabled={!history.cursor}>{t('undo')}</button><button onClick={()=>replay(true)} disabled={history.cursor>=history.entries.length}>{t('redo')}</button><span>{t('historyCount',{count:history.entries.length})}</span><button className="danger" onClick={clearHistory} disabled={!history.entries.length}>{t('clearHistory')}</button>{draftCount>0&&<button onClick={discardDrafts}>{t('discardDrafts')}</button>}</section>
     <section className="json-workbench card" aria-busy={opening}>
       <div className="json-actions"><button disabled={opening} onClick={()=>fileInput.current.click()}>{t('loadFile')}</button><input ref={fileInput} className="sr-only" tabIndex={-1} aria-label={t('loadFile')} type="file" accept="application/json,.json" onChange={async e=>{const input=e.target,file=input.files[0];if(!file)return;setOpening(true);try{load(await file.text());}catch{setNotice(t('fileReadError'));}finally{input.value='';setOpening(false);}}}/><button className="primary" disabled={opening} onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className="notice" role="status">{notice}</pre>}
@@ -113,7 +135,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
         {tab==='lines'&&<>{names()}{input('color',item.color,value=>update({color:value}),'color')}{toggle('interior',item.interior,value=>update({interior:value}))}</>}
         {tab==='edges'&&<><label className="field-label">{t('kind')}<DraftField as="select" immediate aria-label={t('kind')} value={item.kind} onCommit={value=>changeEdge({kind:value,...(value==='transfer'?{to:item.from,fromLine:item.lineId||Object.keys(data.lines)[0],toLine:data.edges.find(v=>v.kind==='ride'&&v.lineId!==item.lineId&&(v.from===item.from||v.to===item.from))?.lineId||Object.keys(data.lines).find(k=>k!==item.lineId&&!data.lines[k].interior)||item.lineId}:item.kind==='transfer'?{lineId:item.fromLine.split(':')[0],to:Object.keys(data.stations).find(k=>k!==item.from),direction:''}:{})})} t={t}>{['ride','walk','transfer'].map(kind=><option key={kind} value={kind}>{t(kind)}</option>)}</DraftField></label>
           {stationSelect('from',item.from,value=>changeEdge({from:value,...(item.kind==='transfer'?{to:value}:{})}))}{item.kind!=='transfer'&&stationSelect('to',item.to,value=>changeEdge({to:value}))}
-          {item.kind==='transfer'?<>{toggle('countTransfer',item.countsAsTransfer,value=>update({countsAsTransfer:value}))}{lineSelect('fromLine',item.fromLine,value=>(value.includes(':')?manualEdge:changeEdge)({fromLine:value}))}{lineSelect('toLine',item.toLine,value=>(value.includes(':')?manualEdge:changeEdge)({toLine:value}))}</>:<>{lineSelect('line',item.lineId,value=>changeEdge({lineId:value}))}{input('direction',item.direction,value=>manualEdge({direction:value}))}{input('reverseDirection',item.reverseDirection,value=>manualEdge({reverseDirection:value}))}</>}
+          {item.kind==='transfer'?<>{toggle('countTransfer',item.countsAsTransfer,value=>update({countsAsTransfer:value}))}{lineSelect('fromLine',item.fromLine,value=>(value.includes(':')?manualEdge:changeEdge)({fromLine:value}))}{lineSelect('toLine',item.toLine,value=>(value.includes(':')?manualEdge:changeEdge)({toLine:value}))}</>:<>{lineSelect('line',item.lineId,value=>changeEdge({lineId:value}))}{directionCode('direction')}{directionLabels()}{directionCode('reverseDirection')}{directionLabels(true)}</>}
           {toggle('autoDefaults',automatic[item.id],value=>{setAutomatic(v=>({...v,[item.id]:value}));if(value)update(edgeDefaults(data,item));})}<button onClick={()=>perform(()=>update(edgeDefaults(current.current,item)))}>{t('suggestDefaults')}</button><p className="muted">{t('defaultsHint')}</p>
           {item.kind==='ride'&&<>{toggle('alightingOnly',item.boardingAllowed===false,value=>update({boardingAllowed:!value}))}{item.bidirectional&&toggle('reverseAlightingOnly',(item.reverseBoardingAllowed??item.boardingAllowed)===false,value=>update({reverseBoardingAllowed:!value}))}{input('arrivalDirection',item.arrivalDirection,value=>update({arrivalDirection:value||undefined}))}{item.bidirectional&&input('reverseArrivalDirection',item.reverseArrivalDirection,value=>update({reverseArrivalDirection:value||undefined}))}{lineSelect('displayLine',item.displayLineId,value=>update({displayLineId:value||undefined}))}</>}
           {toggle('bidirectional',item.bidirectional,value=>update({bidirectional:value}))}{['timeSec','distanceKm','price'].map(key=><React.Fragment key={key}>{input(key,item.metrics[key],value=>(key==='distanceKm'?manualEdge:update)({metrics:{...item.metrics,[key]:value}}),'number')}</React.Fragment>)}

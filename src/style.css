@@ -20,3 +20,5 @@ button.map-field{cursor:pointer;min-height:40px}.map-field:hover{background:var(
 @media(max-width:760px){.editor-grid .map-card{order:0}.editor-grid .editor-panel{order:1}}
 
 @media(max-width:760px){.map-controls{position:static;padding:10px 12px;border-top:1px solid var(--border);background:#f8fafb}.map-label-toggle{position:static;width:max-content;margin:0 12px 12px}.map-edit-controls{position:static;margin:8px 12px;background:#fff}}
+
+.direction-labels{margin:4px 0 18px;padding-top:8px}.apply-direction-labels{width:100%;font-size:12px;text-align:left;overflow-wrap:anywhere}.direction-labels summary{color:var(--accent)}

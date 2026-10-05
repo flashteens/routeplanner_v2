@@ -9,6 +9,7 @@ import {validateNetwork} from '../shared/network.js';
 import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
 import {verifyBlankEditor} from './verify-blank-editor.js';
+import {verifyEditorDirections} from './verify-editor-directions.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
@@ -218,9 +219,9 @@ try{
     await exportEditor();
     let defaultsData=lastExport,newEdge=defaultsData.edges.find(e=>e.id==='browser-defaults');
     assert.equal(newEdge.direction,'L6_N');assert.equal(newEdge.reverseDirection,'L6_S');assert.equal(newEdge.metrics.distanceKm,.268);
-    await fields.getByLabel('Direction identifier',{exact:true}).fill('CUSTOM');
+    await fields.getByLabel('Forward direction identifier',{exact:true}).fill('CUSTOM');
     await fields.getByLabel('Destination',{exact:true}).selectOption('CP');
-    assert.equal(await fields.getByLabel('Direction identifier',{exact:true}).inputValue(),'CUSTOM');
+    assert.equal(await fields.getByLabel('Forward direction identifier',{exact:true}).inputValue(),'CUSTOM');
     await fields.getByLabel('Update suggested defaults automatically',{exact:true}).check();
     await fields.getByLabel('Connection type',{exact:true}).selectOption('transfer');
     await fields.getByLabel('Departure',{exact:true}).selectOption('CH');
@@ -349,6 +350,7 @@ try{
     await verifyImprovements(browser,origin,root);
     await verifyMapRendering(browser,origin,root);
     await verifyBlankEditor(browser,origin,root);
+    await verifyEditorDirections(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}

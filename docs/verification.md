@@ -105,3 +105,23 @@ Service worker 更新至 `ftmc-v2-11`。未改 JSON 結構或內容；只做本�
 - `npm run build` 與完整 `npm run verify` 通過；新增實際瀏覽器三語直接入口、首頁隱藏／編輯器切換、過早新增路段防護、三站兩段加折點、Undo／Redo、JSON 下載重開、同線轉彎試算及離線重新載入／新增車站。瀏覽器無 JavaScript runtime error，也未請求不存在的 `/data/_blank.json`。實際編輯截圖為忽略的 `test-results/editor-blank.png`。65 個舊網站檔案雜湊不變。
 
 Service worker 更新至 `ftmc-v2-12`，空白地圖直接使用本機文件，不抓取不存在的 JSON。只做本機修改與提交，不 push。
+
+
+## 方向文字與批次套用（2026-10-06）
+
+編輯器在正反向方向代碼下方新增可展開的方向文字，中英文欄位有範例 placeholder；既有日文與其他語言從 JSON 物件鍵值動態顯示。文字維持選填。批次按鈕依實際 `lineId`、方向代碼及不同路段數量更新，包含相同組合的 `directionLabel` 與 `reverseDirectionLabel`，不以 `displayLineId` 合併不同服務路線。確認訊息依完整語言物件分組，優先顯示目前語言，只有同文字而其他語言不同時才補一種其他語言。接受後覆蓋全部語言，整批記錄為一個可 Undo／Redo 的操作；取消不修改資料或歷史。
+
+使用者確認：搭車正向必填，只有雙向搭車要求反向必填；步行正反向均選填，但任何有填的正反向代碼都不可相同。UI 顯示欄位錯誤並阻擋無效草稿；匯入的無效方向可繼續修正，但不可下載或試算。既有 JSON schema 與路由不變。
+
+- 新增 9 項 `editor-directions` 單元測試全部通過：必填／不可重複、路線＋方向範圍、跨正反向覆蓋與其他欄位不變、空白 optional 文字、各語言的確認分組、一次 Undo／Redo／JSON 歷史、實際 RoFT SAL_CCW 範圍、步行與單向／雙向例外。既有空白編輯器、history、editor-map、geometry、station rendering、presentation 測試也通過。
+- `npm run build` 與完整 `npm run verify` 通過。瀏覽器檢查中英日欄位、收合預設、placeholder、確認列出相同中文但不同英文的內容、取消與覆蓋、正反向交叉套用、其他路線與方向不變、一次 Undo／Redo、下載驗證、步行選填與不可重複、單向與雙向反向必填、手機無橫向溢出；無 JavaScript runtime error。手機截圖在忽略的 `test-results/editor-directions-mobile.png`。65 個舊檔雜湊不變。
+- 未修改四套地圖 JSON，也未修改抵達後方向欄位或路由演算法。前述 NX02 位置與路由時間的既有測試資料差異仍保留。Service worker 更新至 `ftmc-v2-13`，只做本機提交，不 push。
+
+抵達後方向欄位目前只有以下 RoFT 路段使用，台北捷運與 Newisle 沒有設定：
+
+| 行進方向 | 路線 | 正式／預覽路段 ID | 上車方向 → 抵達後方向 |
+| --- | --- | --- | --- |
+| 翡翠平原 EP → 翡翠西站 YY02 | YYL | e00419／e00426 | YYL_E → YYL_W |
+| 駱駝島 CMI → 甘蔗北鎮 NSV | L6 | e00614／e00622 | L6_CAMEL → L6_S |
+| 駱駝島 CMI → 起司狗旅館 CH | L6 | e00615／e00623 | L6_N → L6_S；反向 CH → CMI 明確設定 L6_CAMEL → L6_CAMEL（與省略時相同） |
+| 神鎬之碑 YY03 → 翡翠西站 YY02（反向） | YYL | e01088／e01087 | YYL_BRANCH_E → YYL_W |
