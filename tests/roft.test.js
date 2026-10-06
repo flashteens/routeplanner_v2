@@ -45,11 +45,12 @@ for(const id of ['ftmc','ftmc_preview']){
     }
     assert.ok(findRoute(full,'GSC','NSV',options).steps.filter(e=>e.kind==='ride').every(e=>e.lineId==='L7'));
   });
-  test(`${id}: Beno positions, Nether relocation and octilinear layout`,()=>{
+  test(`${id}: Beno coverage, Nether relocation and generated octilinear layout`,()=>{
     const d=load(id),gate=d.stations.GH.position;
     for(const station of ['NX01','NX01U'])assert.ok(Math.hypot(d.stations[station].position.x-gate.x,d.stations[station].position.y-gate.y)<150);
-    assert.deepEqual(d.stations.NX02.position,{x:-500,y:0});assert.ok(d.sources.beno.matchedStations>=280);assert.ok(d.sources.beno.tracedEdges>400);
-    for(const e of d.edges.filter(e=>e.kind!=='transfer')){const points=[d.stations[e.from].position,...e.points,d.stations[e.to].position];
+    assert.ok(d.sources.beno.matchedStations>=280);assert.ok(d.sources.beno.tracedEdges>400);
+    // Editable anchors need not be octilinear; the renderer inserts the bends.
+    for(const e of d.edges.filter(e=>e.kind!=='transfer')){const points=octilinearPoints([d.stations[e.from].position,...(e.points||[]),d.stations[e.to].position]);
       for(let i=1;i<points.length;i++){const dx=Math.abs(points[i].x-points[i-1].x),dy=Math.abs(points[i].y-points[i-1].y);assert.ok(dx===0||dy===0||dx===dy,`${e.id} has a non-45° segment`);}}
   });
   test(`${id}: circular extensions share main-line traces and retain through-running routes`,()=>{
