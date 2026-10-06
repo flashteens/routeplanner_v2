@@ -229,5 +229,14 @@
   "arrivalHelpForward": "選填：車輛走完此路段後，改用這個方向代碼銜接下一段，仍視為同車直通、不算換車。一般情況留白即可沿用 direction；此代碼不會直接顯示為查詢頁的方向文字。",
   "arrivalHelpReverse": "選填：反向走完此路段後，改用這個方向代碼銜接下一段，仍視為同車直通、不算換車。留白會沿用 reverseDirection；圖例的概念也適用反向行進。此代碼不會直接顯示為查詢頁的方向文字。",
   "arrivalHelpDiagram": "9 字形直通路線：A 往 J 使用 IN，抵達 J 後改為 LOOP，繼續往 B，不需換車。",
-  "arrivalHelpExample": "9 字形圖例：A → J 的 direction = IN、arrivalDirection = LOOP。抵達 J 後可直通 J → B 的 LOOP 區間，不需換車。IN 與 LOOP 只是示例代碼。"
+  "arrivalHelpExample": "9 字形圖例：A → J 的 direction = IN、arrivalDirection = LOOP。抵達 J 後可直通 J → B 的 LOOP 區間，不需換車。IN 與 LOOP 只是示例代碼。",
+  "fieldHelpDocs": "查看欄位說明文件（另開分頁）",
+  "rideTimeHelp": "搭乘時間＝出發站（前一站）的停靠秒數＋行車至抵達站停車瞬間的秒數；不要包含抵達後的停靠秒數。反向時間也依反向的出發站計算。若有符合的條件式時間，查詢會改用該項時間。",
+  "walkTimeHelp": "此連接的步行秒數，不加列車停靠時間。反向時間指反方向的步行時間；符合的條件式時間會覆蓋基本時間。",
+  "transferTimeHelp": "在同一車站內，從原路線／方向移動到目標路線／方向所需的秒數，不加列車停靠時間。反向時間指反方向的移動時間。",
+  "transferSlopeHelp": "轉乘係數每增加 1，正向時間增加的秒數。實際時間＝基礎秒數＋此數值×（轉乘係數−1）；0 代表不隨係數改變。條件式時間可覆蓋此數值；反向可在 JSON 設定 reverseTransferSlope，未設定時沿用正向。",
+  "variantsHelp": "JSON 陣列：每項以 when 指定馬匹速度或快速列車設定，並以 timeSec 指定時間（搭乘時含出發站停靠，不含抵達後停靠）。只採第一個符合項目；有條件但無符合項目時，整條路段停用。編輯器填 [] 可移除條件，改用基本時間。完整欄位、反向時間與範例請見文件。",
+  "footerDescriptionHelp": "JSON 物件，以語言代碼對應頁尾說明，例如 {\"zh\":\"不計等車時間\",\"en\":\"Waiting time excluded\"}。可新增 ja 等語言；值為純文字，未提供的語言會依序使用英文；沒有英文時不顯示。",
+  "faresHelp": "此 JSON 物件包含完整票價設定，而不只是票價表。type 選擇免費、區間加總或起訖票價；currency 為貨幣，matrix 為起訖站票價，externalTransfers 為站外轉乘規則。完整欄位與範例請見文件。",
+  "optionsHelp": "此 JSON 物件設定可選路線偏好、轉乘係數、馬匹速度及快速列車等級，defaults 為預設選項。comparators 決定各偏好的比較順序與權重；預設值必須列在對應的可選清單中。完整欄位與範例請見文件。"
 }

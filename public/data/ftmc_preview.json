@@ -42767,7 +42767,8 @@
           "y": -7400
         }
       ],
-      "reverseDirection": "WS_N"
+      "reverseDirection": "WS_N",
+      "reverseTimeSec": 27.5
     },
     {
       "id": "e01076",

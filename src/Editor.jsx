@@ -1,5 +1,6 @@
-import React,{useState,useMemo,useEffect,useRef} from 'react';
+import React,{useState,useMemo,useEffect,useRef,useId} from 'react';
 import NetworkMap from './NetworkMap.jsx';
+import FieldHelp from './FieldHelp.jsx';
 import ArrivalDirectionField from './ArrivalDirectionField.jsx';
 import {nameOf,validateNetwork} from '../shared/network.js';
 import {edgeDefaults,addEditorItem} from '../shared/editor-defaults.js';
@@ -9,8 +10,9 @@ import DraftField,{DraftContext} from './DraftField.jsx';
 import {stationSymbol,stationDefaultType} from '../shared/station-symbol.js';
 import {directionCodeProblem,editorDirectionProblems,directionLabelTargets,directionLabelSummary,applyDirectionLabels} from '../shared/editor-directions.js';
 
-function JsonField({label,value,onChange,t}){
-  return <label className="field-label">{label}<DraftField as="textarea" aria-label={label} className="json-field" value={JSON.stringify(value,null,2)} onCommit={text=>onChange(JSON.parse(text))} t={t}/></label>;
+function JsonField({label,value,onChange,t,help,docs,lang}){
+  const id=useId();
+  return <div className="field-label"><div className="arrival-label-heading"><label htmlFor={id}>{label}</label>{help&&<FieldHelp label={label} t={t}><p>{t(help)}</p>{docs&&<p className="field-help-docs"><a href={`/docs/editor-fields.html#${docs}-${lang}`} target="_blank" rel="noopener noreferrer">{t('fieldHelpDocs')}</a></p>}</FieldHelp>}</div><DraftField id={id} as="textarea" aria-label={label} className="json-field" value={JSON.stringify(value,null,2)} onCommit={text=>onChange(JSON.parse(text))} t={t}/></div>;
 }
 export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDraftChange}){
   const [tab,setTab]=useState('stations'),[selected,setSelected]=useState(null),[notice,setNotice]=useState(''),[filter,setFilter]=useState('');
@@ -43,7 +45,10 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   function manualEdge(change){setAutomatic(v=>({...v,[item.id]:false}));update(change);}
   const checked=next=>commitNetwork(next);
   const checkedEdge=change=>checked({...data,edges:data.edges.map(e=>e.id===selected.id?{...e,...change}:e)});
-  const input=(key,value,change,type='text')=><label className="field-label">{t(key)}<DraftField key={key} aria-label={t(key)} type={type} value={value??''} step={type==='number'?'any':undefined} onCommit={change} t={t}/></label>;
+  const input=(key,value,change,type='text')=>{
+    const help=key==='transferSlope'?'transferSlopeHelp':['timeSec','reverseTimeSec'].includes(key)?item.kind==='ride'?'rideTimeHelp':item.kind==='walk'?'walkTimeHelp':'transferTimeHelp':null;
+    return <div className="field-label"><div className="arrival-label-heading"><label htmlFor={`editor-${key}`}>{t(key)}</label>{help&&<FieldHelp label={t(key)} t={t}><p>{t(help)}</p></FieldHelp>}</div><DraftField id={`editor-${key}`} key={key} aria-label={t(key)} type={type} value={value??''} step={type==='number'?'any':undefined} onCommit={change} t={t}/></div>;
+  };
   const toggle=(key,checked,change)=><label className="checkbox-label"><input type="checkbox" checked={Boolean(checked)} onChange={e=>{if(!flushDrafts())return;try{change(e.target.checked);}catch(error){setNotice(t('invalidNetwork')+'\n'+error.message);}}}/>{t(key)}</label>;
   function names(){return <>{input('nameEn',item.names.en,value=>update({names:{...item.names,en:value}}))}{input('nameZh',item.names.zh,value=>update({names:{...item.names,zh:value}}))}</>;}
   function changeSymbol(change){const style=stationSymbol(current.current.stations[selected.id],stationDefaultType(current.current,selected.id));update({symbol:`${change.type??style.type}-${change.direction??style.direction}`,labelOffset:undefined,labelAnchor:undefined});}
@@ -121,10 +126,10 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
         {input('nameEn',data.names.en,value=>commitNetwork(d=>({...d,names:{...d.names,en:value}})))}{input('nameZh',data.names.zh,value=>commitNetwork(d=>({...d,names:{...d.names,zh:value}})))}
         {toggle('enableDistance',data.ui.enableDistance,value=>commitNetwork(d=>({...d,ui:{...d.ui,enableDistance:value}})))}{toggle('enableFare',data.ui.enableFare,value=>commitNetwork(d=>({...d,ui:{...d.ui,enableFare:value}})))}{toggle('previewSetting',data.preview,value=>commitNetwork(d=>({...d,preview:value})))}
         <label className="field-label">{t('fareType')}<DraftField as="select" immediate value={data.fares.type} onCommit={value=>commitNetwork(d=>({...d,fares:{...d.fares,type:value}}))} t={t}>{['free','additive','origin-destination'].map(type=><option key={type} value={type}>{t(type)}</option>)}</DraftField></label>
-        <JsonField label={t('footerDescription')} value={data.footer?.description||{}} onChange={description=>commitNetwork(d=>({...d,footer:{...d.footer,description}}))} t={t}/>
+        <JsonField label={t('footerDescription')} help="footerDescriptionHelp" lang={lang} value={data.footer?.description||{}} onChange={description=>commitNetwork(d=>({...d,footer:{...d.footer,description}}))} t={t}/>
         {input('currency',data.fares.currency,value=>commitNetwork(d=>({...d,fares:{...d.fares,currency:value || null}})))}
-        <JsonField key={data.id+'fares'} label={t('fareMatrix')} value={data.fares} onChange={value=>checked({...data,fares:value})} t={t}/>
-        <JsonField key={data.id+'options'} label={t('advanced')} value={data.options} onChange={value=>checked({...data,options:value})} t={t}/>
+        <JsonField key={data.id+'fares'} label={t('fareMatrix')} help="faresHelp" lang={lang} docs="fares" value={data.fares} onChange={value=>checked({...data,fares:value})} t={t}/>
+        <JsonField key={data.id+'options'} label={t('advanced')} help="optionsHelp" lang={lang} docs="options" value={data.options} onChange={value=>checked({...data,options:value})} t={t}/>
       </div>:item&&selected.tab===tab?<div className="edit-fields" key={selected.id}><div className="selected-heading"><span className="eyebrow">{t('selected')} · {item.id}</span><button className="danger" onClick={remove}>{t('remove')}</button></div>
         {tab==='stations'&&<>{names()}{['aliases','codes'].map(key=><label className="field-label" key={key}>{t(key)}<DraftField as="textarea" value={(item[key]||[]).join('\n')} onCommit={value=>update({[key]:value.split('\n').filter(Boolean)})} t={t}/></label>)}
           <fieldset><legend>{t('coords')}</legend><div className="axis-inputs">{['x','y','z'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField type="number" step="any" allowEmpty value={item.coordinates?.[axis]??''} onCommit={value=>update({coordinates:value===''?null:{...(item.coordinates || {x:0,y:62,z:0}),[axis]:value}})} t={t}/></label>)}</div></fieldset>
@@ -141,7 +146,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
           {item.kind==='ride'&&<>{toggle('alightingOnly',item.boardingAllowed===false,value=>update({boardingAllowed:!value}))}{item.bidirectional&&toggle('reverseAlightingOnly',(item.reverseBoardingAllowed??item.boardingAllowed)===false,value=>update({reverseBoardingAllowed:!value}))}<ArrivalDirectionField value={item.arrivalDirection} onCommit={value=>update({arrivalDirection:value})} t={t}/>{item.bidirectional&&<ArrivalDirectionField reverse value={item.reverseArrivalDirection} onCommit={value=>update({reverseArrivalDirection:value})} t={t}/>}{lineSelect('displayLine',item.displayLineId,value=>update({displayLineId:value||undefined}))}</>}
           {toggle('bidirectional',item.bidirectional,value=>update({bidirectional:value}))}{['timeSec','distanceKm','price'].map(key=><React.Fragment key={key}>{input(key,item.metrics[key],value=>(key==='distanceKm'?manualEdge:update)({metrics:{...item.metrics,[key]:value}}),'number')}</React.Fragment>)}
           {item.bidirectional&&input('reverseTimeSec',item.reverseTimeSec??item.metrics.timeSec,value=>update({reverseTimeSec:value}),'number')}{input('transferSlope',item.transferSlope || 0,value=>update({transferSlope:value}),'number')}
-          <p className="muted">{t('conditionsHint')}</p><JsonField label={t('conditions')} value={item.variants||[]} onChange={value=>{if(!Array.isArray(value))throw new Error(t('invalidNetwork'));checkedEdge({variants:value.length?value:undefined});}} t={t}/>
+          <p className="muted">{t('conditionsHint')}</p><JsonField label={t('conditions')} help="variantsHelp" lang={lang} docs="variants" value={item.variants||[]} onChange={value=>{if(!Array.isArray(value))throw new Error(t('invalidNetwork'));checkedEdge({variants:value.length?value:undefined});}} t={t}/>
           {item.kind!=='transfer'&&<fieldset><legend>{t('points')}</legend><p className="muted">{t('pointsHint')}</p>{(item.points||[]).map((point,i)=><div className="point-row" key={i}><span>{i+1}</span>{['x','y'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField aria-label={`${t('points')} ${i+1} ${axis.toUpperCase()}`} type="number" value={point[axis]} onCommit={value=>update({points:item.points.map((p,j)=>i===j?{...p,[axis]:value}:p)},{kind:'move',target:`edge:${item.id}:point:${i}`})} t={t}/></label>)}<button aria-label={`${t('removePoint')} ${i+1}`} onClick={()=>perform(()=>update({points:item.points.filter((p,j)=>i!==j)}))}>×</button></div>)}<button onClick={()=>perform(()=>update({points:insertControlPoint(current.current,item,midpointControlPoint(current.current,item))}))}>{t('addPoint')}</button></fieldset>}
         </>}
       </div>:<p className="empty-editor">{t('nothingSelected')}</p>}

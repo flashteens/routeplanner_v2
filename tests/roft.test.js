@@ -101,3 +101,15 @@ test('new connections infer existing opaque direction codes, XYZ mileage and tra
   assert.equal(transfer.fromLine,'L1:CUSTOM_EAST');assert.equal(transfer.metrics.distanceKm,0);
   d.stations.GSC.coordinates=null;assert.equal(stationDistanceKm(d,'GSC','NSV'),0);
 });
+
+
+test('RoFT WS retains asymmetric dwell/travel times in both editions and every option profile',()=>{
+  for(const id of ['ftmc','ftmc_preview']){
+    const d=load(id);
+    for(const horseSpeedClass of d.options.horseSpeeds)for(const enableExpressCarts of d.options.expressLevels)for(const transferCoef of d.options.transferCoefficients){
+      const edges=expandEdges(d,{horseSpeedClass,enableExpressCarts,transferCoef}).filter(e=>e.lineId==='WS');
+      assert.equal(edges.find(e=>e.from==='HEC'&&e.to==='WS05').timeSec,27.5);
+      assert.equal(edges.find(e=>e.from==='WS05'&&e.to==='HEC').timeSec,30);
+    }
+  }
+});

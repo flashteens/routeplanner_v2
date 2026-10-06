@@ -10,6 +10,7 @@ import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
 import {verifyBlankEditor} from './verify-blank-editor.js';
 import {verifyEditorDirections} from './verify-editor-directions.js';
+import {verifyFieldHelp} from './verify-field-help.js';
 import {verifyArrivalHelp} from './verify-arrival-help.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
@@ -353,6 +354,7 @@ try{
     await verifyBlankEditor(browser,origin,root);
     await verifyEditorDirections(browser,origin,root);
     await verifyArrivalHelp(browser,origin,root);
+    await verifyFieldHelp(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}

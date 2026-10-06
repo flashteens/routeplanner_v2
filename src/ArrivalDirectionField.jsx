@@ -1,4 +1,5 @@
-import React,{useEffect,useId,useRef,useState} from 'react';
+import React,{useId} from 'react';
+import FieldHelp from './FieldHelp.jsx';
 import DraftField from './DraftField.jsx';
 
 function ArrivalDiagram({t,id}){
@@ -13,21 +14,8 @@ function ArrivalDiagram({t,id}){
   </svg><figcaption>{t('arrivalHelpExample')}</figcaption></figure>;
 }
 export default function ArrivalDirectionField({reverse=false,value,onCommit,t}){
-  const field=reverse?'reverseArrivalDirection':'arrivalDirection',id=useId(),container=useRef(null);
-  const [hovered,setHovered]=useState(false),[pinned,setPinned]=useState(false),[focused,setFocused]=useState(false),[dismissed,setDismissed]=useState(false);
-  const open=!dismissed&&(hovered||pinned||focused),close=()=>{setHovered(false);setPinned(false);setFocused(false);setDismissed(true);};
-  useEffect(()=>{if(!open)return;const outside=e=>{if(!container.current?.contains(e.target))close();},escape=e=>{if(e.key==='Escape')close();};document.addEventListener('pointerdown',outside);document.addEventListener('keydown',escape);return()=>{document.removeEventListener('pointerdown',outside);document.removeEventListener('keydown',escape);};},[open]);
+  const field=reverse?'reverseArrivalDirection':'arrivalDirection',id=useId();
   return <div className="field-label arrival-code-field"><div className="arrival-label-heading"><label htmlFor={id}>{t(field)}</label>
-    <span className="arrival-help" ref={container} onPointerLeave={()=>setHovered(false)}>
-      <button type="button" className="field-help-button" aria-label={`${t('fieldHelp')}: ${t(field)}`} aria-expanded={open} aria-controls={`${id}-help`}
-        onPointerEnter={e=>{if(e.pointerType==='mouse'){setHovered(true);setDismissed(false);}}}
-        onFocus={e=>{if(e.currentTarget.matches(':focus-visible')){setFocused(true);setDismissed(false);}}} onBlur={()=>setFocused(false)}
-        onClick={()=>{if(pinned)close();else{setPinned(true);setDismissed(false);}}}>?</button>
-      <div hidden={!open} id={`${id}-help`} className="arrival-help-panel" role="dialog" aria-label={`${t('fieldHelp')}: ${t(field)}`}>
-        <div className="arrival-help-content"><div className="arrival-help-title"><strong>{t(field)}</strong><button type="button" aria-label={t('close')} onClick={close}>×</button></div>
-          <p>{t(reverse?'arrivalHelpReverse':'arrivalHelpForward')}</p><ArrivalDiagram t={t} id={`arrival-${id.replace(/[^\w-]/g,'')}`}/>
-        </div>
-      </div>
-    </span>
+    <FieldHelp label={t(field)} t={t}><p>{t(reverse?'arrivalHelpReverse':'arrivalHelpForward')}</p><ArrivalDiagram t={t} id={`arrival-${id.replace(/[^\w-]/g,'')}`}/></FieldHelp>
   </div><DraftField id={id} aria-label={t(field)} value={value??''} onCommit={text=>onCommit(text||undefined)} t={t}/></div>;
 }

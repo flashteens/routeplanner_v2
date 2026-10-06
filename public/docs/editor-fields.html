@@ -1,0 +1,209 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Editor JSON field guide / 編輯器 JSON 欄位說明</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:850px;margin:auto;padding:20px;color:#263d49}pre{overflow:auto;background:#eef4f5;padding:16px;border-radius:8px}section{scroll-margin-top:20px}a{color:#176b76}li{margin:10px 0}nav{display:flex;flex-wrap:wrap;gap:20px}</style><body><h1>編輯器 JSON 欄位說明 / Editor JSON field guide</h1><nav><a href="#variants-zh">繁體中文</a><a href="#variants-en">English</a><a href="#variants-ja">日本語</a></nav>
+<section id="variants-zh" lang="zh-Hant"><h2>條件式時間 · variants (zh)</h2><p>JSON 陣列：每項以 when 指定馬匹速度或快速列車設定，並以 timeSec 指定時間（搭乘時含出發站停靠，不含抵達後停靠）。只採第一個符合項目；有條件但無符合項目時，整條路段停用。編輯器填 [] 可移除條件，改用基本時間。完整欄位、反向時間與範例請見文件。</p><ul><li>when 目前只接受 horseSpeedClass（字串代碼陣列）與 enableExpressCarts（數字陣列）。同一陣列內任一值符合即可；不同條件必須同時符合。省略的條件不限制，when: {} 匹配所有選項，可能遮蔽後續項目。</li><li>timeSec 必填且為非負有限秒數。搭乘時間包含出發站停靠與行車，不含抵達後停靠；步行與轉乘不加列車停靠。reverseTimeSec、transferSlope、reverseTransferSlope 可省略，省略時沿用路段原有值；反向時間不會自動改成此項的 timeSec。</li><li>實際正向時間＝timeSec＋transferSlope×（transferCoef−1），反向使用對應反向欄位。條件式時間不改變里程、票價或方向。僅使用第一個符合項目；沒有符合項目時整個連接（含反向）停用。</li><li>編輯器在此欄輸入的是陣列本身。填 [] 會移除 variants 並使用基本時間；直接在路網 JSON 留 variants: [] 則會停用路段。修改基本時間不會更新既有條件式時間，需分別調整。</li></ul><pre><code>[
+  {
+    &quot;when&quot;: {
+      &quot;enableExpressCarts&quot;: [
+        1,
+        2,
+        3
+      ]
+    },
+    &quot;timeSec&quot;: 52.5,
+    &quot;reverseTimeSec&quot;: 52.5,
+    &quot;transferSlope&quot;: 0,
+    &quot;reverseTransferSlope&quot;: 0
+  }
+]</code></pre></section>
+<section id="fares-zh" lang="zh-Hant"><h2>官方票價設定（JSON） · fares (zh)</h2><p>此 JSON 物件包含完整票價設定，而不只是票價表。type 選擇免費、區間加總或起訖票價；currency 為貨幣，matrix 為起訖站票價，externalTransfers 為站外轉乘規則。完整欄位與範例請見文件。</p><ul><li>type: free 為免費；additive 加總路段 metrics.price；origin-destination 使用 matrix[出發站ID][目的站ID]，不是各路段票價相加。currency 可為字串或 null；顯示票價另由 UI 設定控制。</li><li>matrix 為以 canonical 車站 ID 為索引的巢狀物件，票價須為非負有限數，正反向分別填寫。起訖相同票價為 0；缺少起訖組合時票價為未知。</li><li>externalTransfers 是可選陣列，每項 from、to 指定站外轉乘站，maxSeconds 指定優惠轉乘時間上限。超時會分段計算 origin-destination 票價，規則匹配雙向。</li><li>ticketType、source、download、retrieved、transferSource 可保留票種與來源資訊；這些不是時間條件。上例只示範結構，站號 A、B 必須在您的地圖中存在，maxSeconds 並非步行所需時間。</li></ul><pre><code>{
+  &quot;type&quot;: &quot;origin-destination&quot;,
+  &quot;currency&quot;: &quot;TWD&quot;,
+  &quot;matrix&quot;: {
+    &quot;A&quot;: {
+      &quot;A&quot;: 0,
+      &quot;B&quot;: 20
+    },
+    &quot;B&quot;: {
+      &quot;A&quot;: 20,
+      &quot;B&quot;: 0
+    }
+  },
+  &quot;externalTransfers&quot;: [
+    {
+      &quot;from&quot;: &quot;A&quot;,
+      &quot;to&quot;: &quot;B&quot;,
+      &quot;maxSeconds&quot;: 1200
+    }
+  ]
+}</code></pre></section>
+<section id="options-zh" lang="zh-Hant"><h2>其他路線選項 · options (zh)</h2><p>此 JSON 物件設定可選路線偏好、轉乘係數、馬匹速度及快速列車等級，defaults 為預設選項。comparators 決定各偏好的比較順序與權重；預設值必須列在對應的可選清單中。完整欄位與範例請見文件。</p><ul><li>defaults 指定預設 criteria、transferCoef；有馬匹／快速列車清單時，另設 horseSpeedClass、enableExpressCarts。criteria 是查詢頁面列出的路線偏好代碼，transferCoefficients 是可選係數（有限數且至少 1）。預設值必須屬於對應清單。</li><li>horseSpeeds 可選，內容為馬匹代碼字串；expressLevels 可選，內容為快速列車等級數字。搭配 variants.when 使用，單純新增選項不會自動產生路段或時間。</li><li>comparators 是以偏好代碼為索引的物件，每個值為權重物件的陣列。每個權重物件先計算加權總分，依陣列順序比較：前一項相同才比較下一項，較小者優先。</li><li>權重鍵僅接受 timeSec、transfers、transferTimeSec、stops。權重為非負有限數；每組至少有一個正權重。criteria 中每個代碼都需要對應 comparator。示例先比較時間，時間相同再比較轉乘次數。</li></ul><pre><code>{
+  &quot;defaults&quot;: {
+    &quot;criteria&quot;: &quot;time&quot;,
+    &quot;transferCoef&quot;: 1
+  },
+  &quot;criteria&quot;: [
+    &quot;time&quot;,
+    &quot;transfers&quot;
+  ],
+  &quot;transferCoefficients&quot;: [
+    1,
+    4,
+    7
+  ],
+  &quot;comparators&quot;: {
+    &quot;time&quot;: [
+      {
+        &quot;timeSec&quot;: 1
+      },
+      {
+        &quot;transfers&quot;: 1
+      }
+    ],
+    &quot;transfers&quot;: [
+      {
+        &quot;transfers&quot;: 1
+      },
+      {
+        &quot;timeSec&quot;: 1
+      }
+    ]
+  }
+}</code></pre></section>
+<section id="variants-en" lang="en"><h2>Conditional timings · variants (en)</h2><p>A JSON array: each entry uses when to match horse speed or express-cart settings and timeSec for time (rides include departure dwell, excluding arrival dwell). Only the first matching entry is used. No match disables the entire connection. Enter [] in the editor to remove conditions and use base timing. See the documentation for fields, reverse timing and examples.</p><ul><li>when accepts only horseSpeedClass (string-code arrays) and enableExpressCarts (number arrays). Values within an array are OR; different conditions are AND. Omitted conditions are unrestricted. when: {} matches everything and can mask later entries.</li><li>timeSec is required, finite and nonnegative. Ride seconds include departure dwell and travel, excluding arrival dwell. Walking and transfers exclude train dwell. Optional reverseTimeSec, transferSlope and reverseTransferSlope inherit the connection’s base values; reverse time does not automatically inherit this entry’s timeSec.</li><li>Forward time = timeSec + transferSlope × (transferCoef − 1); reverse uses its corresponding fields. Variants do not change distance, fare or direction. Only the first match is used; no match disables the whole connection, including reverse travel.</li><li>Enter the array itself in the editor. [] removes variants and uses base timing. An explicit variants: [] in a network JSON instead disables the connection. Editing base time does not update existing variant times.</li></ul><pre><code>[
+  {
+    &quot;when&quot;: {
+      &quot;enableExpressCarts&quot;: [
+        1,
+        2,
+        3
+      ]
+    },
+    &quot;timeSec&quot;: 52.5,
+    &quot;reverseTimeSec&quot;: 52.5,
+    &quot;transferSlope&quot;: 0,
+    &quot;reverseTransferSlope&quot;: 0
+  }
+]</code></pre></section>
+<section id="fares-en" lang="en"><h2>Official fare configuration (JSON) · fares (en)</h2><p>This JSON object contains the entire fare configuration, not just the fare matrix. type selects free, additive or origin-destination fares; currency is the currency, matrix holds origin/destination fares, and externalTransfers defines out-of-station transfer rules. See the documentation for fields and examples.</p><ul><li>type: free means no fare; additive sums edge metrics.price; origin-destination uses matrix[originID][destinationID], rather than summing edge fares. currency is a string or null. Fare display is controlled separately by UI settings.</li><li>matrix is a nested object keyed by canonical station IDs, with finite nonnegative fares. Provide each direction separately. Same-station fares are zero; missing OD pairs produce an unknown fare.</li><li>Optional externalTransfers entries specify from, to and maxSeconds for out-of-station transfer discounts. When the time limit is exceeded, origin-destination fares are calculated separately for each portion. Each rule applies in both directions.</li><li>Optional ticketType, source, download, retrieved and transferSource retain ticket/source metadata. The example illustrates structure only: stations A and B must exist in your map. maxSeconds is a discount limit, not walking time.</li></ul><pre><code>{
+  &quot;type&quot;: &quot;origin-destination&quot;,
+  &quot;currency&quot;: &quot;TWD&quot;,
+  &quot;matrix&quot;: {
+    &quot;A&quot;: {
+      &quot;A&quot;: 0,
+      &quot;B&quot;: 20
+    },
+    &quot;B&quot;: {
+      &quot;A&quot;: 20,
+      &quot;B&quot;: 0
+    }
+  },
+  &quot;externalTransfers&quot;: [
+    {
+      &quot;from&quot;: &quot;A&quot;,
+      &quot;to&quot;: &quot;B&quot;,
+      &quot;maxSeconds&quot;: 1200
+    }
+  ]
+}</code></pre></section>
+<section id="options-en" lang="en"><h2>Journey options · options (en)</h2><p>This JSON object defines routing preferences, transfer coefficients, horse speeds and express-cart levels. defaults sets initial choices. comparators specifies comparison order and weights for each preference. Defaults must appear in their corresponding allowed lists. See the documentation for fields and examples.</p><ul><li>defaults sets criteria and transferCoef, plus horseSpeedClass and enableExpressCarts when their lists exist. criteria lists routing preference codes; transferCoefficients lists finite allowed coefficients of at least 1. Defaults must belong to their allowed lists.</li><li>Optional horseSpeeds contains string codes; optional expressLevels contains numeric levels. These work with variants.when. Adding an option alone does not generate connections or timing.</li><li>comparators maps preference codes to arrays of weight objects. Each object produces a weighted sum; sums are compared in array order, with later sums breaking ties. Lower scores win.</li><li>Allowed weight keys are timeSec, transfers, transferTimeSec and stops. Weights must be finite and nonnegative; each object needs a positive weight. Every listed preference needs a comparator. The example prioritizes time, then transfers when times tie.</li></ul><pre><code>{
+  &quot;defaults&quot;: {
+    &quot;criteria&quot;: &quot;time&quot;,
+    &quot;transferCoef&quot;: 1
+  },
+  &quot;criteria&quot;: [
+    &quot;time&quot;,
+    &quot;transfers&quot;
+  ],
+  &quot;transferCoefficients&quot;: [
+    1,
+    4,
+    7
+  ],
+  &quot;comparators&quot;: {
+    &quot;time&quot;: [
+      {
+        &quot;timeSec&quot;: 1
+      },
+      {
+        &quot;transfers&quot;: 1
+      }
+    ],
+    &quot;transfers&quot;: [
+      {
+        &quot;transfers&quot;: 1
+      },
+      {
+        &quot;timeSec&quot;: 1
+      }
+    ]
+  }
+}</code></pre></section>
+<section id="variants-ja" lang="ja"><h2>条件付き所要時間 · variants (ja)</h2><p>JSON 配列です。各項目の when で馬の速度や快速トロッコの設定を指定し、timeSec で時間を指定します（乗車は出発駅の停車を含み、到着後の停車を除きます）。最初に一致した項目だけを使い、一致しなければ接続全体が無効になります。エディターで [] を入力すると条件を削除し基本時間を使います。詳細と例は説明文書をご覧ください。</p><ul><li>when は horseSpeedClass（文字列コードの配列）と enableExpressCarts（数値配列）のみを受け付けます。配列内はいずれか一致、異なる条件はすべて一致が必要です。省略した条件は制限しません。when: {} はすべてに一致し、後の項目が使われなくなる場合があります。</li><li>timeSec は必須の非負有限秒数です。乗車は出発駅の停車と走行を含み、到着後の停車を除きます。徒歩・乗換には列車の停車を加えません。reverseTimeSec、transferSlope、reverseTransferSlope は省略時に接続の基本値を使います。逆方向の時間はこの項目の timeSec には自動変更されません。</li><li>正方向の時間＝timeSec＋transferSlope×（transferCoef−1）。逆方向は対応する逆方向の項目を使います。距離・運賃・方向は変更しません。最初の一致のみを使用し、一致がなければ逆方向も含めて接続全体が無効になります。</li><li>エディターには配列そのものを入力します。[] は variants を削除し基本時間を使いますが、路網 JSON に直接 variants: [] を残すと接続が無効になります。基本時間を編集しても既存の条件式時間は変わりません。</li></ul><pre><code>[
+  {
+    &quot;when&quot;: {
+      &quot;enableExpressCarts&quot;: [
+        1,
+        2,
+        3
+      ]
+    },
+    &quot;timeSec&quot;: 52.5,
+    &quot;reverseTimeSec&quot;: 52.5,
+    &quot;transferSlope&quot;: 0,
+    &quot;reverseTransferSlope&quot;: 0
+  }
+]</code></pre></section>
+<section id="fares-ja" lang="ja"><h2>公式運賃設定（JSON） · fares (ja)</h2><p>運賃表だけでなく運賃設定全体の JSON オブジェクトです。type は無料・区間加算・出発到着駅別、currency は通貨、matrix は駅間運賃、externalTransfers は改札外乗換の規則です。詳細と例は説明文書をご覧ください。</p><ul><li>type は free（無料）、additive（区間の metrics.price を加算）、origin-destination（matrix[出発駅ID][到着駅ID] の運賃）です。currency は文字列または null。運賃表示は UI 設定で別に制御します。</li><li>matrix は canonical 駅 ID をキーとする入れ子のオブジェクトで、運賃は非負有限数です。正逆方向を別々に入力します。同一駅は 0、該当する駅間データがなければ運賃は不明です。</li><li>任意の externalTransfers は from、to、maxSeconds で改札外乗換の割引時間上限を指定します。超過すると origin-destination 運賃を区間ごとに計算します。規則は双方向に適用します。</li><li>ticketType、source、download、retrieved、transferSource は券種・出典の情報です。例は構造の説明用で、駅 A・B は地図に存在する必要があります。maxSeconds は割引の上限で、徒歩所要時間ではありません。</li></ul><pre><code>{
+  &quot;type&quot;: &quot;origin-destination&quot;,
+  &quot;currency&quot;: &quot;TWD&quot;,
+  &quot;matrix&quot;: {
+    &quot;A&quot;: {
+      &quot;A&quot;: 0,
+      &quot;B&quot;: 20
+    },
+    &quot;B&quot;: {
+      &quot;A&quot;: 20,
+      &quot;B&quot;: 0
+    }
+  },
+  &quot;externalTransfers&quot;: [
+    {
+      &quot;from&quot;: &quot;A&quot;,
+      &quot;to&quot;: &quot;B&quot;,
+      &quot;maxSeconds&quot;: 1200
+    }
+  ]
+}</code></pre></section>
+<section id="options-ja" lang="ja"><h2>その他の経路設定 · options (ja)</h2><p>経路の優先条件、乗換係数、馬の速度、快速トロッコのレベルを設定する JSON オブジェクトです。defaults は初期値、comparators は比較順序と重みです。初期値は対応する選択肢リストに含めてください。詳細と例は説明文書をご覧ください。</p><ul><li>defaults は criteria、transferCoef を指定し、対応リストがある場合は horseSpeedClass、enableExpressCarts も設定します。criteria は優先条件コード、transferCoefficients は 1 以上の有限な選択可能係数です。初期値は対応リストに含めます。</li><li>任意の horseSpeeds は文字列コード、expressLevels は数値レベルのリストです。variants.when と組み合わせます。選択肢の追加だけでは接続や時間は生成されません。</li><li>comparators は優先条件コードと重みオブジェクトの配列を対応させます。各オブジェクトの加重合計を配列順に比較し、同点のときだけ次を比較します。小さい値が優先されます。</li><li>重みのキーは timeSec、transfers、transferTimeSec、stops のみです。重みは非負有限数で、各組に正の重みが必要です。各優先条件に comparator を用意します。例は時間を優先し、同時間なら乗換回数を比較します。</li></ul><pre><code>{
+  &quot;defaults&quot;: {
+    &quot;criteria&quot;: &quot;time&quot;,
+    &quot;transferCoef&quot;: 1
+  },
+  &quot;criteria&quot;: [
+    &quot;time&quot;,
+    &quot;transfers&quot;
+  ],
+  &quot;transferCoefficients&quot;: [
+    1,
+    4,
+    7
+  ],
+  &quot;comparators&quot;: {
+    &quot;time&quot;: [
+      {
+        &quot;timeSec&quot;: 1
+      },
+      {
+        &quot;transfers&quot;: 1
+      }
+    ],
+    &quot;transfers&quot;: [
+      {
+        &quot;transfers&quot;: 1
+      },
+      {
+        &quot;timeSec&quot;: 1
+      }
+    ]
+  }
+}</code></pre></section>
+</body></html>
