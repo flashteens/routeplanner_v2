@@ -1,3 +1,5 @@
+import {cleanEdge} from './edge-fields.js';
+import {edgeTime} from './familiarity.js';
 import { resolveStation } from './network.js';
 
 const baseLine=syntax => syntax?.split(':')[0];
@@ -23,15 +25,16 @@ export function normalizeOptions(data, options={}) {
 }
 export function expandEdges(data, options={}) {
   const o=normalizeOptions(data,options), edges=[];
-  for (const edge of data.edges) {
+  for (const raw of data.edges) {
+    const edge=cleanEdge(raw);
     const variant=edge.variants?.find(v => Object.entries(v.when).every(([key,values]) => values.includes(o[key])));
     if (edge.variants && !variant) continue;
     const timing={timeSec:edge.metrics.timeSec, reverseTimeSec:edge.reverseTimeSec ?? edge.metrics.timeSec, transferSlope:edge.transferSlope || 0, reverseTransferSlope:edge.reverseTransferSlope ?? edge.transferSlope ?? 0,...variant};
-    edges.push({...edge,sourceEdgeId:edge.id,timeSec:timing.timeSec+timing.transferSlope*(o.transferCoef-1)});
+    edges.push({...edge,sourceEdgeId:edge.id,timeSec:edgeTime(edge,timing,false,o.transferCoef)});
     if (edge.bidirectional) edges.push({...edge,sourceEdgeId:edge.id,from:edge.to,to:edge.from,
       fromLine:edge.toLine,toLine:edge.fromLine,direction:edge.reverseDirection ?? '',directionLabel:edge.reverseDirectionLabel,
       arrivalDirection:edge.reverseArrivalDirection,boardingAllowed:edge.reverseBoardingAllowed ?? edge.boardingAllowed,
-      reversed:true,timeSec:timing.reverseTimeSec+timing.reverseTransferSlope*(o.transferCoef-1)});
+      reversed:true,timeSec:edgeTime(edge,timing,true,o.transferCoef)});
   }
   return edges;
 }

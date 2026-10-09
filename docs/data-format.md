@@ -67,8 +67,7 @@
   "reverseDirectionLabel": { "en": "Westbound", "zh": "往西" },
   "metrics": { "timeSec": 35, "distanceKm": 0.125, "price": 0 },
   "reverseTimeSec": 40,
-  "transferSlope": 0,
-  "reverseTransferSlope": 0,
+  "delayWhenUnfamiliar": false,
   "points": [{ "x": 160, "y": 180 }]
 }
 ```
@@ -99,21 +98,28 @@
 
 ```json
 {
+  "delayWhenUnfamiliar": true,
   "variants": [
     {
       "when": { "enableExpressCarts": [2, 3] },
       "timeSec": 50,
-      "reverseTimeSec": 55,
-      "transferSlope": 0,
-      "reverseTransferSlope": 0
+      "reverseTimeSec": 55
     }
   ]
 }
 ```
 
-存在 `variants` 時，找不到符合選項的項目代表此邊不可用；找到時該項目的時間覆蓋基本時間。可搭配 `horseSpeedClass` 的值陣列。`when` 省略某個選項代表任何該選項值都符合；多條同時符合時採第一條。
+存在 `variants` 時，找不到符合選項的項目代表此邊不可用；找到時該項目的基本時間覆蓋基本時間。可搭配 `horseSpeedClass` 的值陣列。`when` 省略某個選項代表任何該選項值都符合；同一陣列任一值符合，不同條件須同時符合；多條同時符合時採第一條。沒有 `reverseTimeSec` 的項目沿用連接既有反向時間，不自動沿用項目的正向時間。
 
-實際時間為 `timeSec + transferSlope × (transferCoef - 1)`。這精確保存原始轉乘時間函數；反向亦有獨立基礎時間與斜率。Editor 會保留所有 variants，在條件式時間 JSON 欄位修改；若要改成單一固定時間，先清除 variants。
+`delayWhenUnfamiliar` 是唯一的熟悉程度設定，套用至正反向與所有 variants。啟用時以 `transferCoefFunc(baseTime, coefficient)` 計算：
+
+```text
+實際秒數 = 基本秒數 × (0.2 × 係數 + 0.8) + 5/3 × (係數 − 1)
+```
+
+取消勾選時固定為基本秒數。20 秒在係數 1／4／7 時分別為 20／37／54 秒。新建 `transfer` 預設啟用，新建 `ride`／`walk` 預設關閉。既有站外步行仍保留是否延誤的設定。V2 北捷 BL07↔Y16、BL08↔Y17 步行已去掉 V1 誤加的停靠 30 秒，基本時間為 600／360 秒。DR 的兩筆步行與四筆轉乘依 V1 設為啟用。
+
+舊 schema-v2 JSON 的 `transferSlope`／`reverseTransferSlope` 仍可讀取，以便載入舊下載檔及復原舊紀錄；匯出時以一組可復原的編輯轉為布林設定並移除儲存斜率。新的 JSON 不再使用斜率。自訂舊斜率若不是上述共用公式，轉換後依共用公式計算。Editor 會保留 variants 的基本時間與條件；若要改成單一固定時間，清除條件式時間即可。編輯器輸入 `[]` 會移除 variants；直接在路網檔案保留 `variants: []` 則停用此連接。
 
 ## 編輯器復原紀錄
 
@@ -204,3 +210,13 @@ TRTC `edges[].metrics.price` 保存單獨搭乘區間的官方票價，用作資
 ## 編輯器欄位說明
 
 時間、條件式時間、頁尾說明、票價及進階設定欄位旁的問號支援滑鼠懸停、鍵盤與手機點選。較長的 JSON 結構說明另開分頁至 [三語欄位文件](../public/docs/editor-fields.html)，部署後網址為 `/docs/editor-fields.html`。
+
+## 連接編輯與站內動線
+
+新增連接不再要求輸入 ID，使用 `e` 加至少五位遞增數字，避開目前及保留的復原／重做紀錄中的 ID；既有自訂 ID 不改名。起訖站搜尋使用查詢頁面相同引擎：站名、ID、站碼、別名及實際遊戲 XYZ 附近車站；座標搜尋依三維距離排序，沒有遊戲座標的站不參與。未選取有效車站的搜尋草稿阻擋切換與匯出。
+
+切換 kind 時，一次移除不適用欄位，Undo／Redo 可完整恢復。`transfer` 忽略 `lineId`、方向代碼／文字、arrivalDirection、上車限制、顯示路線與路線折點，僅以同站的 `fromLine`／`toLine` 表達動線。`ride`／`walk` 不使用 `fromLine`／`toLine`／`countsAsTransfer`；`walk` 不使用搭乘專屬上車、arrival 與顯示覆寫。舊匯入資料即使殘留其他 kind 的欄位，也不影響轉乘清單或路由呈現。
+
+轉乘圖的頂點完整保留 `L1`、`L1:E`、`#ZY_NJT.B1`、`#_DR_DR02` 等端點，省略方向代表不限方向，不自動補出額外連接。頂點套用路線顏色；箭頭標示單向／雙向，時間是基本秒數，雙向不同時顯示正向／反向。點選箭頭或清單可選取另一筆轉乘；站外步行另列連到另一站的提示。排版依端點與 edge ID 排序，選取、改時間及陣列重排不改變節點位置。支援縮放、平移與鍵盤選取。
+
+各頁籤搜尋提示分開：車站支援名稱／代碼／別名／遊戲 XYZ；路線支援名称或 ID；連接支援 ID、端點站名／代碼、路線名稱與方向語法。新增車站的 SVG 位置採目前地圖視窗中央（四捨五入），不將畫面座標寫為遊戲 XYZ，也不改變目前縮放與平移。

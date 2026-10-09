@@ -1,3 +1,5 @@
+import {withFamiliarity} from './familiarity.js';
+import {cleanEdge} from './edge-fields.js';
 const base=value=>value?.split(':')[0];
 const location=s=>s?.coordinates?{x:s.coordinates.x,y:s.coordinates.z}:s?.position;
 const vector=(data,from,to)=>{const a=location(data.stations[from]),b=location(data.stations[to]);return a&&b?{x:b.x-a.x,y:b.y-a.y}:null;};
@@ -44,15 +46,38 @@ export function edgeDefaults(data,edge) {
 }
 
 // The same creation rules serve the editor UI and blank-document tests.
-export function addEditorItem(data,tab,id) {
+export function addEditorItem(data,tab,id,position={x:0,y:0}) {
   if(!/^[\w:#.-]+$/.test(id)||['__proto__','constructor','prototype','editorHistory'].includes(id)||(tab==='edges'?data.edges.some(e=>e.id===id):Object.hasOwn(data[tab]||{},id)))throw new Error('duplicateId');
-  if(tab==='stations')return {...data,stations:{...data.stations,[id]:{id,names:{en:id,zh:id},aliases:[],codes:[],coordinates:null,position:{x:0,y:0},symbol:'L-3'}}};
+  if(tab==='stations')return {...data,stations:{...data.stations,[id]:{id,names:{en:id,zh:id},aliases:[],codes:[],coordinates:null,position:{x:Math.round(position.x),y:Math.round(position.y)},symbol:'L-3'}}};
   if(tab==='lines')return {...data,lines:{...data.lines,[id]:{id,names:{en:id,zh:id},color:'#176b76',interior:false}}};
   if(tab==='edges'){
     const stations=Object.keys(data.stations),lineId=Object.keys(data.lines).find(id=>!data.lines[id].interior)||Object.keys(data.lines)[0];
     if(stations.length<2||!lineId)throw new Error('invalidNetwork');
-    const edge={id,kind:'ride',from:stations[0],to:stations[1],lineId,bidirectional:true,metrics:{timeSec:30,distanceKm:0,price:0},points:[]};
+    const edge={id,kind:'ride',delayWhenUnfamiliar:false,from:stations[0],to:stations[1],lineId,bidirectional:true,metrics:{timeSec:30,distanceKm:0,price:0},points:[]};
     return {...data,edges:[...data.edges,{...edge,...edgeDefaults(data,edge)}]};
   }
   throw new Error('invalidNetwork');
+}
+
+export function nextEdgeId(data){
+  const ids=new Set(data.edges.map(e=>e.id));
+  // Include retained undo/redo records so a deleted edge's ID is not reused.
+  for(const entry of data.editorHistory?.entries||[])for(const c of entry.changes||[])if(c.collection==='edges')ids.add(c.key);
+  const numbers=[...ids].map(id=>/^(?:e)?(\d+)$/.exec(id)?.[1]).filter(Boolean).map(Number).filter(Number.isSafeInteger);
+  let n=Math.max(0,...numbers)+1,id;
+  do{id='e'+String(n++).padStart(5,'0');}while(ids.has(id));return id;
+}
+export function changeEdgeKind(data,edge,kind){
+  if(edge.kind===kind)return cleanEdge(edge);
+  let next={...edge,kind,delayWhenUnfamiliar:kind==='transfer'};
+  if(kind==='transfer'){
+    next.to=edge.from;next.fromLine=edge.lineId||edge.fromLine||Object.keys(data.lines)[0];
+    next.toLine=data.edges.find(e=>e.kind==='ride'&&e.lineId!==next.fromLine&&(e.from===edge.from||e.to===edge.from))?.lineId||Object.keys(data.lines).find(id=>id!==next.fromLine&&!data.lines[id].interior)||next.fromLine;
+    next.metrics={...edge.metrics,distanceKm:0};
+  }else {
+    next.lineId=edge.kind==='transfer'?edge.fromLine.split(':')[0]:edge.lineId;
+    if(next.to===next.from)next.to=Object.keys(data.stations).find(id=>id!==next.from);
+    next=cleanEdge(next);next={...next,...edgeDefaults(data,next)};
+  }
+  return cleanEdge(withFamiliarity(next,next.delayWhenUnfamiliar));
 }

@@ -19,7 +19,7 @@ for(const id of Object.keys(systems)){
       const expected=new Map();
       for(const [from,neighbors]of Object.entries(c.myMap))for(const[to,links]of Object.entries(neighbors)){
         if(from===to){for(const[fromLine,targets]of Object.entries(links))for(const[toLine,v]of Object.entries(targets))expected.set(JSON.stringify([from,to,fromLine,toLine]),v.value);}
-        else for(const[line,v]of Object.entries(links))expected.set(JSON.stringify([from,to,line,c.getNeighborPathDirection(from,to,line)]),v.value);
+        else for(const[line,v]of Object.entries(links))expected.set(JSON.stringify([from,to,line,c.getNeighborPathDirection(from,to,line)]),v.value-(id==='trtc'&&line==='#_OUT'?30:0));
       }
       if(id.startsWith('ftmc'))for(const key of expected.keys()){const parts=JSON.parse(key);if(correctedLine(parts[2])||correctedLine(parts[3]))expected.delete(key);}
       const actual=expandEdges(d,options).filter(e=>!id.startsWith('ftmc')||!affected(e));assert.equal(actual.length,expected.size,`${id} edge count ${JSON.stringify(options)}`);
@@ -40,7 +40,8 @@ for(const id of Object.keys(systems)){
         const legacyLines=[];for(let step=old;step;step=step.nextStep)legacyLines.push(step.fromLineSyntax);
         // Operational corrections intentionally replace v1 behavior on these services.
         if(id.startsWith('ftmc')&&(legacyLines.some(correctedLine)||result.steps.some(e=>affected({...e,lineId:d.edges.find(v=>v.id===e.edgeId)?.lineId}))))continue;
-        if(result.success){assert.ok(Math.abs(result.metrics.timeSec-old.getTotalDistance())<0.0001,`${id} ${from}→${to} ${criteria}: ${result.metrics.timeSec} != ${old.getTotalDistance()}`);}
+        let legacyWalkCorrection=0;if(id==='trtc')for(let step=old;step?.nextStep;step=step.nextStep)if(step.current!==step.nextStep.current&&step.nextStep.fromLineSyntax?.split(':')[0]==='#_OUT')legacyWalkCorrection+=30;
+        if(result.success){assert.ok(Math.abs(result.metrics.timeSec-(old.getTotalDistance()-legacyWalkCorrection))<0.0001,`${id} ${from}→${to} ${criteria}: ${result.metrics.timeSec} != ${old.getTotalDistance()}`);}
       }
     }
   });

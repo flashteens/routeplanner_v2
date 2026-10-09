@@ -22,7 +22,7 @@ export async function verifyFieldHelp(browser,origin,root){
         const edge=data.edges.find(e=>e.kind===kind&&e.bidirectional);
         await page.locator('.editor-list-tools input').fill(edge.id);await page.locator('.editor-list button').first().click();
         await check('timeSec',`${kind}TimeHelp`);await check('reverseTimeSec',`${kind}TimeHelp`);
-        await check('transferSlope','transferSlopeHelp');await check('conditions','variantsHelp','variants');
+        await check('delayWhenUnfamiliar','familiarityHelp');await check('conditions','variantsHelp','variants');
       }
       await page.locator('.editor-tabs').getByRole('button',{name:t.settings,exact:true}).click();
       await check('footerDescription','footerDescriptionHelp');await check('fareMatrix','faresHelp','fares');await check('advanced','optionsHelp','options');

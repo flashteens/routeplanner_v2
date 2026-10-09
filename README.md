@@ -125,3 +125,5 @@ LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap npm run verify
 ```
 
 不要把 `npm run migrate` 當作啟動步驟。它會覆寫四套路網 JSON；`LEGACY_ROOT` 亦適用於遷移。
+
+編輯器連接自動產生遞增 ID，起訖站支援與查詢頁面相同的站名／代碼／別名／遊戲座標搜尋。選取站內轉乘可查看與點選穩定排版的動線圖。切換連接類型會清除不適用欄位，可透過 Undo／Redo 還原。熟悉程度使用 `delayWhenUnfamiliar` 與 V1 共用公式；欄位問號內含公式及範例。詳細資料格式見 `docs/data-format.md`。

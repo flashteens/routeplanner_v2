@@ -986,9 +986,8 @@
         "en": "for Birch Shore (North)",
         "zh": "往 Birch Shore (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00002",
@@ -1013,9 +1012,8 @@
         "en": "for Birch Shore (South)",
         "zh": "往 Birch Shore (南下)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00003",
@@ -1031,8 +1029,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00004",
@@ -1057,9 +1054,8 @@
         "en": "for Birch Shore (North)",
         "zh": "往 Birch Shore (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00005",
@@ -1084,9 +1080,8 @@
         "en": "for Eastcliff (East)",
         "zh": "往 Eastcliff (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00006",
@@ -1111,9 +1106,8 @@
         "en": "for Horizon (West)",
         "zh": "往 Horizon (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00007",
@@ -1129,8 +1123,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00008",
@@ -1155,9 +1148,8 @@
         "en": "for Birch Shore (North)",
         "zh": "往 Birch Shore (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00009",
@@ -1182,9 +1174,8 @@
         "en": "for Hawthorne (East)",
         "zh": "往 Hawthorne (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00010",
@@ -1209,9 +1200,8 @@
         "en": "for Azalea (West)",
         "zh": "往 Azalea (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00011",
@@ -1227,8 +1217,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00012",
@@ -1253,9 +1242,8 @@
         "en": "for Riverview Heights (East)",
         "zh": "往 Riverview Heights (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00013",
@@ -1280,9 +1268,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00014",
@@ -1298,8 +1285,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00015",
@@ -1324,9 +1310,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00016",
@@ -1351,9 +1336,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00017",
@@ -1378,9 +1362,8 @@
         "en": "for Greenwich (West)",
         "zh": "往 Greenwich (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00018",
@@ -1405,9 +1388,8 @@
         "en": "for Greenwich (East)",
         "zh": "往 Greenwich (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00019",
@@ -1423,8 +1405,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00020",
@@ -1440,8 +1421,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00021",
@@ -1457,8 +1437,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00022",
@@ -1483,9 +1462,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00023",
@@ -1510,9 +1488,8 @@
         "en": "for Eastcliff (East)",
         "zh": "往 Eastcliff (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00024",
@@ -1528,8 +1505,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00025",
@@ -1554,9 +1530,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00026",
@@ -1581,9 +1556,8 @@
         "en": "for Hawthorne (East)",
         "zh": "往 Hawthorne (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00027",
@@ -1599,8 +1573,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00028",
@@ -1625,9 +1598,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00029",
@@ -1652,9 +1624,8 @@
         "en": "for Ridge Park (West)",
         "zh": "往 Ridge Park (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00030",
@@ -1679,9 +1650,8 @@
         "en": "for Horizon (West)",
         "zh": "往 Horizon (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00031",
@@ -1706,9 +1676,8 @@
         "en": "for Greenwich (West)",
         "zh": "往 Greenwich (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00032",
@@ -1724,8 +1693,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00033",
@@ -1741,8 +1709,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00034",
@@ -1758,8 +1725,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00035",
@@ -1784,9 +1750,8 @@
         "en": "for Horizon (West)",
         "zh": "往 Horizon (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00036",
@@ -1811,9 +1776,8 @@
         "en": "for Hawthorne (East)",
         "zh": "往 Hawthorne (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00037",
@@ -1838,9 +1802,8 @@
         "en": "for Union (South)",
         "zh": "往 Union (南下)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00038",
@@ -1856,8 +1819,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00039",
@@ -1873,8 +1835,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00040",
@@ -1890,8 +1851,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00041",
@@ -1916,9 +1876,8 @@
         "en": "for Horizon (West)",
         "zh": "往 Horizon (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00042",
@@ -1943,9 +1902,8 @@
         "en": "for Azalea (South)",
         "zh": "往 Azalea (南下)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00043",
@@ -1961,8 +1919,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00044",
@@ -1987,9 +1944,8 @@
         "en": "for Loma Vista (North)",
         "zh": "往 Loma Vista (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00045",
@@ -2014,9 +1970,8 @@
         "en": "for Loma Vista (North)",
         "zh": "往 Loma Vista (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00046",
@@ -2041,9 +1996,8 @@
         "en": "for Greenwich (East)",
         "zh": "往 Greenwich (東行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00047",
@@ -2059,8 +2013,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00048",
@@ -2085,9 +2038,8 @@
         "en": "for Riverdale (West)",
         "zh": "往 Riverdale (西行)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00049",
@@ -2112,9 +2064,8 @@
         "en": "for Azalea (South)",
         "zh": "往 Azalea (南下)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00050",
@@ -2139,9 +2090,8 @@
         "en": "for Verona Labs (North)",
         "zh": "往 Verona Labs (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00051",
@@ -2157,8 +2107,7 @@
         "price": 0
       },
       "reverseTimeSec": 12.5,
-      "transferSlope": 4.166667,
-      "reverseTransferSlope": 4.166667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00052",
@@ -2183,9 +2132,8 @@
         "en": "for Port Redpath (North)",
         "zh": "往 Port Redpath (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00053",
@@ -2210,9 +2158,8 @@
         "en": "for Port Redpath (North)",
         "zh": "往 Port Redpath (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00054",
@@ -2237,9 +2184,8 @@
         "en": "for Verona Labs (North)",
         "zh": "往 Verona Labs (北上)"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     }
   ]
 }

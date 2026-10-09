@@ -11,7 +11,7 @@ export async function verifyBlankEditor(browser,origin,root){
   page.on('request',request=>{if(new URL(request.url()).pathname==='/data/_blank.json')blankRequests.push(request.url());});
   const add=async(tab,id)=>{
     await page.locator('.editor-tabs').getByRole('button',{name:tab,exact:true}).click();
-    page.once('dialog',dialog=>{assert.equal(dialog.type(),'prompt');return dialog.accept(id);});
+    if(tab!=='Connections')page.once('dialog',dialog=>{assert.equal(dialog.type(),'prompt');return dialog.accept(id);});
     await page.getByRole('button',{name:'Add ＋',exact:true}).click();
   };
   const download=async()=>{
@@ -47,8 +47,8 @@ export async function verifyBlankEditor(browser,origin,root){
     await add('Lines','L1');await add('Connections','AB');
     await page.locator('.editor-panel').getByRole('button',{name:'Add bend',exact:true}).click();
     await add('Connections','BC');
-    await page.getByLabel('Departure',{exact:true}).selectOption('B');
-    await page.getByLabel('Destination',{exact:true}).selectOption('C');
+    await page.getByLabel('Destination',{exact:true}).fill('C');await page.getByLabel('Destination',{exact:true}).press('Enter');
+    await page.getByLabel('Departure',{exact:true}).fill('B');await page.getByLabel('Departure',{exact:true}).press('Enter');
     assert.equal(await page.locator('g[data-station]').count(),3);assert.equal(await page.locator('path[data-edge]').count(),2);
     const undo=page.getByRole('button',{name:'Undo',exact:true}),redo=page.getByRole('button',{name:'Redo',exact:true});
     let count=0;while(await undo.isEnabled()){assert.ok(count++<30);await undo.click();}

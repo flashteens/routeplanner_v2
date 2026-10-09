@@ -1,5 +1,5 @@
 <!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Editor JSON field guide / 編輯器 JSON 欄位說明</title><style>body{font:16px/1.7 system-ui,sans-serif;max-width:850px;margin:auto;padding:20px;color:#263d49}pre{overflow:auto;background:#eef4f5;padding:16px;border-radius:8px}section{scroll-margin-top:20px}a{color:#176b76}li{margin:10px 0}nav{display:flex;flex-wrap:wrap;gap:20px}</style><body><h1>編輯器 JSON 欄位說明 / Editor JSON field guide</h1><nav><a href="#variants-zh">繁體中文</a><a href="#variants-en">English</a><a href="#variants-ja">日本語</a></nav>
-<section id="variants-zh" lang="zh-Hant"><h2>條件式時間 · variants (zh)</h2><p>JSON 陣列：每項以 when 指定馬匹速度或快速列車設定，並以 timeSec 指定時間（搭乘時含出發站停靠，不含抵達後停靠）。只採第一個符合項目；有條件但無符合項目時，整條路段停用。編輯器填 [] 可移除條件，改用基本時間。完整欄位、反向時間與範例請見文件。</p><ul><li>when 目前只接受 horseSpeedClass（字串代碼陣列）與 enableExpressCarts（數字陣列）。同一陣列內任一值符合即可；不同條件必須同時符合。省略的條件不限制，when: {} 匹配所有選項，可能遮蔽後續項目。</li><li>timeSec 必填且為非負有限秒數。搭乘時間包含出發站停靠與行車，不含抵達後停靠；步行與轉乘不加列車停靠。reverseTimeSec、transferSlope、reverseTransferSlope 可省略，省略時沿用路段原有值；反向時間不會自動改成此項的 timeSec。</li><li>實際正向時間＝timeSec＋transferSlope×（transferCoef−1），反向使用對應反向欄位。條件式時間不改變里程、票價或方向。僅使用第一個符合項目；沒有符合項目時整個連接（含反向）停用。</li><li>編輯器在此欄輸入的是陣列本身。填 [] 會移除 variants 並使用基本時間；直接在路網 JSON 留 variants: [] 則會停用路段。修改基本時間不會更新既有條件式時間，需分別調整。</li></ul><pre><code>[
+<section id="variants-zh" lang="zh-Hant"><h2>條件式時間 · variants (zh)</h2><p>JSON 陣列：每項以 when 指定馬匹速度或快速列車設定，並以 timeSec 指定基本時間（搭乘含出發站停靠，不含抵達後停靠）。只採第一個符合項目；無符合項目時整條路段停用。正反向都套用本路段的迷路旅客延誤設定。填 [] 可移除條件，改用基本時間。完整欄位與範例請見文件。</p><ul><li>when 只接受 horseSpeedClass（字串代碼陣列）與 enableExpressCarts（數字陣列）。同一陣列任一值符合，不同條件須同時符合；省略的條件不限制。when: {} 匹配所有選項，可能遮蔽後續項目。</li><li>timeSec 必填且為非負有限秒數。搭乘包含出發站停靠與行車，不含抵達後停靠；步行與轉乘不加停靠。reverseTimeSec 可省略，沿用連接既有反向時間，不自動改成項目的 timeSec。</li><li>delayWhenUnfamiliar 設定在連接本身，不寫在 variants 裡。啟用後，正反向基本秒數皆套用「基本秒數 × (0.2 × 係數 + 0.8) + 5/3 × (係數 − 1)」。20 秒在係數 1／4／7 為 20／37／54 秒，未啟用則固定為基本秒數。</li><li>僅採第一個符合項目；無符合項目時整個連接停用。條件式時間不改變里程、票價或方向。編輯器填 [] 會移除 variants 並使用基本時間；直接在 JSON 保留 variants: [] 則停用連接。</li><li>舊儲存斜率可讀取，但匯出後改用連接的布林延誤設定與共用公式。修改基本時間不會自動更新既有條件式基本時間，需分別調整。</li></ul><pre><code>[
   {
     &quot;when&quot;: {
       &quot;enableExpressCarts&quot;: [
@@ -9,9 +9,7 @@
       ]
     },
     &quot;timeSec&quot;: 52.5,
-    &quot;reverseTimeSec&quot;: 52.5,
-    &quot;transferSlope&quot;: 0,
-    &quot;reverseTransferSlope&quot;: 0
+    &quot;reverseTimeSec&quot;: 52.5
   }
 ]</code></pre></section>
 <section id="fares-zh" lang="zh-Hant"><h2>官方票價設定（JSON） · fares (zh)</h2><p>此 JSON 物件包含完整票價設定，而不只是票價表。type 選擇免費、區間加總或起訖票價；currency 為貨幣，matrix 為起訖站票價，externalTransfers 為站外轉乘規則。完整欄位與範例請見文件。</p><ul><li>type: free 為免費；additive 加總路段 metrics.price；origin-destination 使用 matrix[出發站ID][目的站ID]，不是各路段票價相加。currency 可為字串或 null；顯示票價另由 UI 設定控制。</li><li>matrix 為以 canonical 車站 ID 為索引的巢狀物件，票價須為非負有限數，正反向分別填寫。起訖相同票價為 0；缺少起訖組合時票價為未知。</li><li>externalTransfers 是可選陣列，每項 from、to 指定站外轉乘站，maxSeconds 指定優惠轉乘時間上限。超時會分段計算 origin-destination 票價，規則匹配雙向。</li><li>ticketType、source、download、retrieved、transferSource 可保留票種與來源資訊；這些不是時間條件。上例只示範結構，站號 A、B 必須在您的地圖中存在，maxSeconds 並非步行所需時間。</li></ul><pre><code>{
@@ -68,7 +66,7 @@
     ]
   }
 }</code></pre></section>
-<section id="variants-en" lang="en"><h2>Conditional timings · variants (en)</h2><p>A JSON array: each entry uses when to match horse speed or express-cart settings and timeSec for time (rides include departure dwell, excluding arrival dwell). Only the first matching entry is used. No match disables the entire connection. Enter [] in the editor to remove conditions and use base timing. See the documentation for fields, reverse timing and examples.</p><ul><li>when accepts only horseSpeedClass (string-code arrays) and enableExpressCarts (number arrays). Values within an array are OR; different conditions are AND. Omitted conditions are unrestricted. when: {} matches everything and can mask later entries.</li><li>timeSec is required, finite and nonnegative. Ride seconds include departure dwell and travel, excluding arrival dwell. Walking and transfers exclude train dwell. Optional reverseTimeSec, transferSlope and reverseTransferSlope inherit the connection’s base values; reverse time does not automatically inherit this entry’s timeSec.</li><li>Forward time = timeSec + transferSlope × (transferCoef − 1); reverse uses its corresponding fields. Variants do not change distance, fare or direction. Only the first match is used; no match disables the whole connection, including reverse travel.</li><li>Enter the array itself in the editor. [] removes variants and uses base timing. An explicit variants: [] in a network JSON instead disables the connection. Editing base time does not update existing variant times.</li></ul><pre><code>[
+<section id="variants-en" lang="en"><h2>Conditional timings · variants (en)</h2><p>A JSON array: when matches horse speed or express-cart settings; timeSec specifies base time (rides include departure dwell, not arrival dwell). Only the first match is used; no match disables the connection. Both directions use the connection’s unfamiliar-traveler setting. Enter [] to remove conditions and use base timing. See the documentation for fields and examples.</p><ul><li>when accepts horseSpeedClass (string-code arrays) and enableExpressCarts (number arrays). Values within an array are OR; conditions are AND. Omitted conditions are unrestricted; when: {} matches everything and can mask later entries.</li><li>timeSec is required, finite and nonnegative. Rides include departure dwell and travel, not arrival dwell. Walks and transfers exclude train dwell. Optional reverseTimeSec inherits the connection’s base reverse time, not this entry’s forward time.</li><li>delayWhenUnfamiliar belongs to the connection, not to variants. When enabled, both directions use: base seconds × (0.2 × coefficient + 0.8) + 5/3 × (coefficient − 1). A 20-second base gives 20/37/54 seconds at coefficients 1/4/7. Disabled means fixed base time.</li><li>Only the first match is used. No match disables the whole connection. Variants do not change distance, fare or direction. [] in the editor removes variants; explicit variants: [] in network JSON disables the connection.</li><li>Legacy stored slopes remain readable, but export converts them to the connection’s boolean setting and shared formula. Editing base timing does not update existing variant base times.</li></ul><pre><code>[
   {
     &quot;when&quot;: {
       &quot;enableExpressCarts&quot;: [
@@ -78,9 +76,7 @@
       ]
     },
     &quot;timeSec&quot;: 52.5,
-    &quot;reverseTimeSec&quot;: 52.5,
-    &quot;transferSlope&quot;: 0,
-    &quot;reverseTransferSlope&quot;: 0
+    &quot;reverseTimeSec&quot;: 52.5
   }
 ]</code></pre></section>
 <section id="fares-en" lang="en"><h2>Official fare configuration (JSON) · fares (en)</h2><p>This JSON object contains the entire fare configuration, not just the fare matrix. type selects free, additive or origin-destination fares; currency is the currency, matrix holds origin/destination fares, and externalTransfers defines out-of-station transfer rules. See the documentation for fields and examples.</p><ul><li>type: free means no fare; additive sums edge metrics.price; origin-destination uses matrix[originID][destinationID], rather than summing edge fares. currency is a string or null. Fare display is controlled separately by UI settings.</li><li>matrix is a nested object keyed by canonical station IDs, with finite nonnegative fares. Provide each direction separately. Same-station fares are zero; missing OD pairs produce an unknown fare.</li><li>Optional externalTransfers entries specify from, to and maxSeconds for out-of-station transfer discounts. When the time limit is exceeded, origin-destination fares are calculated separately for each portion. Each rule applies in both directions.</li><li>Optional ticketType, source, download, retrieved and transferSource retain ticket/source metadata. The example illustrates structure only: stations A and B must exist in your map. maxSeconds is a discount limit, not walking time.</li></ul><pre><code>{
@@ -137,7 +133,7 @@
     ]
   }
 }</code></pre></section>
-<section id="variants-ja" lang="ja"><h2>条件付き所要時間 · variants (ja)</h2><p>JSON 配列です。各項目の when で馬の速度や快速トロッコの設定を指定し、timeSec で時間を指定します（乗車は出発駅の停車を含み、到着後の停車を除きます）。最初に一致した項目だけを使い、一致しなければ接続全体が無効になります。エディターで [] を入力すると条件を削除し基本時間を使います。詳細と例は説明文書をご覧ください。</p><ul><li>when は horseSpeedClass（文字列コードの配列）と enableExpressCarts（数値配列）のみを受け付けます。配列内はいずれか一致、異なる条件はすべて一致が必要です。省略した条件は制限しません。when: {} はすべてに一致し、後の項目が使われなくなる場合があります。</li><li>timeSec は必須の非負有限秒数です。乗車は出発駅の停車と走行を含み、到着後の停車を除きます。徒歩・乗換には列車の停車を加えません。reverseTimeSec、transferSlope、reverseTransferSlope は省略時に接続の基本値を使います。逆方向の時間はこの項目の timeSec には自動変更されません。</li><li>正方向の時間＝timeSec＋transferSlope×（transferCoef−1）。逆方向は対応する逆方向の項目を使います。距離・運賃・方向は変更しません。最初の一致のみを使用し、一致がなければ逆方向も含めて接続全体が無効になります。</li><li>エディターには配列そのものを入力します。[] は variants を削除し基本時間を使いますが、路網 JSON に直接 variants: [] を残すと接続が無効になります。基本時間を編集しても既存の条件式時間は変わりません。</li></ul><pre><code>[
+<section id="variants-ja" lang="ja"><h2>条件付き所要時間 · variants (ja)</h2><p>JSON 配列です。when で馬の速度や快速トロッコの設定を指定し、timeSec で基本時間を指定します（乗車は出発駅の停車を含み、到着後の停車を除きます）。最初の一致のみを使い、一致しなければ接続が無効になります。両方向に接続の習熟度設定を適用します。[] で条件を削除します。詳細と例は説明文書をご覧ください。</p><ul><li>when は horseSpeedClass（文字列配列）と enableExpressCarts（数値配列）に対応します。配列内はいずれか一致、異なる条件はすべて一致が必要です。省略条件は制限せず、when: {} はすべてに一致します。</li><li>timeSec は必須の非負有限秒数です。乗車は出発駅の停車と走行を含み、到着後の停車を除きます。徒歩・乗換には列車の停車を加えません。reverseTimeSec は省略時に接続の基本逆方向時間を使い、この項目の正方向時間には変更しません。</li><li>delayWhenUnfamiliar は接続本体に設定します。有効時、両方向の基本時間に「基本秒数×（0.2×係数＋0.8）＋5/3×（係数−1）」を適用します。基本 20 秒で係数 1／4／7 は 20／37／54 秒です。無効時は基本時間で固定します。</li><li>最初の一致のみを使い、一致しなければ接続全体が無効になります。距離・運賃・方向は変更しません。エディターの [] は条件を削除しますが、路網 JSON の variants: [] は接続を無効にします。</li><li>旧斜率は読み込みできますが、エクスポートでは接続の真偽値設定と共通式に変換します。基本時間の編集だけでは既存の条件式基本時間は更新しません。</li></ul><pre><code>[
   {
     &quot;when&quot;: {
       &quot;enableExpressCarts&quot;: [
@@ -147,9 +143,7 @@
       ]
     },
     &quot;timeSec&quot;: 52.5,
-    &quot;reverseTimeSec&quot;: 52.5,
-    &quot;transferSlope&quot;: 0,
-    &quot;reverseTransferSlope&quot;: 0
+    &quot;reverseTimeSec&quot;: 52.5
   }
 ]</code></pre></section>
 <section id="fares-ja" lang="ja"><h2>公式運賃設定（JSON） · fares (ja)</h2><p>運賃表だけでなく運賃設定全体の JSON オブジェクトです。type は無料・区間加算・出発到着駅別、currency は通貨、matrix は駅間運賃、externalTransfers は改札外乗換の規則です。詳細と例は説明文書をご覧ください。</p><ul><li>type は free（無料）、additive（区間の metrics.price を加算）、origin-destination（matrix[出発駅ID][到着駅ID] の運賃）です。currency は文字列または null。運賃表示は UI 設定で別に制御します。</li><li>matrix は canonical 駅 ID をキーとする入れ子のオブジェクトで、運賃は非負有限数です。正逆方向を別々に入力します。同一駅は 0、該当する駅間データがなければ運賃は不明です。</li><li>任意の externalTransfers は from、to、maxSeconds で改札外乗換の割引時間上限を指定します。超過すると origin-destination 運賃を区間ごとに計算します。規則は双方向に適用します。</li><li>ticketType、source、download、retrieved、transferSource は券種・出典の情報です。例は構造の説明用で、駅 A・B は地図に存在する必要があります。maxSeconds は割引の上限で、徒歩所要時間ではありません。</li></ul><pre><code>{

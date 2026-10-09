@@ -6,7 +6,7 @@ import {mapStationLayout,showStationLabel,stationLabelOffset} from '../shared/ma
 import {stationAppearance,labelDirection,stationDefaultType} from '../shared/station-symbol.js';
 
 function bounds(stations,edges=[]){const p=[...Object.values(stations).map(s=>s.position),...edges.flatMap(e=>e.points||[])];if(!p.length)return{x:0,y:0,w:1000,h:800};const xs=p.map(v=>v.x),ys=p.map(v=>v.y),x=Math.min(...xs)-90,y=Math.min(...ys)-90;return{x,y,w:Math.max(400,Math.max(...xs)-x+90),h:Math.max(300,Math.max(...ys)-y+90)};}
-export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options}){
+export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options,onViewportChange}){
   const [zoom,setZoom]=useState(1),[pan,setPan]=useState({x:0,y:0}),[lineFilter,setLineFilter]=useState(''),[labels,setLabels]=useState(false),[hover,setHover]=useState(null);
   const [addingPoint,setAddingPoint]=useState(false);
   const [fitRevision,setFitRevision]=useState(0),[fitRoute,setFitRoute]=useState(false);
@@ -16,10 +16,10 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onAct
   const edges=useMemo(()=>data.edges.filter(e=>e.kind!=='transfer'&&(editable||enabled.has(e.id))&&(!lineFilter||(e.displayLineId||e.lineId)===lineFilter)),[data.edges,enabled,lineFilter,editable]);
   const stationIds=useMemo(()=>lineFilter?new Set(edges.flatMap(e=>[e.from,e.to])):null,[lineFilter,edges]);
   const stations=useMemo(()=>Object.fromEntries(Object.entries(data.stations).filter(([id])=>!stationIds||stationIds.has(id))),[data.stations,stationIds]);
-  const stationCount=Object.keys(stations).length;
   const routeStations=useMemo(()=>result?.success?Object.fromEntries([...new Set([result.from,result.to,...result.steps.flatMap(s=>[s.from,s.to])])].map(id=>[id,data.stations[id]])):null,[result,data.stations]);
-  const base=useMemo(()=>bounds(fitRoute&&routeStations?routeStations:stations,fitRoute&&result?.success?edges.filter(e=>result.steps.some(s=>s.edgeId===e.id)):edges),[data.id,lineFilter,stationCount,fitRevision,fitRoute,routeStations]);
+  const base=useMemo(()=>bounds(fitRoute&&routeStations?routeStations:stations,fitRoute&&result?.success?edges.filter(e=>result.steps.some(s=>s.edgeId===e.id)):edges),[data.id,lineFilter,fitRevision,fitRoute,routeStations]);
   const box={x:base.x+base.w/2-base.w/zoom/2+pan.x,y:base.y+base.h/2-base.h/zoom/2+pan.y,w:base.w/zoom,h:base.h/zoom};
+  useEffect(()=>{onViewportChange?.(box);},[box.x,box.y,box.w,box.h]);
   const [size,setSize]=useState({width:800,height:580});
   useEffect(()=>{const observer=new ResizeObserver(entries=>setSize({width:entries[0].contentRect.width,height:entries[0].contentRect.height}));observer.observe(svgRef.current);return()=>observer.disconnect();},[]);
   useEffect(()=>{const svg=svgRef.current,handler=e=>{e.preventDefault();setZoom(z=>Math.max(.5,Math.min(maxZoom,z*(e.deltaY<0?1.16:.86))));};svg.addEventListener('wheel',handler,{passive:false});return()=>svg.removeEventListener('wheel',handler);},[maxZoom]);

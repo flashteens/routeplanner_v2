@@ -1,3 +1,4 @@
+import {cleanEdge} from './edge-fields.js';
 import {validStationSymbol} from './station-symbol.js';
 export const languageKey = lang => lang === 'zh' || lang === 'zh-TW' ? 'zh' : 'en';
 export const nameOf = (item, lang) => item?.names?.[languageKey(lang)] || item?.names?.en || item?.id || '';
@@ -102,7 +103,8 @@ export function validateNetwork(data) {
   const edgeIds=new Set();
   const isStation=id=>typeof id==='string'&&Object.hasOwn(data.stations,id);
   const isLine=syntax => typeof syntax === 'string' && Object.hasOwn(data.lines,syntax.split(':')[0]);
-  for (const e of data.edges) {
+  for (const raw of data.edges) {
+    const e=raw&&typeof raw==='object'?cleanEdge(raw):raw;
     const p=`Edge ${typeof e?.id==='string'?e.id:'?'}`;
     if (!e || typeof e !== 'object') {errors.push('Every edge must be an object.');continue;}
     if (typeof e.id!=='string' || !e.id || edgeIds.has(e.id)) errors.push(`${p}: duplicate, empty or non-string id.`);
@@ -111,7 +113,7 @@ export function validateNetwork(data) {
     if (!['ride','walk','transfer'].includes(e.kind)) errors.push(`${p}: unsupported kind.`);
     if (e.kind === 'transfer' ? e.from !== e.to || !isLine(e.fromLine) || !isLine(e.toLine) : e.from === e.to || typeof e.lineId!=='string' || !Object.hasOwn(data.lines,e.lineId)) errors.push(`${p}: invalid line/station references.`);
     if (typeof e.bidirectional !== 'boolean') errors.push(`${p}: bidirectional must be boolean.`);
-    for (const key of ['boardingAllowed','reverseBoardingAllowed','countsAsTransfer']) if (e[key] != null && typeof e[key] !== 'boolean') errors.push(`${p}: ${key} must be boolean.`);
+    for (const key of ['boardingAllowed','reverseBoardingAllowed','countsAsTransfer','delayWhenUnfamiliar']) if (e[key] != null && typeof e[key] !== 'boolean') errors.push(`${p}: ${key} must be boolean.`);
     for (const key of ['direction','reverseDirection','arrivalDirection','reverseArrivalDirection']) if (e[key] != null && typeof e[key] !== 'string') errors.push(`${p}: ${key} must be a string.`);
     for(const key of ['directionLabel','reverseDirectionLabel','displayDirectionLabel'])if(e[key]!=null&&(!object(e[key])||Object.values(e[key]).some(v=>typeof v!=='string')))errors.push(`${p}: ${key} must contain language strings.`);
     if (e.displayLineId != null && (typeof e.displayLineId!=='string'||!Object.hasOwn(data.lines,e.displayLineId))) errors.push(`${p}: unknown display line.`);

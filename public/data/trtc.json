@@ -17757,9 +17757,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00002",
@@ -17784,14 +17783,13 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 994,
           "y": 1608
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00003",
@@ -17816,9 +17814,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00004",
@@ -17843,9 +17840,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00005",
@@ -17870,14 +17866,13 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 994,
           "y": 1389
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00006",
@@ -17902,9 +17897,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00007",
@@ -17929,14 +17923,13 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 803,
           "y": 1389
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00008",
@@ -17961,9 +17954,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00009",
@@ -17988,9 +17980,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00010",
@@ -18015,9 +18006,8 @@
         "en": "for Tamsui R28",
         "zh": "往淡水 R28"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00011",
@@ -18042,9 +18032,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00012",
@@ -18069,10 +18058,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00013",
@@ -18088,8 +18076,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00014",
@@ -18105,8 +18092,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00015",
@@ -18131,9 +18117,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00016",
@@ -18158,9 +18143,8 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00017",
@@ -18185,10 +18169,9 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00018",
@@ -18213,9 +18196,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00019",
@@ -18240,10 +18222,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00020",
@@ -18259,8 +18240,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00021",
@@ -18276,8 +18256,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00022",
@@ -18302,9 +18281,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00023",
@@ -18329,9 +18307,8 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00024",
@@ -18356,10 +18333,9 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00025",
@@ -18384,9 +18360,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00026",
@@ -18411,10 +18386,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00027",
@@ -18430,8 +18404,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00028",
@@ -18447,8 +18420,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00029",
@@ -18473,9 +18445,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00030",
@@ -18500,9 +18471,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00031",
@@ -18527,9 +18497,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00032",
@@ -18554,14 +18523,13 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 803,
           "y": 672
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00033",
@@ -18586,9 +18554,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00034",
@@ -18613,9 +18580,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00035",
@@ -18640,9 +18606,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00036",
@@ -18667,9 +18632,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00037",
@@ -18694,14 +18658,13 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 1146,
           "y": 672
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00038",
@@ -18726,9 +18689,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00039",
@@ -18753,9 +18715,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00040",
@@ -18780,9 +18741,8 @@
         "en": "for Taipei Zoo BR01",
         "zh": "往動物園 BR01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00041",
@@ -18807,9 +18767,8 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00042",
@@ -18834,10 +18793,9 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00043",
@@ -18853,8 +18811,7 @@
         "price": 0
       },
       "reverseTimeSec": 240,
-      "transferSlope": 49.666667,
-      "reverseTransferSlope": 49.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00044",
@@ -18870,8 +18827,7 @@
         "price": 0
       },
       "reverseTimeSec": 240,
-      "transferSlope": 49.666667,
-      "reverseTransferSlope": 49.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00045",
@@ -18896,9 +18852,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00046",
@@ -18923,9 +18878,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00047",
@@ -18950,9 +18904,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00048",
@@ -18977,10 +18930,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00049",
@@ -19005,9 +18957,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00050",
@@ -19032,10 +18983,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00051",
@@ -19060,14 +19010,13 @@
         "en": "for Huilong O21 / Luzhou O54",
         "zh": "往迴龍 O21 / 蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 591,
           "y": 1352
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00052",
@@ -19092,15 +19041,14 @@
         "en": "for Huilong O21",
         "zh": "往迴龍 O21"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 591,
           "y": 1352
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00053",
@@ -19125,15 +19073,14 @@
         "en": "for Luzhou O54",
         "zh": "往蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 591,
           "y": 1352
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00054",
@@ -19158,9 +19105,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00055",
@@ -19185,10 +19131,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00056",
@@ -19213,10 +19158,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00057",
@@ -19232,8 +19176,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00058",
@@ -19249,8 +19192,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00059",
@@ -19266,8 +19208,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00060",
@@ -19283,8 +19224,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00061",
@@ -19300,8 +19240,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00062",
@@ -19317,8 +19256,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00063",
@@ -19334,8 +19272,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00064",
@@ -19351,8 +19288,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00065",
@@ -19368,8 +19304,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00066",
@@ -19385,8 +19320,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00067",
@@ -19402,8 +19336,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00068",
@@ -19419,8 +19352,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00069",
@@ -19436,8 +19368,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00070",
@@ -19453,8 +19384,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00071",
@@ -19470,8 +19400,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00072",
@@ -19487,8 +19416,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00073",
@@ -19504,8 +19432,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00074",
@@ -19521,8 +19448,7 @@
         "price": 0
       },
       "reverseTimeSec": 90,
-      "transferSlope": 19.666667,
-      "reverseTransferSlope": 19.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00075",
@@ -19538,8 +19464,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00076",
@@ -19555,8 +19480,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00077",
@@ -19572,8 +19496,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00078",
@@ -19589,8 +19512,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00079",
@@ -19606,8 +19528,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00080",
@@ -19623,8 +19544,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00081",
@@ -19649,9 +19569,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00082",
@@ -19676,10 +19595,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00083",
@@ -19704,9 +19622,8 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00084",
@@ -19731,10 +19648,9 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00085",
@@ -19759,14 +19675,13 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 402,
           "y": 1285
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00086",
@@ -19791,15 +19706,14 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 402,
           "y": 1285
         }
       ],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00087",
@@ -19815,8 +19729,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00088",
@@ -19832,8 +19745,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00089",
@@ -19849,8 +19761,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00090",
@@ -19866,8 +19777,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00091",
@@ -19883,8 +19793,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00092",
@@ -19900,8 +19809,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00093",
@@ -19917,8 +19825,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00094",
@@ -19934,8 +19841,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00095",
@@ -19951,8 +19857,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00096",
@@ -19968,8 +19873,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00097",
@@ -19985,8 +19889,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00098",
@@ -20002,8 +19905,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00099",
@@ -20019,8 +19921,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00100",
@@ -20036,8 +19937,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00101",
@@ -20053,8 +19953,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00102",
@@ -20070,8 +19969,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00103",
@@ -20096,9 +19994,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00104",
@@ -20123,10 +20020,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00105",
@@ -20151,9 +20047,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00106",
@@ -20178,10 +20073,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00107",
@@ -20206,9 +20100,8 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00108",
@@ -20233,10 +20126,9 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00109",
@@ -20261,9 +20153,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00110",
@@ -20288,10 +20179,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00111",
@@ -20307,8 +20197,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00112",
@@ -20324,8 +20213,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00113",
@@ -20341,8 +20229,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00114",
@@ -20358,8 +20245,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00115",
@@ -20384,9 +20270,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00116",
@@ -20411,10 +20296,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00117",
@@ -20439,14 +20323,13 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 402,
           "y": 1026
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00118",
@@ -20471,15 +20354,14 @@
         "en": "for Songshan G19",
         "zh": "往松山 G19"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 402,
           "y": 1026
         }
       ],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00119",
@@ -20504,9 +20386,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00120",
@@ -20531,10 +20412,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00121",
@@ -20550,8 +20430,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00122",
@@ -20567,8 +20446,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00123",
@@ -20584,8 +20462,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00124",
@@ -20601,8 +20478,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00125",
@@ -20627,9 +20503,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00126",
@@ -20654,10 +20529,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00127",
@@ -20682,9 +20556,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00128",
@@ -20709,10 +20582,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00129",
@@ -20737,9 +20609,8 @@
         "en": "for Huilong O21 / Luzhou O54",
         "zh": "往迴龍 O21 / 蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00130",
@@ -20764,10 +20635,9 @@
         "en": "for Huilong O21",
         "zh": "往迴龍 O21"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00131",
@@ -20792,10 +20662,9 @@
         "en": "for Luzhou O54",
         "zh": "往蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00132",
@@ -20820,9 +20689,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00133",
@@ -20847,10 +20715,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00134",
@@ -20875,10 +20742,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00135",
@@ -20894,8 +20760,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00136",
@@ -20911,8 +20776,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00137",
@@ -20928,8 +20792,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00138",
@@ -20945,8 +20808,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00139",
@@ -20962,8 +20824,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00140",
@@ -20979,8 +20840,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00141",
@@ -21005,9 +20865,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00142",
@@ -21032,10 +20891,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00143",
@@ -21060,9 +20918,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00144",
@@ -21087,10 +20944,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00145",
@@ -21115,9 +20971,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00146",
@@ -21142,10 +20997,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00147",
@@ -21170,9 +21024,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00148",
@@ -21197,10 +21050,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00149",
@@ -21225,9 +21077,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00150",
@@ -21252,10 +21103,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00151",
@@ -21280,14 +21130,13 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 508,
           "y": 420
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00152",
@@ -21312,15 +21161,14 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 508,
           "y": 420
         }
       ],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00153",
@@ -21345,9 +21193,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00154",
@@ -21372,10 +21219,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00155",
@@ -21400,9 +21246,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00156",
@@ -21427,10 +21272,9 @@
         "en": "for Xiangshan R02 / Daan R05",
         "zh": "往象山 R02 / 大安 R05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "R"
+      "displayLineId": "R",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00157",
@@ -21455,9 +21299,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00158",
@@ -21482,9 +21325,8 @@
         "en": "for Beitou R22",
         "zh": "往北投 R22"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00159",
@@ -21500,8 +21342,7 @@
         "price": 0
       },
       "reverseTimeSec": 150,
-      "transferSlope": 31.666667,
-      "reverseTransferSlope": 31.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00160",
@@ -21517,8 +21358,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00161",
@@ -21534,8 +21374,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00162",
@@ -21551,8 +21390,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00163",
@@ -21577,9 +21415,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00164",
@@ -21604,14 +21441,13 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 196,
           "y": 420
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00165",
@@ -21636,9 +21472,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00166",
@@ -21663,9 +21498,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00167",
@@ -21690,9 +21524,8 @@
         "en": "for Xiangshan R02",
         "zh": "往象山 R02"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00168",
@@ -21717,9 +21550,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00169",
@@ -21744,9 +21576,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00170",
@@ -21771,9 +21602,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00171",
@@ -21798,9 +21628,8 @@
         "en": "for Qizhang G03",
         "zh": "往七張 G03"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00172",
@@ -21816,8 +21645,7 @@
         "price": 0
       },
       "reverseTimeSec": 150,
-      "transferSlope": 31.666667,
-      "reverseTransferSlope": 31.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00173",
@@ -21833,8 +21661,7 @@
         "price": 0
       },
       "reverseTimeSec": 30,
-      "transferSlope": 7.666667,
-      "reverseTransferSlope": 7.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00174",
@@ -21850,8 +21677,7 @@
         "price": 0
       },
       "reverseTimeSec": 30,
-      "transferSlope": 7.666667,
-      "reverseTransferSlope": 7.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00175",
@@ -21867,8 +21693,7 @@
         "price": 0
       },
       "reverseTimeSec": 150,
-      "transferSlope": 31.666667,
-      "reverseTransferSlope": 31.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00176",
@@ -21893,14 +21718,13 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 834,
           "y": 1611
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00177",
@@ -21925,14 +21749,13 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 758,
           "y": 1644
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00178",
@@ -21948,8 +21771,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00179",
@@ -21974,9 +21796,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00180",
@@ -22001,9 +21822,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00181",
@@ -22028,9 +21848,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00182",
@@ -22055,9 +21874,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00183",
@@ -22082,10 +21900,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00184",
@@ -22110,9 +21927,8 @@
         "en": "for Huilong O21 / Luzhou O54",
         "zh": "往迴龍 O21 / 蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00185",
@@ -22137,10 +21953,9 @@
         "en": "for Huilong O21",
         "zh": "往迴龍 O21"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00186",
@@ -22165,10 +21980,9 @@
         "en": "for Luzhou O54",
         "zh": "往蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00187",
@@ -22184,8 +21998,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00188",
@@ -22201,8 +22014,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00189",
@@ -22218,8 +22030,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00190",
@@ -22235,8 +22046,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00191",
@@ -22252,8 +22062,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00192",
@@ -22269,8 +22078,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00193",
@@ -22286,8 +22094,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00194",
@@ -22303,8 +22110,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00195",
@@ -22320,8 +22126,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00196",
@@ -22337,8 +22142,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00197",
@@ -22354,8 +22158,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00198",
@@ -22371,8 +22174,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00199",
@@ -22388,8 +22190,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00200",
@@ -22405,8 +22206,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00201",
@@ -22422,8 +22222,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00202",
@@ -22439,8 +22238,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00203",
@@ -22456,8 +22254,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00204",
@@ -22473,8 +22270,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00205",
@@ -22490,8 +22286,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00206",
@@ -22507,8 +22302,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00207",
@@ -22524,8 +22318,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00208",
@@ -22541,8 +22334,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00209",
@@ -22558,8 +22350,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00210",
@@ -22575,8 +22366,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00211",
@@ -22601,9 +22391,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00212",
@@ -22628,10 +22417,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00213",
@@ -22656,9 +22444,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00214",
@@ -22683,10 +22470,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00215",
@@ -22711,8 +22497,6 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 330,
@@ -22722,7 +22506,8 @@
           "x": 293,
           "y": 1186
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00216",
@@ -22747,8 +22532,6 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 330,
@@ -22759,7 +22542,8 @@
           "y": 1186
         }
       ],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00217",
@@ -22775,8 +22559,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00218",
@@ -22792,8 +22575,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00219",
@@ -22809,8 +22591,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00220",
@@ -22826,8 +22607,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00221",
@@ -22843,8 +22623,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00222",
@@ -22860,8 +22639,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00223",
@@ -22877,8 +22655,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00224",
@@ -22894,8 +22671,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00225",
@@ -22911,8 +22687,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00226",
@@ -22928,8 +22703,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00227",
@@ -22945,8 +22719,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00228",
@@ -22962,8 +22735,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00229",
@@ -22979,8 +22751,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00230",
@@ -22996,8 +22767,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00231",
@@ -23013,8 +22783,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00232",
@@ -23030,8 +22799,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00233",
@@ -23056,9 +22824,8 @@
         "en": "for Huilong O21 / Luzhou O54",
         "zh": "往迴龍 O21 / 蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00234",
@@ -23083,10 +22850,9 @@
         "en": "for Huilong O21",
         "zh": "往迴龍 O21"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00235",
@@ -23111,10 +22877,9 @@
         "en": "for Luzhou O54",
         "zh": "往蘆洲 O54"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00236",
@@ -23139,9 +22904,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00237",
@@ -23166,10 +22930,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00238",
@@ -23194,10 +22957,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00239",
@@ -23213,8 +22975,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00240",
@@ -23230,8 +22991,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00241",
@@ -23247,8 +23007,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00242",
@@ -23264,8 +23023,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00243",
@@ -23281,8 +23039,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00244",
@@ -23298,8 +23055,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00245",
@@ -23324,9 +23080,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00246",
@@ -23351,10 +23106,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00247",
@@ -23379,9 +23133,8 @@
         "en": "for Xindian G01",
         "zh": "往新店 G01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00248",
@@ -23406,10 +23159,9 @@
         "en": "for Xindian G01 / Taipower Bldg. G08",
         "zh": "往新店 G01 / 台電大樓 G08"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "G"
+      "displayLineId": "G",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00249",
@@ -23434,9 +23186,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00250",
@@ -23461,10 +23212,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00251",
@@ -23489,10 +23239,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00252",
@@ -23517,9 +23266,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00253",
@@ -23544,10 +23292,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00254",
@@ -23572,10 +23319,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00255",
@@ -23600,9 +23346,8 @@
         "en": "for New Taipei Industrial Park Y20",
         "zh": "往新北產業園區 Y20"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00256",
@@ -23627,9 +23372,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00257",
@@ -23645,8 +23389,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00258",
@@ -23662,8 +23405,7 @@
         "price": 0
       },
       "reverseTimeSec": 420,
-      "transferSlope": 85.666667,
-      "reverseTransferSlope": 85.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00259",
@@ -23679,8 +23421,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00260",
@@ -23696,8 +23437,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00261",
@@ -23713,8 +23453,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00262",
@@ -23730,8 +23469,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00263",
@@ -23747,8 +23485,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00264",
@@ -23764,8 +23501,7 @@
         "price": 0
       },
       "reverseTimeSec": 420,
-      "transferSlope": 85.666667,
-      "reverseTransferSlope": 85.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00265",
@@ -23781,8 +23517,7 @@
         "price": 0
       },
       "reverseTimeSec": 420,
-      "transferSlope": 85.666667,
-      "reverseTransferSlope": 85.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00266",
@@ -23798,8 +23533,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00267",
@@ -23815,8 +23549,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00268",
@@ -23832,8 +23565,7 @@
         "price": 0
       },
       "reverseTimeSec": 360,
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00269",
@@ -23858,9 +23590,8 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00270",
@@ -23885,10 +23616,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00271",
@@ -23913,10 +23643,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00272",
@@ -23941,9 +23670,8 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00273",
@@ -23968,10 +23696,9 @@
         "en": "for Nangang Exhib. Center BL23",
         "zh": "往南港展覽館 BL23"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00274",
@@ -23987,8 +23714,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00275",
@@ -24004,8 +23730,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00276",
@@ -24021,8 +23746,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00277",
@@ -24038,8 +23762,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00278",
@@ -24055,8 +23778,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00279",
@@ -24072,8 +23794,7 @@
         "price": 0
       },
       "reverseTimeSec": 180,
-      "transferSlope": 37.666667,
-      "reverseTransferSlope": 37.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00280",
@@ -24098,14 +23819,13 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 658,
           "y": 892
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00281",
@@ -24130,15 +23850,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 658,
           "y": 892
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00282",
@@ -24163,15 +23882,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 658,
           "y": 892
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00283",
@@ -24196,10 +23914,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00284",
@@ -24224,15 +23941,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 362,
           "y": 892
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00285",
@@ -24248,8 +23964,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00286",
@@ -24265,8 +23980,7 @@
         "price": 0
       },
       "reverseTimeSec": 30,
-      "transferSlope": 7.666667,
-      "reverseTransferSlope": 7.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00287",
@@ -24282,8 +23996,7 @@
         "price": 0
       },
       "reverseTimeSec": 30,
-      "transferSlope": 7.666667,
-      "reverseTransferSlope": 7.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00288",
@@ -24299,8 +24012,7 @@
         "price": 0
       },
       "reverseTimeSec": 20,
-      "transferSlope": 5.666667,
-      "reverseTransferSlope": 5.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00289",
@@ -24325,15 +24037,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 238,
           "y": 892
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00290",
@@ -24358,10 +24069,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00291",
@@ -24386,10 +24096,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00292",
@@ -24414,10 +24123,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00293",
@@ -24442,15 +24150,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 226,
           "y": 1138
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00294",
@@ -24475,14 +24182,13 @@
         "en": "for New Taipei Industrial Park Y20",
         "zh": "往新北產業園區 Y20"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 238,
           "y": 1316
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00295",
@@ -24507,14 +24213,13 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 230,
           "y": 1138
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00296",
@@ -24530,8 +24235,7 @@
         "price": 0
       },
       "reverseTimeSec": 240,
-      "transferSlope": 49.666667,
-      "reverseTransferSlope": 49.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00297",
@@ -24547,8 +24251,7 @@
         "price": 0
       },
       "reverseTimeSec": 300,
-      "transferSlope": 61.666667,
-      "reverseTransferSlope": 61.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00298",
@@ -24573,15 +24276,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 168,
           "y": 1190
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00299",
@@ -24606,15 +24308,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 123,
           "y": 1234
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00300",
@@ -24639,15 +24340,14 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 75,
           "y": 1339
         }
       ],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00301",
@@ -24672,10 +24372,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00302",
@@ -24700,10 +24399,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00303",
@@ -24728,10 +24426,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00304",
@@ -24756,10 +24453,9 @@
         "en": "for Nanshijiao O01",
         "zh": "往南勢角 O01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "O"
+      "displayLineId": "O",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00305",
@@ -24784,9 +24480,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00306",
@@ -24811,9 +24506,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00307",
@@ -24838,9 +24532,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00308",
@@ -24865,9 +24558,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00309",
@@ -24892,9 +24584,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00310",
@@ -24919,10 +24610,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00311",
@@ -24947,9 +24637,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00312",
@@ -24974,10 +24663,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00313",
@@ -25002,9 +24690,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00314",
@@ -25029,10 +24716,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00315",
@@ -25048,8 +24734,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00316",
@@ -25064,24 +24749,23 @@
       },
       "bidirectional": true,
       "metrics": {
-        "timeSec": 630,
+        "timeSec": 600,
         "distanceKm": 0,
         "price": 0
       },
-      "reverseTimeSec": 630,
+      "reverseTimeSec": 600,
       "reverseDirection": "",
       "reverseDirectionLabel": {
         "en": "",
         "zh": ""
       },
-      "transferSlope": 121.666667,
-      "reverseTransferSlope": 121.666667,
       "points": [
         {
           "x": 322,
           "y": 1410
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00317",
@@ -25106,9 +24790,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00318",
@@ -25133,10 +24816,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00319",
@@ -25152,8 +24834,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00320",
@@ -25168,24 +24849,23 @@
       },
       "bidirectional": true,
       "metrics": {
-        "timeSec": 390,
+        "timeSec": 360,
         "distanceKm": 0,
         "price": 0
       },
-      "reverseTimeSec": 390,
+      "reverseTimeSec": 360,
       "reverseDirection": "",
       "reverseDirectionLabel": {
         "en": "",
         "zh": ""
       },
-      "transferSlope": 73.666667,
-      "reverseTransferSlope": 73.666667,
       "points": [
         {
           "x": 258,
           "y": 1334
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00321",
@@ -25210,9 +24890,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00322",
@@ -25237,10 +24916,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00323",
@@ -25265,9 +24943,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00324",
@@ -25292,10 +24969,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00325",
@@ -25320,9 +24996,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00326",
@@ -25347,10 +25022,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00327",
@@ -25375,9 +25049,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00328",
@@ -25402,10 +25075,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00329",
@@ -25430,14 +25102,13 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 1162,
           "y": 1149
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00330",
@@ -25462,15 +25133,14 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 1162,
           "y": 1149
         }
       ],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00331",
@@ -25495,9 +25165,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00332",
@@ -25522,10 +25191,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00333",
@@ -25550,9 +25218,8 @@
         "en": "for Dingpu BL01",
         "zh": "往頂埔 BL01"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00334",
@@ -25577,10 +25244,9 @@
         "en": "for Dingpu BL01 / Far E. Hospital BL05",
         "zh": "往頂埔 BL01 / 亞東醫院 BL05"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [],
-      "displayLineId": "BL"
+      "displayLineId": "BL",
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00335",
@@ -25605,14 +25271,13 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 727,
           "y": 1646
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00336",
@@ -25637,9 +25302,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00337",
@@ -25664,9 +25328,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00338",
@@ -25691,9 +25354,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00339",
@@ -25718,9 +25380,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00340",
@@ -25745,9 +25406,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00341",
@@ -25772,9 +25432,8 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
-      "points": []
+      "points": [],
+      "delayWhenUnfamiliar": false
     },
     {
       "id": "e00342",
@@ -25790,8 +25449,7 @@
         "price": 0
       },
       "reverseTimeSec": 60,
-      "transferSlope": 13.666667,
-      "reverseTransferSlope": 13.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00343",
@@ -25807,8 +25465,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00344",
@@ -25824,8 +25481,7 @@
         "price": 0
       },
       "reverseTimeSec": 120,
-      "transferSlope": 25.666667,
-      "reverseTransferSlope": 25.666667
+      "delayWhenUnfamiliar": true
     },
     {
       "id": "e00345",
@@ -25850,14 +25506,13 @@
         "en": "for Dapinglin Y07",
         "zh": "往大坪林 Y07"
       },
-      "transferSlope": 0,
-      "reverseTransferSlope": 0,
       "points": [
         {
           "x": 168,
           "y": 1074
         }
-      ]
+      ],
+      "delayWhenUnfamiliar": false
     }
   ],
   "map": {

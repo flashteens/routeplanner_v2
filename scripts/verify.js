@@ -10,8 +10,10 @@ import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
 import {verifyBlankEditor} from './verify-blank-editor.js';
 import {verifyEditorDirections} from './verify-editor-directions.js';
+import {verifyEditorUpgrades} from './verify-editor-upgrades.js';
 import {verifyFieldHelp} from './verify-field-help.js';
 import {verifyArrivalHelp} from './verify-arrival-help.js';
+import {nextEdgeId} from '../shared/editor-defaults.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
@@ -212,24 +214,24 @@ try{
     await importEditor(saved);assert.match(await page.locator('.notice').textContent(),/loaded successfully/);
     // Newly added edges follow line/from/to changes while preserving explicit overrides.
     await page.getByRole('button',{name:'Connections',exact:true}).click();
-    page.once('dialog',dialog=>dialog.accept('browser-defaults'));
+    const generatedEdgeId=nextEdgeId(saved);
     await page.locator('.editor-list-tools').getByRole('button',{name:'Add',exact:false}).click();
     const fields=page.locator('.edit-fields');
-    await fields.getByLabel('Departure',{exact:true}).selectOption('RS');
-    await fields.getByLabel('Destination',{exact:true}).selectOption('CH');
+    await fields.getByLabel('Departure',{exact:true}).fill('RS');await fields.getByLabel('Departure',{exact:true}).press('Enter');
+    await fields.getByLabel('Destination',{exact:true}).fill('CH');await fields.getByLabel('Destination',{exact:true}).press('Enter');
     await fields.getByLabel('Line',{exact:true}).fill('L6');
     await exportEditor();
-    let defaultsData=lastExport,newEdge=defaultsData.edges.find(e=>e.id==='browser-defaults');
+    let defaultsData=lastExport,newEdge=defaultsData.edges.find(e=>e.id===generatedEdgeId);
     assert.equal(newEdge.direction,'L6_N');assert.equal(newEdge.reverseDirection,'L6_S');assert.equal(newEdge.metrics.distanceKm,.268);
     await fields.getByLabel('Forward direction identifier',{exact:true}).fill('CUSTOM');
-    await fields.getByLabel('Destination',{exact:true}).selectOption('CP');
+    await fields.getByLabel('Destination',{exact:true}).fill('CP');await fields.getByLabel('Destination',{exact:true}).press('Enter');
     assert.equal(await fields.getByLabel('Forward direction identifier',{exact:true}).inputValue(),'CUSTOM');
     await fields.getByLabel('Update suggested defaults automatically',{exact:true}).check();
     await fields.getByLabel('Connection type',{exact:true}).selectOption('transfer');
-    await fields.getByLabel('Departure',{exact:true}).selectOption('CH');
+    await fields.getByLabel('Departure',{exact:true}).fill('CH');await fields.getByLabel('Departure',{exact:true}).press('Enter');
     await exportEditor();
     assert.match(await page.locator('[role="status"]').textContent(),/ready to download/,await page.locator('.edit-fields').innerText());
-    defaultsData=lastExport;newEdge=defaultsData.edges.find(e=>e.id==='browser-defaults');
+    defaultsData=lastExport;newEdge=defaultsData.edges.find(e=>e.id===generatedEdgeId);
     assert.equal(newEdge.from,newEdge.to,JSON.stringify(newEdge));assert.equal(newEdge.metrics.distanceKm,0);assert.deepEqual(validateNetwork(defaultsData),[]);
     await importEditor(saved);
     await page.getByRole('button',{name:'System settings',exact:true}).click();
@@ -355,6 +357,7 @@ try{
     await verifyEditorDirections(browser,origin,root);
     await verifyArrivalHelp(browser,origin,root);
     await verifyFieldHelp(browser,origin,root);
+    await verifyEditorUpgrades(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}
