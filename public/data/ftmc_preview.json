@@ -2179,6 +2179,33 @@
       },
       "color": "#bbbbbb",
       "interior": true
+    },
+    "DR": {
+      "id": "DR",
+      "names": {
+        "en": "Dark River Mini Train",
+        "zh": "暗黑河小火車"
+      },
+      "color": "#b4bb88",
+      "interior": false
+    },
+    "#_DR_DR02": {
+      "id": "#_DR_DR02",
+      "names": {
+        "en": "Out-of-station Transfer (to Mini Train)",
+        "zh": "請站外轉乘前往小火車月台"
+      },
+      "color": "#bbbbbb",
+      "interior": true
+    },
+    "#_DR02_DR": {
+      "id": "#_DR02_DR",
+      "names": {
+        "en": "Out-of-station Transfer (to Line X3)",
+        "zh": "請站外轉乘前往X3線車站"
+      },
+      "color": "#bbbbbb",
+      "interior": true
     }
   },
   "stations": {
@@ -4744,11 +4771,7 @@
         "x": 295,
         "y": -1467
       },
-      "labelOffset": {
-        "x": -12,
-        "y": -12
-      },
-      "symbol": "L-4"
+      "symbol": "I-1"
     },
     "DS": {
       "id": "DS",
@@ -10775,6 +10798,81 @@
         "x": 12,
         "y": -12
       }
+    },
+    "DR01": {
+      "id": "DR01",
+      "names": {
+        "en": "Depot of Delight",
+        "zh": "歡樂基地"
+      },
+      "aliases": [
+        "DR01",
+        "Depot of Delight",
+        "歡樂基地"
+      ],
+      "codes": [
+        "DR01"
+      ],
+      "coordinates": {
+        "x": 368,
+        "y": 79,
+        "z": -2889
+      },
+      "position": {
+        "x": 224,
+        "y": -1458
+      },
+      "symbol": "L-4"
+    },
+    "DR02": {
+      "id": "DR02",
+      "names": {
+        "en": "Dark River South",
+        "zh": "暗黑河南站"
+      },
+      "aliases": [
+        "DR02",
+        "Dark River South",
+        "暗黑河南站"
+      ],
+      "codes": [
+        "DR02"
+      ],
+      "coordinates": {
+        "x": 478,
+        "y": 66,
+        "z": -2845
+      },
+      "position": {
+        "x": 297,
+        "y": -1444
+      },
+      "symbol": "L-7"
+    },
+    "DR03": {
+      "id": "DR03",
+      "names": {
+        "en": "Coast of The Guy",
+        "zh": "魔王海岸"
+      },
+      "aliases": [
+        "DR03",
+        "Coast of The Guy",
+        "魔王海岸"
+      ],
+      "codes": [
+        "DR03"
+      ],
+      "coordinates": {
+        "x": 588,
+        "y": 63,
+        "z": -2886
+      },
+      "position": {
+        "x": 366,
+        "y": -1476
+      },
+      "symbol": "L-5"
     }
   },
   "edges": [
@@ -49342,6 +49440,207 @@
       "reverseTimeSec": 17.5,
       "transferSlope": 5.166667,
       "reverseTransferSlope": 5.166667
+    },
+    {
+      "id": "e01275",
+      "kind": "ride",
+      "from": "DR01",
+      "to": "DR02",
+      "lineId": "DR",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 52.5,
+        "distanceKm": 0.119,
+        "price": 0
+      },
+      "points": [
+        {
+          "x": 238,
+          "y": -1444
+        }
+      ],
+      "direction": "E",
+      "directionLabel": {
+        "zh": "往DR03方向(東)",
+        "en": "To DR03 (eastbound)"
+      },
+      "reverseDirection": "W",
+      "reverseDirectionLabel": {
+        "zh": "往DR01方向(西)",
+        "en": "To DR01 (westbound)"
+      },
+      "reverseTimeSec": 52.5
+    },
+    {
+      "id": "e01276",
+      "kind": "ride",
+      "from": "DR02",
+      "to": "DR03",
+      "lineId": "DR",
+      "bidirectional": true,
+      "metrics": {
+        "timeSec": 47.5,
+        "distanceKm": 0.117,
+        "price": 0
+      },
+      "points": [
+        {
+          "x": 365,
+          "y": -1446
+        }
+      ],
+      "direction": "E",
+      "directionLabel": {
+        "zh": "往DR03方向(東)",
+        "en": "To DR03 (eastbound)"
+      },
+      "reverseDirection": "W",
+      "reverseDirectionLabel": {
+        "zh": "往DR01方向(西)",
+        "en": "To DR01 (westbound)"
+      }
+    },
+    {
+      "id": "e01277",
+      "kind": "walk",
+      "from": "DR",
+      "to": "DR02",
+      "lineId": "#_DR_DR02",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "",
+      "directionLabel": {},
+      "reverseDirection": "",
+      "reverseDirectionLabel": {}
+    },
+    {
+      "id": "e01288",
+      "kind": "walk",
+      "from": "DR02",
+      "to": "DR",
+      "lineId": "#_DR02_DR",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 20,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "",
+      "directionLabel": {},
+      "reverseDirection": "",
+      "reverseDirectionLabel": {},
+      "fromLine": "L1:W",
+      "toLine": "ACL:ACL_CW"
+    },
+    {
+      "id": "e01289",
+      "kind": "transfer",
+      "from": "DR",
+      "to": "DR",
+      "lineId": "X3L",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 22.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "",
+      "directionLabel": {
+        "en": "Notchland",
+        "zh": "往諾基蘭村"
+      },
+      "reverseDirection": "E",
+      "reverseDirectionLabel": {
+        "en": "O.stone",
+        "zh": "往橙岩廣場"
+      },
+      "fromLine": "X3L",
+      "toLine": "#_DR_DR02"
+    },
+    {
+      "id": "01290",
+      "kind": "transfer",
+      "from": "DR",
+      "to": "DR",
+      "lineId": "X3L",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 22.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "S",
+      "directionLabel": {
+        "en": "Rocky Beach",
+        "zh": "往岩石灘"
+      },
+      "reverseDirection": "N",
+      "reverseDirectionLabel": {
+        "en": "N. W. Mansion",
+        "zh": "往北方森林屋"
+      },
+      "fromLine": "#_DR02_DR",
+      "toLine": "X3L"
+    },
+    {
+      "id": "e01291",
+      "kind": "transfer",
+      "from": "DR02",
+      "to": "DR02",
+      "lineId": "DR",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 7.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "W",
+      "directionLabel": {
+        "zh": "往DR01方向(西)",
+        "en": "To DR01 (westbound)"
+      },
+      "reverseDirection": "E",
+      "reverseDirectionLabel": {
+        "zh": "往DR03方向(東)",
+        "en": "To DR03 (eastbound)"
+      },
+      "fromLine": "DR",
+      "toLine": "#_DR02_DR"
+    },
+    {
+      "id": "e01292",
+      "kind": "transfer",
+      "from": "DR02",
+      "to": "DR02",
+      "lineId": "DR",
+      "bidirectional": false,
+      "metrics": {
+        "timeSec": 7.5,
+        "distanceKm": 0,
+        "price": 0
+      },
+      "points": [],
+      "direction": "W",
+      "directionLabel": {
+        "zh": "往DR01方向(西)",
+        "en": "To DR01 (westbound)"
+      },
+      "reverseDirection": "E",
+      "reverseDirectionLabel": {
+        "zh": "往DR03方向(東)",
+        "en": "To DR03 (eastbound)"
+      },
+      "fromLine": "#_DR_DR02",
+      "toLine": "DR"
     }
   ],
   "map": {
