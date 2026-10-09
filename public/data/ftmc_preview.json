@@ -49543,7 +49543,6 @@
       "kind": "transfer",
       "from": "DR",
       "to": "DR",
-      "lineId": "X3L",
       "bidirectional": false,
       "metrics": {
         "timeSec": 22.5,
@@ -49551,16 +49550,6 @@
         "price": 0
       },
       "points": [],
-      "direction": "",
-      "directionLabel": {
-        "en": "Notchland",
-        "zh": "往諾基蘭村"
-      },
-      "reverseDirection": "E",
-      "reverseDirectionLabel": {
-        "en": "O.stone",
-        "zh": "往橙岩廣場"
-      },
       "fromLine": "X3L",
       "toLine": "#_DR_DR02"
     },
@@ -49569,7 +49558,6 @@
       "kind": "transfer",
       "from": "DR",
       "to": "DR",
-      "lineId": "X3L",
       "bidirectional": false,
       "metrics": {
         "timeSec": 22.5,
@@ -49577,16 +49565,6 @@
         "price": 0
       },
       "points": [],
-      "direction": "S",
-      "directionLabel": {
-        "en": "Rocky Beach",
-        "zh": "往岩石灘"
-      },
-      "reverseDirection": "N",
-      "reverseDirectionLabel": {
-        "en": "N. W. Mansion",
-        "zh": "往北方森林屋"
-      },
       "fromLine": "#_DR02_DR",
       "toLine": "X3L"
     },
@@ -49595,7 +49573,6 @@
       "kind": "transfer",
       "from": "DR02",
       "to": "DR02",
-      "lineId": "DR",
       "bidirectional": false,
       "metrics": {
         "timeSec": 7.5,
@@ -49603,16 +49580,6 @@
         "price": 0
       },
       "points": [],
-      "direction": "W",
-      "directionLabel": {
-        "zh": "往DR01方向(西)",
-        "en": "To DR01 (westbound)"
-      },
-      "reverseDirection": "E",
-      "reverseDirectionLabel": {
-        "zh": "往DR03方向(東)",
-        "en": "To DR03 (eastbound)"
-      },
       "fromLine": "DR",
       "toLine": "#_DR02_DR"
     },
@@ -49621,7 +49588,6 @@
       "kind": "transfer",
       "from": "DR02",
       "to": "DR02",
-      "lineId": "DR",
       "bidirectional": false,
       "metrics": {
         "timeSec": 7.5,
@@ -49629,16 +49595,6 @@
         "price": 0
       },
       "points": [],
-      "direction": "W",
-      "directionLabel": {
-        "zh": "往DR01方向(西)",
-        "en": "To DR01 (westbound)"
-      },
-      "reverseDirection": "E",
-      "reverseDirectionLabel": {
-        "zh": "往DR03方向(東)",
-        "en": "To DR03 (eastbound)"
-      },
       "fromLine": "#_DR_DR02",
       "toLine": "DR"
     }
