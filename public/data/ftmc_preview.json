@@ -42866,7 +42866,11 @@
         }
       ],
       "reverseDirection": "WS_N",
-      "reverseTimeSec": 27.5
+      "reverseTimeSec": 27.5,
+      "reverseDirectionLabel": {
+        "en": "Plat. 1",
+        "zh": "第一月台"
+      }
     },
     {
       "id": "e01076",
