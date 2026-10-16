@@ -5593,7 +5593,7 @@
   },
   {
     "file": "preview/config.ftmc.json",
-    "sha256": "9074ca248da9ee6bdc4eb383046d0967a5657d6648db7408057943e7396634a3"
+    "sha256": "e4ff7d07d9e993529f37b3b07ef3f0ce6e5dbfe4e588884eddeb2f2310f886df"
   },
   {
     "file": "preview/config.newisle.json",
@@ -5621,7 +5621,7 @@
   },
   {
     "file": "preview/ft_mcsubway.js",
-    "sha256": "7223764c4f6c09648144bb0885215049ae60d39980875cf7823cc395f65cdfe3"
+    "sha256": "b9319ab8fa2a5dbbbd6e022a865ad53f64c7d1639dea81d36b7cc82df4133fb9"
   },
   {
     "file": "preview/ftstar.ico",

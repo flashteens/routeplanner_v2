@@ -6,7 +6,7 @@ import {mapStationLayout,showStationLabel,stationLabelOffset} from '../shared/ma
 import {stationAppearance,labelDirection,stationDefaultType} from '../shared/station-symbol.js';
 
 function bounds(stations,edges=[]){const p=[...Object.values(stations).map(s=>s.position),...edges.flatMap(e=>e.points||[])];if(!p.length)return{x:0,y:0,w:1000,h:800};const xs=p.map(v=>v.x),ys=p.map(v=>v.y),x=Math.min(...xs)-90,y=Math.min(...ys)-90;return{x,y,w:Math.max(400,Math.max(...xs)-x+90),h:Math.max(300,Math.max(...ys)-y+90)};}
-export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options,onViewportChange}){
+export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options,onViewportChange,stationWarnings=[]}){
   const [zoom,setZoom]=useState(1),[pan,setPan]=useState({x:0,y:0}),[lineFilter,setLineFilter]=useState(''),[labels,setLabels]=useState(false),[hover,setHover]=useState(null);
   const [addingPoint,setAddingPoint]=useState(false);
   const [fitRevision,setFitRevision]=useState(0),[fitRoute,setFitRoute]=useState(false);
@@ -98,6 +98,7 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onAct
           {chosen&&<circle r={14*units} fill={s.id===from?'#176b76':'#d28a32'} opacity="0.15"/>}
           {style.type==='I'?<rect data-station-marker="I" x={-marker.halfWidth} y={-marker.halfHeight} width={2*marker.halfWidth} height={2*marker.halfHeight} rx={marker.corner} transform={`rotate(${Math.atan2(marker.uy,marker.ux)*180/Math.PI})`} fill={chosen?(s.id===from?'#176b76':'#d28a32'):'#fff'} stroke={colors.length===1?colors[0]:'#304858'} strokeWidth={1.5*units} opacity={result?.success&&!pathStations.has(s.id)&&!chosen?0.4:1}/>:<circle data-station-marker={style.type} r={marker.radius} fill={chosen?(s.id===from?'#176b76':'#d28a32'):'#fff'} stroke={colors.length===1?colors[0]:'#304858'} strokeWidth={(style.type==='M'?3:1.5)*units} opacity={result?.success&&!pathStations.has(s.id)&&!chosen?0.4:1}/>}
           <circle r={10*units} fill="transparent"/>
+          {editable&&stationWarnings.some(w=>w.station===s.id)&&<g data-station-warning={s.id} transform={`translate(${11*units},${-13*units})`} aria-label={t('stationWarning')}><path d={`M 0 ${-8*units} L ${8*units} ${6*units} L ${-8*units} ${6*units} Z`} fill="#fff0b3" stroke="#9a5300" strokeWidth={1.4*units}/><text textAnchor="middle" y={3.5*units} fontSize={11*units} fontWeight="bold" fill="#713e00">!</text><title>{t('stationWarning')}</title></g>}
           {show&&<text x={offset.x} y={offset.y} textAnchor={style.anchor} dominantBaseline={style.baseline} fontSize={12*units} fontWeight={chosen?'700':'500'} fill="#263d49" paintOrder="stroke" stroke="#fff" strokeWidth={3*units} strokeLinejoin="round"
             onPointerDown={e=>editable?start(e,'label',s.id):start(e,'station',s.id)}>{nameOf(s,lang)}</text>}
           <title>{nameOf(s,lang)} · {(s.codes || []).join(' / ')}</title></g>;})}

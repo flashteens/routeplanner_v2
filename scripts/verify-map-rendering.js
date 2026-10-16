@@ -7,7 +7,7 @@ export async function verifyMapRendering(browser,origin,root){
     await page.goto(`${origin}/editor?conf=ftmc_preview&lang=en`);
     await page.locator('g[data-station="GB"]').waitFor();
     const toggle=page.getByLabel('Station labels',{exact:true});assert.ok(!await toggle.isChecked());
-    const visible=()=>page.locator('g[data-station] text').evaluateAll(items=>[...new Set(items.map(t=>t.parentElement.dataset.stationType))].sort());
+    const visible=()=>page.locator('g[data-station] > text').evaluateAll(items=>[...new Set(items.map(t=>t.parentElement.dataset.stationType))].sort());
     await page.mouse.move(5,5);
     assert.deepEqual(await visible(),[]);
     for(let count=1;count<=8;count++){
@@ -16,7 +16,7 @@ export async function verifyMapRendering(browser,origin,root){
       assert.deepEqual(await visible(),expected,`Progressive labels at zoom ${zoom}`);
     }
     await page.getByRole('button',{name:'Fit map',exact:true}).click();
-    await toggle.check();assert.equal(await page.locator('g[data-station] text').count(),await page.locator('g[data-station]').count());
+    await toggle.check();assert.equal(await page.locator('g[data-station] > text').count(),await page.locator('g[data-station]').count());
     await toggle.uncheck();
     for(let i=0;i<8;i++)await page.getByRole('button',{name:'Zoom in',exact:true}).click();
     const dimensions=(await page.locator('.map-canvas svg').getAttribute('viewBox')).split(' ').map(Number);

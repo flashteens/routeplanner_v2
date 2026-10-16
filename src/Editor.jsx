@@ -1,4 +1,6 @@
 import React,{useState,useMemo,useEffect,useRef,useId} from 'react';
+import BatchEditor from './BatchEditor.jsx';
+import {stationWarnings} from '../shared/editor-warnings.js';
 import TransferGraph from './TransferGraph.jsx';
 import EditorStationPicker from './EditorStationPicker.jsx';
 import {editorItems} from '../shared/editor-search.js';
@@ -22,13 +24,14 @@ function JsonField({label,value,onChange,t,help,docs,lang}){
 export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDraftChange}){
   const [tab,setTab]=useState('stations'),[selected,setSelected]=useState(null),[notice,setNotice]=useState(''),[filter,setFilter]=useState('');
   const [opening,setOpening]=useState(false),[automatic,setAutomatic]=useState({});
-  const [draftCount,setDraftCount]=useState(0);
+  const [draftCount,setDraftCount]=useState(0),[batch,setBatch]=useState(null),[batchDirty,setBatchDirty]=useState(false);
+  const warnings=useMemo(()=>stationWarnings(data),[data]);
   const mapView=useRef(null);
   const fileInput=useRef(null),drafts=useRef(new Map()),current=useRef(data),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=data;
   const draftContext=useMemo(()=>({register:(id,value)=>{if(value)drafts.current.set(id,value);else drafts.current.delete(id);setDraftCount(drafts.current.size);}}),[]);
   const directionErrors=d=>editorDirectionProblems(d).map(issue=>`${issue.edgeId} · ${t(issue.key)}: ${t(issue.problem)}`);
   const errors=useMemo(()=>[...validateNetwork(withoutHistory(data)),...directionErrors(data)],[data,t]);
-  useEffect(()=>{onDraftChange?.(draftCount>0);},[draftCount,onDraftChange]);
+  useEffect(()=>{onDraftChange?.(draftCount>0||batchDirty);},[draftCount,batchDirty,onDraftChange]);
   let history;try{history=checkHistoryShape(data.editorHistory??emptyHistory());}catch{history=emptyHistory();}
   function flushDrafts(){let okay=true;for(const draft of [...drafts.current.values()])if(!draft.commit())okay=false;if(!okay)setNotice(t('invalidDraft'));return okay;}
   function discardDrafts(){for(const draft of [...drafts.current.values()])draft.discard();setNotice('');}
@@ -43,7 +46,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   function perform(change){if(!flushDrafts())return;try{change();}catch(error){setNotice(t('historyError')+'\n'+error.message);}}
   function replay(redo){if(!flushDrafts())return;activeGroup.current=null;try{const next=replayHistory(current.current,redo,validateNetwork);current.current=next;setData(next);setNotice('');}catch(error){historyNeedsRepair.current=true;const message=t('historyError')+'\n'+error.message;setNotice(message);alert(message);}}
   function clearHistory(){if(!confirm(t('clearHistoryConfirm')))return;const next={...current.current,editorHistory:emptyHistory()};activeGroup.current=null;historyNeedsRepair.current=false;current.current=next;setData(next);setNotice(t('historyCleared'));}
-  useEffect(()=>{const handler=e=>{if(!(e.ctrlKey||e.metaKey)||e.altKey||e.target.closest('input,textarea,select,[contenteditable="true"]'))return;const key=e.key.toLowerCase();if(key==='z'||key==='y'){e.preventDefault();replay(key==='y'||e.shiftKey);}};document.addEventListener('keydown',handler);return()=>document.removeEventListener('keydown',handler);});
+  useEffect(()=>{const handler=e=>{if(batch)return;if(!(e.ctrlKey||e.metaKey)||e.altKey||e.target.closest('input,textarea,select,[contenteditable="true"]'))return;const key=e.key.toLowerCase();if(key==='z'||key==='y'){e.preventDefault();replay(key==='y'||e.shiftKey);}};document.addEventListener('keydown',handler);return()=>document.removeEventListener('keydown',handler);});
   const item=selected?.tab==='edges'?data.edges.find(e=>e.id===selected.id):data[selected?.tab]?.[selected?.id];
   const select=(nextTab,id)=>{if(selected?.tab===nextTab&&selected.id===id){setTab(nextTab);return true;}if(!flushDrafts())return false;setTab(nextTab);setSelected({tab:nextTab,id});return true;};
   const update=(change,action)=>commitNetwork(d=>selected.tab==='edges'?{...d,edges:d.edges.map(e=>e.id===selected.id?{...e,...change}:e)}:{...d,[selected.tab]:{...d[selected.tab],[selected.id]:{...d[selected.tab][selected.id],...change}}},action);
@@ -85,6 +88,8 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
       <button className="apply-direction-labels" disabled={!count} onClick={()=>applyLabels(reverse)}>{t('applyDirectionLabels',{line:item.lineId||'—',direction:item[code]||'—',count})}</button>
     </details>;
   }
+  function openBatch(type){if(!flushDrafts())return;setBatch(type==='stations'?{type}:{type:item?.kind==='transfer'?'transfer':'travel',id:item?.kind==='transfer'?item.from:item?.lineId||Object.keys(data.lines)[0]});}
+  function applyBatch(next){if(!editNetwork(next,{kind:'edit',target:'batch:'+batch.type}))throw new Error(t('batchInvalid'));setSelected(null);setFilter('');setAutomatic({});}
   function add(){
     if(!flushDrafts())return;
     const id=tab==='edges'?nextEdgeId(current.current):prompt(t('newId'))?.trim();if(!id)return;
@@ -130,6 +135,8 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
     <section className="json-workbench card" aria-busy={opening}>
       <div className="json-actions"><button disabled={opening} onClick={()=>fileInput.current.click()}>{t('loadFile')}</button><input ref={fileInput} className="sr-only" tabIndex={-1} aria-label={t('loadFile')} type="file" accept="application/json,.json" onChange={async e=>{const input=e.target,file=input.files[0];if(!file)return;setOpening(true);try{load(await file.text());}catch{setNotice(t('fileReadError'));}finally{input.value='';setOpening(false);}}}/><button className="primary" disabled={opening} onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className="notice" role="status">{notice}</pre>}
     </section>
+    <div className="batch-toolbar"><button onClick={()=>openBatch('stations')}>{t('batchStations')}</button><button disabled={!Object.keys(data.lines).length} onClick={()=>openBatch('edges')}>{t('batchEdges')}</button></div>
+    {batch&&<BatchEditor data={data} initialScope={batch} lang={lang} t={t} fallback={mapView.current?{x:mapView.current.x+mapView.current.w/2,y:mapView.current.y+mapView.current.h/2}:undefined} onApply={applyBatch} onClose={()=>{setBatch(null);setBatchDirty(false);}} onDirty={setBatchDirty}/>}
     <div className="editor-grid"><section className="editor-panel card"><nav className="editor-tabs">{['stations','lines','edges','settings'].map(name=><button className={tab===name?'selected':''} key={name} onClick={()=>{if(!flushDrafts())return;setTab(name);setFilter('');}}>{t(name)}</button>)}</nav>
       {tab!=='settings'&&<><div className="editor-list-tools"><input aria-label={t(`editorSearch${tab}`)} placeholder={t(`editorSearch${tab}`)} value={filter} onChange={e=>setFilter(e.target.value)}/><button onClick={add}>{t('add')} ＋</button></div>
         <div className="editor-list">{editorItems(data,tab,filter,lang).map(v=><button key={v.id} className={selected?.tab===tab&&selected.id===v.id?'selected':''} onClick={()=>select(tab,v.id)}>
@@ -163,7 +170,8 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
           {item.kind!=='transfer'&&<fieldset><legend>{t('points')}</legend><p className="muted">{t('pointsHint')}</p>{(item.points||[]).map((point,i)=><div className="point-row" key={i}><span>{i+1}</span>{['x','y'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField aria-label={`${t('points')} ${i+1} ${axis.toUpperCase()}`} type="number" value={point[axis]} onCommit={value=>update({points:item.points.map((p,j)=>i===j?{...p,[axis]:value}:p)},{kind:'move',target:`edge:${item.id}:point:${i}`})} t={t}/></label>)}<button aria-label={`${t('removePoint')} ${i+1}`} onClick={()=>perform(()=>update({points:item.points.filter((p,j)=>i!==j)}))}>×</button></div>)}<button onClick={()=>perform(()=>update({points:insertControlPoint(current.current,item,midpointControlPoint(current.current,item))}))}>{t('addPoint')}</button></fieldset>}
         </>}
       </div>:<p className="empty-editor">{t('nothingSelected')}</p>}
-    </section><div className="editor-visuals">{tab==='edges'&&item?.kind==='transfer'&&<TransferGraph data={data} station={item.from} selected={item.id} lang={lang} t={t} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/>}<NetworkMap onViewportChange={box=>{mapView.current=box;}} data={data} editable setData={editNetwork} selected={selected} lang={lang} t={t} options={data.options.defaults} onSelect={id=>{const okay=select('stations',id);if(okay)setFilter('');return okay;}} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/></div></div>
+    </section><div className="editor-visuals">{tab==='edges'&&item?.kind==='transfer'&&<TransferGraph data={data} station={item.from} selected={item.id} lang={lang} t={t} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/>}<NetworkMap stationWarnings={warnings} onViewportChange={box=>{mapView.current=box;}} data={data} editable setData={editNetwork} selected={selected} lang={lang} t={t} options={data.options.defaults} onSelect={id=>{const okay=select('stations',id);if(okay)setFilter('');return okay;}} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/></div></div>
+    {warnings.length>0&&<section className="station-warnings card" aria-label={t('stationWarnings')}><h3>⚠ {t('stationWarnings')}</h3><p>{t('stationWarningsHint')}</p><ul>{warnings.map(w=><li key={w.station}><button onClick={()=>{if(select('stations',w.station))setFilter('');}}>{nameOf(data.stations[w.station],lang)} · {w.station}</button><ul>{w.reasons.map(reason=><li key={reason.code}>{t(reason.code)}{reason.groups&&<span> {reason.groups.map(g=>g.join(' / ')).join(' ｜ ')}</span>}{reason.edges&&<span> {reason.lines.join(' / ')} · {t('batchConnection')}: {reason.edges.join(', ')}</span>}</li>)}</ul></li>)}</ul></section>}
     {errors.length>0&&<section className="validation card"><h3>{t('validation')}</h3><ul>{errors.slice(0,50).map((error,i)=><li key={i}>{error}</li>)}</ul></section>}
   </main></DraftContext.Provider>;
 }
