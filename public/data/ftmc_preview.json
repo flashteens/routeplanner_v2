@@ -11,7 +11,7 @@
     "zh": "2026.10/10"
   },
   "ui": {
-    "enableDistance": true,
+    "enableDistance": false,
     "enableFare": false,
     "unofficial": false
   },

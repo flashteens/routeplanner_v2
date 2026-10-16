@@ -11,7 +11,7 @@
     "zh": "2025.07/27"
   },
   "ui": {
-    "enableDistance": true,
+    "enableDistance": false,
     "enableFare": false,
     "unofficial": false
   },
@@ -45937,5 +45937,10 @@
     "style": "octilinear",
     "cornerRadius": 12,
     "parallelGap": 5
+  },
+  "editorHistory": {
+    "version": 1,
+    "entries": [],
+    "cursor": 0
   }
 }
