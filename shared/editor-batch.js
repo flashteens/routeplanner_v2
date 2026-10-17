@@ -37,13 +37,35 @@ export function exportBatch(data,scope,headers=batchColumns(scope)){
   const keys=batchColumns(scope),items=scope.type==='stations'?Object.values(data.stations):data.edges.filter(e=>inBatchScope(e,scope));
   return writeCSV([headers,...items.map(item=>keys.map(key=>scope.type==='stations'?key==='id'?item.id:key==='coords'?item.coordinates?['x','y','z'].map(k=>item.coordinates[k]).join(' '):'':item.names[key==='nameEn'?'en':'zh']:printable(getField(cleanEdge(item),key))))]);
 }
-// Inverse-distance k-NN in game XYZ. Only pre-existing anchors are used, so row order cannot change estimates.
+// k-NN selects neighbors in horizontal game XZ; fit each map axis separately.
+// Positive slopes allow extrapolation, instead of pulling new stations back into the anchor cloud.
+const axisScales=new WeakMap();
+function fallbackScales(stations){
+  if(axisScales.has(stations))return axisScales.get(stations);
+  const anchors=Object.values(stations).filter(s=>s.coordinates&&s.position);
+  const result=Object.fromEntries([['x','x'],['z','y']].map(([game,map])=>{
+    const sorted=anchors.toSorted((a,b)=>a.coordinates[game]-b.coordinates[game]),slopes=[];
+    for(let i=0;i<sorted.length;i++)for(let j=i+1;j<Math.min(i+5,sorted.length);j++){
+      const delta=sorted[j].coordinates[game]-sorted[i].coordinates[game],slope=(sorted[j].position[map]-sorted[i].position[map])/delta;
+      if(delta>1e-8&&Number.isFinite(slope)&&slope>1e-8)slopes.push(slope);
+    }
+    slopes.sort((a,b)=>a-b);return [game,slopes.length?slopes[Math.floor(slopes.length/2)]:1];
+  }));axisScales.set(stations,result);return result;
+}
 export function predictStationPosition(data,coordinates,fallback={x:0,y:0}){
-  if(!coordinates)return{position:{x:Math.round(fallback.x),y:Math.round(fallback.y)},estimated:false};
-  const near=Object.values(data.stations).filter(s=>s.coordinates&&s.position).map(s=>({s,d:Math.hypot(...['x','y','z'].map(k=>s.coordinates[k]-coordinates[k]))})).sort((a,b)=>a.d-b.d||a.s.id.localeCompare(b.s.id)).slice(0,5);
-  if(!near.length)return{position:{x:Math.round(fallback.x),y:Math.round(fallback.y)},estimated:false};
-  const exact=near.filter(n=>n.d<1e-8),anchors=exact.length?exact:near,weights=anchors.map(n=>exact.length?1:1/n.d**2),total=weights.reduce((a,b)=>a+b,0);
-  return {position:Object.fromEntries(['x','y'].map(k=>[k,Math.round(anchors.reduce((sum,n,i)=>sum+n.s.position[k]*weights[i],0)/total)])),estimated:true};
+  const center=()=>({position:{x:Math.round(fallback.x),y:Math.round(fallback.y)},estimated:false});
+  if(!coordinates)return center();
+  const near=Object.values(data.stations).filter(s=>s.coordinates&&s.position).map(s=>({s,d:Math.hypot(s.coordinates.x-coordinates.x,s.coordinates.z-coordinates.z)})).sort((a,b)=>a.d-b.d||a.s.id.localeCompare(b.s.id)).slice(0,5);
+  if(!near.length)return center();
+  const exact=near.filter(n=>n.d<1e-8);
+  if(exact.length)return {position:Object.fromEntries(['x','y'].map(k=>[k,Math.round(exact.reduce((sum,n)=>sum+n.s.position[k],0)/exact.length)])),estimated:true};
+  const scales=fallbackScales(data.stations),weights=near.map(n=>1/n.d**2),total=weights.reduce((a,b)=>a+b,0);
+  const position=Object.fromEntries([['x','x'],['z','y']].map(([game,map])=>{
+    const meanX=near.reduce((sum,n,i)=>sum+n.s.coordinates[game]*weights[i],0)/total,meanY=near.reduce((sum,n,i)=>sum+n.s.position[map]*weights[i],0)/total;
+    const variance=near.reduce((sum,n,i)=>sum+weights[i]*(n.s.coordinates[game]-meanX)**2,0),covariance=near.reduce((sum,n,i)=>sum+weights[i]*(n.s.coordinates[game]-meanX)*(n.s.position[map]-meanY),0),slope=covariance/variance;
+    const value=Number.isFinite(slope)&&slope>1e-8?meanY+slope*(coordinates[game]-meanX):near[0].s.position[map]+scales[game]*(coordinates[game]-near[0].s.coordinates[game]);
+    return [map,Math.round(value)];
+  }));return Object.values(position).every(Number.isFinite)?{position,estimated:true}:center();
 }
 function removeStations(data,removed){
   if(!removed.size)return data;

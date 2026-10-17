@@ -312,5 +312,13 @@
   "batchUnknownStation": "指定の駅がありません。出発・到着駅の番号を確認してください。",
   "batchEndpointError": "路線・乗り換え地点が存在するか確認してください。乗車・徒歩の出発駅と到着駅は別にします。",
   "batchLanguageError": "多言語文言は言語と文字列の組にしてください。例：{\"ja\":\"川方面\",\"en\":\"To River\"}。",
-  "batchConditionError": "条件別時間の一覧・条件・秒数を確認してください。通常の編集画面のヘルプを参照できます。"
+  "batchConditionError": "条件別時間の一覧・条件・秒数を確認してください。通常の編集画面のヘルプを参照できます。",
+  "creatingConnection": "区間を新規作成中",
+  "repairingConnection": "区間の編集が未完了です",
+  "connectionDraftHint": "駅または乗り換えの接続先を入力してください。他の項目も編集できます。すべて有効になると自動で適用します。未完了の内容は地図やJSONには含めず、取り消せます。",
+  "finishConnection": "現在の区間を完成させるか編集を取り消してから続けてください。",
+  "cancelConnection": "新規作成を取り消す",
+  "viewStationTransfers": "駅の乗り換え動線を見る",
+  "addStationTransfers": "駅の乗り換え動線を追加",
+  "backToStation": "駅の編集に戻る"
 }

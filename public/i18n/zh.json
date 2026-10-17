@@ -312,5 +312,13 @@
   "batchUnknownStation": "找不到指定的車站，請檢查起訖站編號。",
   "batchEndpointError": "請檢查路線或轉乘點是否存在；搭乘與步行的起訖站不能相同。",
   "batchLanguageError": "多語言文字請填成語言與文字的對照，例如 {\"zh\":\"往河岸\",\"en\":\"To River\"}。",
-  "batchConditionError": "請檢查條件式時間的清單、適用選項與秒數，可參考原編輯器的欄位說明。"
+  "batchConditionError": "請檢查條件式時間的清單、適用選項與秒數，可參考原編輯器的欄位說明。",
+  "creatingConnection": "正在新增路段",
+  "repairingConnection": "路段修改尚未完成",
+  "connectionDraftHint": "請補齊起訖車站或轉乘來源與目標。期間可繼續修改其他欄位；全部有效後會自動套用。未完成的內容不會加入地圖或 JSON，可取消這次修改。",
+  "finishConnection": "請先完成目前路段的欄位，或取消這次修改，再繼續操作。",
+  "cancelConnection": "取消新增",
+  "viewStationTransfers": "查看既有轉乘動線",
+  "addStationTransfers": "新增轉乘動線",
+  "backToStation": "返回編輯車站"
 }

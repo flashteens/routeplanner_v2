@@ -1,4 +1,5 @@
 import React,{useState,useMemo,useEffect,useRef,useId} from 'react';
+import {continueConnection,firstStationTransfer,withConnectionDraft} from '../shared/editor-connections.js';
 import BatchEditor from './BatchEditor.jsx';
 import {stationWarnings} from '../shared/editor-warnings.js';
 import TransferGraph from './TransferGraph.jsx';
@@ -21,22 +22,45 @@ function JsonField({label,value,onChange,t,help,docs,lang}){
   const id=useId();
   return <div className="field-label"><div className="arrival-label-heading"><label htmlFor={id}>{label}</label>{help&&<FieldHelp label={label} t={t}><p>{t(help)}</p>{docs&&<p className="field-help-docs"><a href={`/docs/editor-fields.html#${docs}-${lang}`} target="_blank" rel="noopener noreferrer">{t('fieldHelpDocs')}</a></p>}</FieldHelp>}</div><DraftField id={id} as="textarea" aria-label={label} className="json-field" value={JSON.stringify(value,null,2)} onCommit={text=>onChange(JSON.parse(text))} t={t}/></div>;
 }
-export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDraftChange}){
+export default function Editor({data:documentData,setData,lang,t,onPreview,onDownloaded,onDraftChange}){
   const [tab,setTab]=useState('stations'),[selected,setSelected]=useState(null),[notice,setNotice]=useState(''),[filter,setFilter]=useState('');
   const [opening,setOpening]=useState(false),[automatic,setAutomatic]=useState({});
   const [draftCount,setDraftCount]=useState(0),[batch,setBatch]=useState(null),[batchDirty,setBatchDirty]=useState(false);
-  const warnings=useMemo(()=>stationWarnings(data),[data]);
+  const [edgeDraft,setEdgeDraft]=useState(null),edgeDraftRef=useRef(null),[focusRequest,setFocusRequest]=useState(null);
+  const data=withConnectionDraft(documentData,edgeDraft);
+  const warnings=useMemo(()=>stationWarnings(documentData),[documentData]);
   const mapView=useRef(null);
-  const fileInput=useRef(null),drafts=useRef(new Map()),current=useRef(data),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=data;
+  const fileInput=useRef(null),drafts=useRef(new Map()),current=useRef(documentData),activeGroup=useRef(null),historyNeedsRepair=useRef(false);current.current=documentData;
   const draftContext=useMemo(()=>({register:(id,value)=>{if(value)drafts.current.set(id,value);else drafts.current.delete(id);setDraftCount(drafts.current.size);}}),[]);
   const directionErrors=d=>editorDirectionProblems(d).map(issue=>`${issue.edgeId} · ${t(issue.key)}: ${t(issue.problem)}`);
-  const errors=useMemo(()=>[...validateNetwork(withoutHistory(data)),...directionErrors(data)],[data,t]);
-  useEffect(()=>{onDraftChange?.(draftCount>0||batchDirty);},[draftCount,batchDirty,onDraftChange]);
+  const errors=useMemo(()=>[...validateNetwork(withoutHistory(documentData)),...directionErrors(documentData)],[documentData,t]);
+  useEffect(()=>{onDraftChange?.(draftCount>0||batchDirty||Boolean(edgeDraft));},[draftCount,batchDirty,edgeDraft,onDraftChange]);
   let history;try{history=checkHistoryShape(data.editorHistory??emptyHistory());}catch{history=emptyHistory();}
-  function flushDrafts(){let okay=true;for(const draft of [...drafts.current.values()])if(!draft.commit())okay=false;if(!okay)setNotice(t('invalidDraft'));return okay;}
-  function discardDrafts(){for(const draft of [...drafts.current.values()])draft.discard();setNotice('');}
+  function editingData(){return withConnectionDraft(current.current,edgeDraftRef.current);}
+  function stageConnection(draft){edgeDraftRef.current=draft;setEdgeDraft(draft);}
+  function finishConnection(){
+    const draft=edgeDraftRef.current;if(!draft)return true;
+    const next=editingData();
+    if(drafts.current.size||validateNetwork(next).length||editorDirectionProblems(next).length)return false;
+    const recorded=recordEdit(current.current,next,{kind:draft.isNew?'add':'edit',target:`edges:${draft.edge.id}`},validateNetwork,false,historyNeedsRepair.current);
+    historyNeedsRepair.current=false;activeGroup.current=null;current.current=recorded;setData(recorded);stageConnection(null);setNotice('');return true;
+  }
+  function flushDrafts(){
+    let okay=true;for(const draft of [...drafts.current.values()])if(!draft.commit())okay=false;
+    if(!okay){setNotice(t('invalidDraft'));return false;}
+    if(!finishConnection()){setNotice(t('finishConnection'));return false;}
+    setNotice(value=>[t('invalidDraft'),t('finishConnection')].includes(value)?'':value);return true;
+  }
+  function discardDrafts(){for(const draft of [...drafts.current.values()])draft.discard();if(edgeDraftRef.current?.isNew)setSelected(null);stageConnection(null);setNotice('');}
+  useEffect(()=>{if(!draftCount&&!edgeDraft)setNotice(value=>[t('invalidDraft'),t('finishConnection')].includes(value)?'':value);},[draftCount,edgeDraft,t]);
   function commitNetwork(change,action={kind:'edit',target:selected?`${selected.tab}:${selected.id}`:'settings'}){
-    const before=current.current,next=typeof change==='function'?change(before):change;
+    const before=current.current,view=editingData(),next=typeof change==='function'?change(view):change,draft=edgeDraftRef.current;
+    const edge=next.edges.find(e=>e.id===(draft?.edge.id??(selected?.tab==='edges'?selected.id:null))),old=before.edges.find(e=>e.id===edge?.id);
+    // Keep invalid endpoint combinations outside the portable document until both fields are repaired.
+    if(draft||edge&&old&&(edge.from!==old.from||edge.to!==old.to)&&validateNetwork(next).length){
+      if(!edge)throw new Error(t('finishConnection'));
+      stageConnection({...draft,isNew:draft?.isNew??false,edge});finishConnection();return current.current;
+    }
     const key=action.kind==='move'?action.target:null;
     const recorded=recordEdit(before,next,action,validateNetwork,key!==null&&activeGroup.current===key,historyNeedsRepair.current);
     if(recorded!==before&&historyNeedsRepair.current){historyNeedsRepair.current=false;setNotice(t('historyEditRecovered'));}
@@ -48,14 +72,14 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   function clearHistory(){if(!confirm(t('clearHistoryConfirm')))return;const next={...current.current,editorHistory:emptyHistory()};activeGroup.current=null;historyNeedsRepair.current=false;current.current=next;setData(next);setNotice(t('historyCleared'));}
   useEffect(()=>{const handler=e=>{if(batch)return;if(!(e.ctrlKey||e.metaKey)||e.altKey||e.target.closest('input,textarea,select,[contenteditable="true"]'))return;const key=e.key.toLowerCase();if(key==='z'||key==='y'){e.preventDefault();replay(key==='y'||e.shiftKey);}};document.addEventListener('keydown',handler);return()=>document.removeEventListener('keydown',handler);});
   const item=selected?.tab==='edges'?data.edges.find(e=>e.id===selected.id):data[selected?.tab]?.[selected?.id];
-  const select=(nextTab,id)=>{if(selected?.tab===nextTab&&selected.id===id){setTab(nextTab);return true;}if(!flushDrafts())return false;setTab(nextTab);setSelected({tab:nextTab,id});return true;};
+  const select=(nextTab,id,focus=true)=>{if(selected?.tab!==nextTab||selected.id!==id)if(!flushDrafts())return false;setTab(nextTab);setSelected({tab:nextTab,id});if(focus)setFocusRequest({tab:nextTab,id});return true;};
   const update=(change,action)=>commitNetwork(d=>selected.tab==='edges'?{...d,edges:d.edges.map(e=>e.id===selected.id?{...e,...change}:e)}:{...d,[selected.tab]:{...d[selected.tab],[selected.id]:{...d[selected.tab][selected.id],...change}}},action);
-  function changeEdge(change){const d=current.current,edge=d.edges.find(e=>e.id===selected.id),next={...edge,...change};
+  function changeEdge(change){const d=editingData(),edge=d.edges.find(e=>e.id===selected.id),next={...edge,...change};
     // Typed transfer endpoints are intentional; only explicit default inference changes them.
     const defaults=automatic[edge.id]&&(edge.kind!=='transfer'||Object.hasOwn(change,'from'))?edgeDefaults(d,next):{};
     commitNetwork({...d,edges:d.edges.map(e=>e.id===edge.id?cleanEdge({...next,...defaults}):e)});
   }
-  function switchKind(kind){const d=current.current,edge=d.edges.find(e=>e.id===selected.id);commitNetwork({...d,edges:d.edges.map(e=>e.id===edge.id?changeEdgeKind(d,edge,kind):e)});}
+  function switchKind(kind){const d=editingData(),edge=d.edges.find(e=>e.id===selected.id);commitNetwork({...d,edges:d.edges.map(e=>e.id===edge.id?changeEdgeKind(d,edge,kind):e)});}
   function changeFamiliarity(enabled){commitNetwork(d=>({...d,edges:d.edges.map(e=>e.id===selected.id?withFamiliarity(e,enabled):e)}));}
 
   function manualEdge(change){setAutomatic(v=>({...v,[item.id]:false}));update(change);}
@@ -65,10 +89,10 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
     const help=['timeSec','reverseTimeSec'].includes(key)?item.kind==='ride'?'rideTimeHelp':item.kind==='walk'?'walkTimeHelp':'transferTimeHelp':null;
     return <div className="field-label"><div className="arrival-label-heading"><label htmlFor={`editor-${key}`}>{t(key)}</label>{help&&<FieldHelp label={t(key)} t={t}><p>{t(help)}</p></FieldHelp>}</div><DraftField id={`editor-${key}`} key={key} aria-label={t(key)} type={type} value={value??''} step={type==='number'?'any':undefined} onCommit={change} t={t}/></div>;
   };
-  const toggle=(key,checked,change)=><label className="checkbox-label"><input type="checkbox" checked={Boolean(checked)} onChange={e=>{if(!flushDrafts())return;try{change(e.target.checked);}catch(error){setNotice(t('invalidNetwork')+'\n'+error.message);}}}/>{t(key)}</label>;
+  const toggle=(key,checked,change)=><label className="checkbox-label"><input type="checkbox" checked={Boolean(checked)} onChange={e=>{if(!edgeDraftRef.current&&!flushDrafts())return;try{change(e.target.checked);}catch(error){setNotice(t('invalidNetwork')+'\n'+error.message);}}}/>{t(key)}</label>;
   function names(){return <>{input('nameEn',item.names.en,value=>update({names:{...item.names,en:value}}))}{input('nameZh',item.names.zh,value=>update({names:{...item.names,zh:value}}))}</>;}
   function changeSymbol(change){const style=stationSymbol(current.current.stations[selected.id],stationDefaultType(current.current,selected.id));update({symbol:`${change.type??style.type}-${change.direction??style.direction}`,labelOffset:undefined,labelAnchor:undefined});}
-  function directionCode(key){return <label className="field-label">{t(key)}<DraftField aria-label={t(key)} required={item.kind==='ride'&&(key==='direction'||item.bidirectional)} validationError={directionCodeProblem(item,key,item[key])?t(directionCodeProblem(item,key,item[key])):''} value={item[key]??''} onCommit={value=>{const trimmed=value.trim(),edge=current.current.edges.find(e=>e.id===selected.id),problem=directionCodeProblem(edge,key,trimmed);if(problem)throw new Error(t(problem));manualEdge({[key]:trimmed});}} t={t}/></label>;}
+  function directionCode(key){return <label className="field-label">{t(key)}<DraftField aria-label={t(key)} required={item.kind==='ride'&&(key==='direction'||item.bidirectional)} validationError={directionCodeProblem(item,key,item[key])?t(directionCodeProblem(item,key,item[key])):''} value={item[key]??''} onCommit={value=>{const trimmed=value.trim(),edge=editingData().edges.find(e=>e.id===selected.id),problem=directionCodeProblem(edge,key,trimmed);if(problem)throw new Error(t(problem));manualEdge({[key]:trimmed});}} t={t}/></label>;}
   function applyLabels(reverse){
     if(!flushDrafts())return;
     const d=current.current,edge=d.edges.find(e=>e.id===selected.id),direction=edge[reverse?'reverseDirection':'direction'],targets=directionLabelTargets(d,edge.lineId,direction);
@@ -84,14 +108,22 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
     const languages=[...new Set(['zh','en',...Object.keys(labels)])],names={zh:t('labelLanguageZh'),en:t('labelLanguageEn'),ja:t('labelLanguageJa')};
     const count=new Set(directionLabelTargets(data,item.lineId,item[code]).map(target=>target.edgeId)).size;
     return <details className="options direction-labels" data-direction-label={key}><summary>{t(key)}</summary>
-      {languages.map(language=><label className="field-label" key={language}>{names[language]||language}<DraftField aria-label={`${t(key)} · ${names[language]||language}`} placeholder={t('directionLabelPlaceholder')} value={labels[language]??''} onCommit={value=>{const edge=current.current.edges.find(e=>e.id===selected.id),next={...edge[key]};if(value)next[language]=value;else delete next[language];manualEdge({[key]:next});}} t={t}/></label>)}
-      <button className="apply-direction-labels" disabled={!count} onClick={()=>applyLabels(reverse)}>{t('applyDirectionLabels',{line:item.lineId||'—',direction:item[code]||'—',count})}</button>
+      {languages.map(language=><label className="field-label" key={language}>{names[language]||language}<DraftField aria-label={`${t(key)} · ${names[language]||language}`} placeholder={t('directionLabelPlaceholder')} value={labels[language]??''} onCommit={value=>{const edge=editingData().edges.find(e=>e.id===selected.id),next={...edge[key]};if(value)next[language]=value;else delete next[language];manualEdge({[key]:next});}} t={t}/></label>)}
+      <button className="apply-direction-labels" disabled={!count||Boolean(edgeDraft)} onClick={()=>applyLabels(reverse)}>{t('applyDirectionLabels',{line:item.lineId||'—',direction:item[code]||'—',count})}</button>
     </details>;
   }
   function openBatch(type){if(!flushDrafts())return;setBatch(type==='stations'?{type}:{type:item?.kind==='transfer'?'transfer':'travel',id:item?.kind==='transfer'?item.from:item?.lineId||Object.keys(data.lines)[0]});}
   function applyBatch(next){if(!editNetwork(next,{kind:'edit',target:'batch:'+batch.type}))throw new Error(t('batchInvalid'));setSelected(null);setFilter('');setAutomatic({});}
+  function beginConnection(edge){stageConnection({edge,isNew:true});setTab('edges');setSelected({tab:'edges',id:edge.id});setFilter('');setAutomatic(v=>({...v,[edge.id]:false}));setNotice('');finishConnection();}
+  function viewTransfers(station){
+    if(!flushDrafts())return;
+    const first=current.current.edges.find(e=>e.kind==='transfer'&&e.from===station);
+    if(first){if(select('edges',first.id))setFilter('');}
+    else beginConnection(firstStationTransfer(current.current,station));
+  }
   function add(){
     if(!flushDrafts())return;
+    if(tab==='edges'&&selected?.tab==='edges'){const source=current.current.edges.find(e=>e.id===selected.id);if(source){beginConnection(continueConnection(current.current,source));return;}}
     const id=tab==='edges'?nextEdgeId(current.current):prompt(t('newId'))?.trim();if(!id)return;
     let next;try{next=addEditorItem(current.current,tab,id,mapView.current?{x:mapView.current.x+mapView.current.w/2,y:mapView.current.y+mapView.current.h/2}:undefined);}catch(error){setNotice(t(error.message));return;}
     const added=editNetwork(next,{kind:'add',target:`${tab}:${id}`});
@@ -99,6 +131,7 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
     if(added){select(tab,id);setNotice('');}
   }
   function remove(){
+    if(edgeDraftRef.current?.isNew){discardDrafts();return;}
     if(!selected||!flushDrafts()||!confirm(t('deleteConfirm')))return;
     editNetwork(d=>{
       const next={...d};
@@ -128,13 +161,14 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
   }catch(error){setNotice(error instanceof SyntaxError?t('invalidJson'):t('invalidNetwork')+'\n'+error.message);}}
   function serialize(){if(!flushDrafts())return null;const modern={...current.current,edges:current.current.edges.map(e=>cleanEdge(modernizeEdgeTiming(e,current.current.id)))};commitNetwork(modern,{kind:'edit',target:'edgeFormat'});const d=current.current,problems=[...validateNetwork(withoutHistory(d)),...directionErrors(d),...validateEditorHistory(d,validateNetwork)];if(problems.length){setNotice(t('invalidNetwork')+'\n'+problems.join('\n'));return null;}const value=JSON.stringify({...d,editorHistory:d.editorHistory??emptyHistory()},null,2)+'\n';setNotice(t('saved'));return value;}
   function download(){const value=serialize();if(!value)return;const url=URL.createObjectURL(new Blob([value],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=data.id+'.json';onDownloaded?.(current.current);a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-  const stationSelect=(key,value,onChange)=><EditorStationPicker key={key} data={data} lang={lang} t={t} label={t(key)} value={value} onCommit={id=>{if(!flushDrafts())throw new Error(t('invalidDraft'));onChange(id);}}/>;
+  const stationSelect=(key,value,onChange)=><EditorStationPicker key={key} data={data} lang={lang} t={t} label={t(key)} value={value} onCommit={onChange}/>;
   const lineSelect=(key,value,onChange)=><label className="field-label">{t(key)}<DraftField key={key} aria-label={t(key)} list="editor-lines" value={value || ''} onCommit={onChange} t={t}/></label>;
   return <DraftContext.Provider value={draftContext}><main><div className="page-intro editor-intro"><div><span className="eyebrow">{t('editor')}</span><h1>{t('editorTitle')}</h1><p>{t('editorSubtitle')}</p></div><button className="primary" onClick={()=>{if(!flushDrafts())return;[...validateNetwork(withoutHistory(current.current)),...directionErrors(current.current)].length?setNotice(t('invalidNetwork')):onPreview();}}>{t('viewPlanner')} →</button></div>
-    <section className="history-toolbar card" aria-label={t('editHistory')}><button onClick={()=>replay(false)} disabled={!history.cursor}>{t('undo')}</button><button onClick={()=>replay(true)} disabled={history.cursor>=history.entries.length}>{t('redo')}</button><span>{t('historyCount',{count:history.entries.length})}</span><button className="danger" onClick={clearHistory} disabled={!history.entries.length}>{t('clearHistory')}</button>{draftCount>0&&<button onClick={discardDrafts}>{t('discardDrafts')}</button>}</section>
+    <section className="history-toolbar card" aria-label={t('editHistory')}><button onClick={()=>replay(false)} disabled={!history.cursor}>{t('undo')}</button><button onClick={()=>replay(true)} disabled={history.cursor>=history.entries.length}>{t('redo')}</button><span>{t('historyCount',{count:history.entries.length})}</span><button className="danger" onClick={clearHistory} disabled={!history.entries.length}>{t('clearHistory')}</button>{draftCount>0&&!edgeDraft&&<button onClick={discardDrafts}>{t('discardDrafts')}</button>}</section>
     <section className="json-workbench card" aria-busy={opening}>
-      <div className="json-actions"><button disabled={opening} onClick={()=>fileInput.current.click()}>{t('loadFile')}</button><input ref={fileInput} className="sr-only" tabIndex={-1} aria-label={t('loadFile')} type="file" accept="application/json,.json" onChange={async e=>{const input=e.target,file=input.files[0];if(!file)return;setOpening(true);try{load(await file.text());}catch{setNotice(t('fileReadError'));}finally{input.value='';setOpening(false);}}}/><button className="primary" disabled={opening} onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className="notice" role="status">{notice}</pre>}
+      <div className="json-actions"><button disabled={opening} onClick={()=>{if(flushDrafts())fileInput.current.click();}}>{t('loadFile')}</button><input ref={fileInput} className="sr-only" tabIndex={-1} aria-label={t('loadFile')} type="file" accept="application/json,.json" onChange={async e=>{const input=e.target,file=input.files[0];if(!file)return;setOpening(true);try{load(await file.text());}catch{setNotice(t('fileReadError'));}finally{input.value='';setOpening(false);}}}/><button className="primary" disabled={opening} onClick={download}>{t('download')}</button></div><p className="muted">{t('editorLocal')}</p>{notice&&<pre className="notice" role="status">{notice}</pre>}
     </section>
+    {edgeDraft&&<section className="connection-draft card" role="status"><strong>{t(edgeDraft.isNew?'creatingConnection':'repairingConnection')} · {edgeDraft.edge.id}</strong><p>{t('connectionDraftHint')}</p><button onClick={discardDrafts}>{t('discardDrafts')}</button></section>}
     <div className="batch-toolbar"><button onClick={()=>openBatch('stations')}>{t('batchStations')}</button><button disabled={!Object.keys(data.lines).length} onClick={()=>openBatch('edges')}>{t('batchEdges')}</button></div>
     {batch&&<BatchEditor data={data} initialScope={batch} lang={lang} t={t} fallback={mapView.current?{x:mapView.current.x+mapView.current.w/2,y:mapView.current.y+mapView.current.h/2}:undefined} onApply={applyBatch} onClose={()=>{setBatch(null);setBatchDirty(false);}} onDirty={setBatchDirty}/>}
     <div className="editor-grid"><section className="editor-panel card"><nav className="editor-tabs">{['stations','lines','edges','settings'].map(name=><button className={tab===name?'selected':''} key={name} onClick={()=>{if(!flushDrafts())return;setTab(name);setFilter('');}}>{t(name)}</button>)}</nav>
@@ -150,8 +184,8 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
         {input('currency',data.fares.currency,value=>commitNetwork(d=>({...d,fares:{...d.fares,currency:value || null}})))}
         <JsonField key={data.id+'fares'} label={t('fareMatrix')} help="faresHelp" lang={lang} docs="fares" value={data.fares} onChange={value=>checked({...data,fares:value})} t={t}/>
         <JsonField key={data.id+'options'} label={t('advanced')} help="optionsHelp" lang={lang} docs="options" value={data.options} onChange={value=>checked({...data,options:value})} t={t}/>
-      </div>:item&&selected.tab===tab?<div className="edit-fields" key={selected.id}><div className="selected-heading"><span className="eyebrow">{t('selected')} · {item.id}</span><button className="danger" onClick={remove}>{t('remove')}</button></div>
-        {tab==='stations'&&<>{names()}{['aliases','codes'].map(key=><label className="field-label" key={key}>{t(key)}<DraftField as="textarea" value={(item[key]||[]).join('\n')} onCommit={value=>update({[key]:value.split('\n').filter(Boolean)})} t={t}/></label>)}
+      </div>:item&&selected.tab===tab?<div className="edit-fields" key={selected.id}><div className="selected-heading"><span className="eyebrow">{t('selected')} · {item.id}</span><button className="danger" onClick={remove}>{t(edgeDraft?.isNew?'cancelConnection':'remove')}</button></div>
+        {tab==='stations'&&<>{names()}<button className="station-transfers" onClick={()=>viewTransfers(item.id)}>{t(data.edges.some(e=>e.kind==='transfer'&&e.from===item.id)?'viewStationTransfers':'addStationTransfers')}</button>{['aliases','codes'].map(key=><label className="field-label" key={key}>{t(key)}<DraftField as="textarea" value={(item[key]||[]).join('\n')} onCommit={value=>update({[key]:value.split('\n').filter(Boolean)})} t={t}/></label>)}
           <fieldset><legend>{t('coords')}</legend><div className="axis-inputs">{['x','y','z'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField type="number" step="any" allowEmpty value={item.coordinates?.[axis]??''} onCommit={value=>update({coordinates:value===''?null:{...(item.coordinates || {x:0,y:62,z:0}),[axis]:value}})} t={t}/></label>)}</div></fieldset>
           <fieldset><legend>{t('mapPosition')}</legend><div className="axis-inputs">{['x','y'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField type="number" value={item.position[axis]} onCommit={value=>update({position:{...item.position,[axis]:value}},{kind:'move',target:`station:${item.id}:position`})} t={t}/></label>)}</div></fieldset>
           <label className="field-label">{t('stationType')}<DraftField as="select" immediate aria-label={t('stationType')} value={stationSymbol(item,stationDefaultType(data,item.id)).type} onCommit={type=>changeSymbol({type})} t={t}>{['L','I','M'].map(type=><option key={type} value={type}>{t(`stationType${type}`)}</option>)}</DraftField></label>
@@ -167,10 +201,10 @@ export default function Editor({data,setData,lang,t,onPreview,onDownloaded,onDra
           {toggle('bidirectional',item.bidirectional,value=>update({bidirectional:value}))}{['timeSec','distanceKm','price'].map(key=><React.Fragment key={key}>{input(key,item.metrics[key],value=>(key==='distanceKm'?manualEdge:update)({metrics:{...item.metrics,[key]:value}}),'number')}</React.Fragment>)}
           {item.bidirectional&&input('reverseTimeSec',item.reverseTimeSec??item.metrics.timeSec,value=>update({reverseTimeSec:value}),'number')}<div className="field-label"><div className="arrival-label-heading">{toggle('delayWhenUnfamiliar',delaysWhenUnfamiliar(item),changeFamiliarity)}<FieldHelp label={t('delayWhenUnfamiliar')} t={t}><p>{t('familiarityHelp')}</p></FieldHelp></div></div>
           <p className="muted">{t('conditionsHint')}</p><JsonField label={t('conditions')} help="variantsHelp" lang={lang} docs="variants" value={item.variants||[]} onChange={value=>{if(!Array.isArray(value))throw new Error(t('invalidNetwork'));checkedEdge({variants:value.length?value:undefined});}} t={t}/>
-          {item.kind!=='transfer'&&<fieldset><legend>{t('points')}</legend><p className="muted">{t('pointsHint')}</p>{(item.points||[]).map((point,i)=><div className="point-row" key={i}><span>{i+1}</span>{['x','y'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField aria-label={`${t('points')} ${i+1} ${axis.toUpperCase()}`} type="number" value={point[axis]} onCommit={value=>update({points:item.points.map((p,j)=>i===j?{...p,[axis]:value}:p)},{kind:'move',target:`edge:${item.id}:point:${i}`})} t={t}/></label>)}<button aria-label={`${t('removePoint')} ${i+1}`} onClick={()=>perform(()=>update({points:item.points.filter((p,j)=>i!==j)}))}>×</button></div>)}<button onClick={()=>perform(()=>update({points:insertControlPoint(current.current,item,midpointControlPoint(current.current,item))}))}>{t('addPoint')}</button></fieldset>}
+          {item.kind!=='transfer'&&Boolean(data.stations[item.from]&&data.stations[item.to])&&<fieldset><legend>{t('points')}</legend><p className="muted">{t('pointsHint')}</p>{(item.points||[]).map((point,i)=><div className="point-row" key={i}><span>{i+1}</span>{['x','y'].map(axis=><label key={axis}>{axis.toUpperCase()}<DraftField aria-label={`${t('points')} ${i+1} ${axis.toUpperCase()}`} type="number" value={point[axis]} onCommit={value=>update({points:item.points.map((p,j)=>i===j?{...p,[axis]:value}:p)},{kind:'move',target:`edge:${item.id}:point:${i}`})} t={t}/></label>)}<button aria-label={`${t('removePoint')} ${i+1}`} onClick={()=>perform(()=>update({points:item.points.filter((p,j)=>i!==j)}))}>×</button></div>)}<button onClick={()=>perform(()=>update({points:insertControlPoint(current.current,item,midpointControlPoint(current.current,item))}))}>{t('addPoint')}</button></fieldset>}
         </>}
       </div>:<p className="empty-editor">{t('nothingSelected')}</p>}
-    </section><div className="editor-visuals">{tab==='edges'&&item?.kind==='transfer'&&<TransferGraph data={data} station={item.from} selected={item.id} lang={lang} t={t} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/>}<NetworkMap stationWarnings={warnings} onViewportChange={box=>{mapView.current=box;}} data={data} editable setData={editNetwork} selected={selected} lang={lang} t={t} options={data.options.defaults} onSelect={id=>{const okay=select('stations',id);if(okay)setFilter('');return okay;}} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/></div></div>
+    </section><div className="editor-visuals">{tab==='edges'&&item?.kind==='transfer'&&<TransferGraph data={documentData} onSelectStation={id=>{if(select('stations',id))setFilter('');}} station={item.from} selected={item.id} lang={lang} t={t} onSelectEdge={id=>{if(select('edges',id))setFilter('');}}/>}<NetworkMap focusRequest={focusRequest} stationWarnings={warnings} onViewportChange={box=>{mapView.current=box;}} data={documentData} editable setData={editNetwork} selected={selected} lang={lang} t={t} options={data.options.defaults} onSelect={id=>{const okay=select('stations',id,false);if(okay)setFilter('');return okay;}} onSelectEdge={id=>{if(select('edges',id,false))setFilter('');}}/></div></div>
     {warnings.length>0&&<section className="station-warnings card" aria-label={t('stationWarnings')}><h3>⚠ {t('stationWarnings')}</h3><p>{t('stationWarningsHint')}</p><ul>{warnings.map(w=><li key={w.station}><button onClick={()=>{if(select('stations',w.station))setFilter('');}}>{nameOf(data.stations[w.station],lang)} · {w.station}</button><ul>{w.reasons.map(reason=><li key={reason.code}>{t(reason.code)}{reason.groups&&<span> {reason.groups.map(g=>g.join(' / ')).join(' ｜ ')}</span>}{reason.edges&&<span> {reason.lines.join(' / ')} · {t('batchConnection')}: {reason.edges.join(', ')}</span>}</li>)}</ul></li>)}</ul></section>}
     {errors.length>0&&<section className="validation card"><h3>{t('validation')}</h3><ul>{errors.slice(0,50).map((error,i)=><li key={i}>{error}</li>)}</ul></section>}
   </main></DraftContext.Provider>;

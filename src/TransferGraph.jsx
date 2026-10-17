@@ -2,7 +2,7 @@ import React,{useEffect,useId,useMemo,useRef,useState} from 'react';
 import {transferGraph} from '../shared/transfer-graph.js';
 import {nameOf} from '../shared/network.js';
 
-export default function TransferGraph({data,station,selected,lang,t,onSelectEdge}){
+export default function TransferGraph({data,station,selected,lang,t,onSelectEdge,onSelectStation}){
   const graph=useMemo(()=>transferGraph(data,station),[data.edges,data.lines,station]);
   const [zoom,setZoom]=useState(1),[pan,setPan]=useState({x:0,y:0}),svg=useRef(null),gesture=useRef(null),id=useId().replace(/[^\w-]/g,'');
   useEffect(()=>{setZoom(1);setPan({x:0,y:0});},[station]);
@@ -14,6 +14,7 @@ export default function TransferGraph({data,station,selected,lang,t,onSelectEdge
   const label=e=>`${e.id} · ${e.fromLine} ${e.bidirectional?'↔':'→'} ${e.toLine} · ${seconds(e)}`;
   return <section className="transfer-graph card" aria-label={t('transferGraph')}>
     <div className="transfer-graph-heading"><div><span className="eyebrow">{t('transferGraph')}</span><h2>{nameOf(data.stations[station],lang)}</h2></div><div className="graph-controls"><button onClick={()=>setZoom(z=>Math.min(8,z*1.4))} aria-label={t('graphZoomIn')}>+</button><button onClick={()=>setZoom(z=>Math.max(.5,z/1.4))} aria-label={t('graphZoomOut')}>−</button><button onClick={()=>{setZoom(1);setPan({x:0,y:0});}}>{t('fit')}</button></div></div>
+    {onSelectStation&&<button onClick={()=>onSelectStation(station)}>{t('backToStation')}</button>}
     <p className="muted">{t('transferGraphHint')}</p>
     <svg ref={svg} className="transfer-graph-canvas" viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} role="group" aria-label={t('transferGraph')}
       onPointerDown={e=>{if(e.button!==0)return;gesture.current={start:point(e),inverse:svg.current.getScreenCTM().inverse(),pan:{...pan},pointer:e.pointerId};svg.current.setPointerCapture(e.pointerId);}}

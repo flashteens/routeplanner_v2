@@ -1,4 +1,5 @@
 import React,{useState,useMemo,useRef,useEffect} from 'react';
+import {revealBounds} from '../shared/editor-focus.js';
 import {nameOf} from '../shared/network.js';
 import {expandEdges} from '../shared/router.js';
 import {mapPaths,insertControlPoint} from '../shared/map-geometry.js';
@@ -6,16 +7,16 @@ import {mapStationLayout,showStationLabel,stationLabelOffset} from '../shared/ma
 import {stationAppearance,labelDirection,stationDefaultType} from '../shared/station-symbol.js';
 
 function bounds(stations,edges=[]){const p=[...Object.values(stations).map(s=>s.position),...edges.flatMap(e=>e.points||[])];if(!p.length)return{x:0,y:0,w:1000,h:800};const xs=p.map(v=>v.x),ys=p.map(v=>v.y),x=Math.min(...xs)-90,y=Math.min(...ys)-90;return{x,y,w:Math.max(400,Math.max(...xs)-x+90),h:Math.max(300,Math.max(...ys)-y+90)};}
-export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options,onViewportChange,stationWarnings=[]}){
+export default function NetworkMap({data,result,lang,t,from,to,activeField,onActiveFieldChange,onSelect,editable=false,setData,selected,onSelectEdge,options,onViewportChange,stationWarnings=[],focusRequest}){
   const [zoom,setZoom]=useState(1),[pan,setPan]=useState({x:0,y:0}),[lineFilter,setLineFilter]=useState(''),[labels,setLabels]=useState(false),[hover,setHover]=useState(null);
   const [addingPoint,setAddingPoint]=useState(false);
   const [fitRevision,setFitRevision]=useState(0),[fitRoute,setFitRoute]=useState(false);
   const svgRef=useRef(),gesture=useRef(null),pointers=useRef(new Map()),maxZoom=editable?128:32;
   useEffect(()=>{setZoom(1);setPan({x:0,y:0});setLineFilter('');},[data.id]);
   const enabled=useMemo(()=>{try{return new Set(expandEdges(data,options).map(e=>e.sourceEdgeId));}catch{return new Set();}},[data.edges,data.options,options]);
-  const edges=useMemo(()=>data.edges.filter(e=>e.kind!=='transfer'&&(editable||enabled.has(e.id))&&(!lineFilter||(e.displayLineId||e.lineId)===lineFilter)),[data.edges,enabled,lineFilter,editable]);
+  const edges=useMemo(()=>data.edges.filter(e=>e.kind!=='transfer'&&(editable||enabled.has(e.id))&&(!lineFilter||(e.displayLineId||e.lineId)===lineFilter||editable&&focusRequest?.tab==='edges'&&e.id===focusRequest.id)),[data.edges,enabled,lineFilter,editable,focusRequest]);
   const stationIds=useMemo(()=>lineFilter?new Set(edges.flatMap(e=>[e.from,e.to])):null,[lineFilter,edges]);
-  const stations=useMemo(()=>Object.fromEntries(Object.entries(data.stations).filter(([id])=>!stationIds||stationIds.has(id))),[data.stations,stationIds]);
+  const stations=useMemo(()=>Object.fromEntries(Object.entries(data.stations).filter(([id])=>!stationIds||stationIds.has(id)||editable&&focusRequest?.tab==='stations'&&id===focusRequest.id)),[data.stations,stationIds,editable,focusRequest]);
   const routeStations=useMemo(()=>result?.success?Object.fromEntries([...new Set([result.from,result.to,...result.steps.flatMap(s=>[s.from,s.to])])].map(id=>[id,data.stations[id]])):null,[result,data.stations]);
   const base=useMemo(()=>bounds(fitRoute&&routeStations?routeStations:stations,fitRoute&&result?.success?edges.filter(e=>result.steps.some(s=>s.edgeId===e.id)):edges),[data.id,lineFilter,fitRevision,fitRoute,routeStations]);
   const box={x:base.x+base.w/2-base.w/zoom/2+pan.x,y:base.y+base.h/2-base.h/zoom/2+pan.y,w:base.w/zoom,h:base.h/zoom};
@@ -26,6 +27,21 @@ export default function NetworkMap({data,result,lang,t,from,to,activeField,onAct
   const units=Math.max(box.w/size.width,box.h/size.height),highlight=new Set(result?.success?result.steps.map(s=>s.edgeId):[]),pathStations=new Set(result?.success?result.steps.flatMap(s=>[s.from,s.to]):[]);
   const rawPaths=useMemo(()=>mapPaths(data,edges,(data.map?.parallelGap??5)*units,data.map?.cornerRadius??12),[data.stations,edges,units,data.map]);
   const {paths,markers}=useMemo(()=>mapStationLayout(data,edges,rawPaths,units),[data.stations,data.lines,edges,rawPaths,units]);
+  useEffect(()=>{
+    if(!editable||!focusRequest)return;
+    let target,anchor;
+    if(focusRequest.tab==='stations'){
+      const marker=markers.get(focusRequest.id);if(!marker)return;
+      const radius=Math.max(marker.radius||0,marker.halfWidth||0,marker.halfHeight||0,10*units);
+      target={x:marker.x-radius,y:marker.y-radius,w:radius*2,h:radius*2};anchor=marker;
+    }else if(focusRequest.tab==='edges'){
+      const edge=edges.find(e=>e.id===focusRequest.id);if(!edge)return;
+      const path=[...svgRef.current.querySelectorAll('path[data-edge]')].find(p=>p.dataset.edge===edge.id);if(!path)return;
+      const bounds=path.getBBox();target={x:bounds.x,y:bounds.y,w:bounds.width,h:bounds.height};anchor=path.getPointAtLength(path.getTotalLength()/2);
+    }else return;
+    const next=revealBounds(box,target,anchor);
+    if(next.x!==box.x||next.y!==box.y)setPan({x:pan.x+next.x-box.x,y:pan.y+next.y-box.y});
+  },[focusRequest]);
   const selectedEdge=edges.find(e=>e.id===selected?.id&&selected?.tab==='edges');
   const controlPoints=selectedEdge?.points||[];
   const lineList=Object.values(data.lines).filter(l=>!l.interior&&data.edges.some(e=>e.kind==='ride'&&(e.displayLineId||e.lineId)===l.id));

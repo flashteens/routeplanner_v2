@@ -312,5 +312,13 @@
   "batchUnknownStation": "A station was not found. Check the departure and destination numbers.",
   "batchEndpointError": "Check that the line or transfer point exists. Rides and walks need different departure and destination stations.",
   "batchLanguageError": "Multilingual text needs language/text pairs, for example {\"zh\":\"往河岸\",\"en\":\"To River\"}.",
-  "batchConditionError": "Check the conditional-time list, options and seconds. See the field help in the regular editor."
+  "batchConditionError": "Check the conditional-time list, options and seconds. See the field help in the regular editor.",
+  "creatingConnection": "Creating a connection",
+  "repairingConnection": "Connection edits are incomplete",
+  "connectionDraftHint": "Complete the stations or transfer endpoints. You can edit other fields meanwhile. Valid, complete changes are applied automatically. Incomplete changes stay out of the map and JSON and can be cancelled.",
+  "finishConnection": "Complete this connection or cancel its pending changes before continuing.",
+  "cancelConnection": "Cancel new connection",
+  "viewStationTransfers": "View station transfers",
+  "addStationTransfers": "Add station transfers",
+  "backToStation": "Back to station"
 }

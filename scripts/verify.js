@@ -10,6 +10,7 @@ import {verifyImprovements} from './verify-improvements.js';
 import {verifyMapRendering} from './verify-map-rendering.js';
 import {verifyBlankEditor} from './verify-blank-editor.js';
 import {verifyEditorDirections} from './verify-editor-directions.js';
+import {verifyEditorRepairs} from './verify-editor-repairs.js';
 import {verifyEditorBatch} from './verify-editor-batch.js';
 import {verifyEditorUpgrades} from './verify-editor-upgrades.js';
 import {verifyFieldHelp} from './verify-field-help.js';
@@ -360,6 +361,7 @@ try{
     await verifyFieldHelp(browser,origin,root);
     await verifyEditorUpgrades(browser,origin,root);
     await verifyEditorBatch(browser,origin,root);
+    await verifyEditorRepairs(browser,origin,root);
     await checkOld();
   }
 }catch(error){console.error(error);if(log)console.error(log);process.exitCode=1;}
