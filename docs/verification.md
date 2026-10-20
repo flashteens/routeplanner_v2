@@ -192,3 +192,16 @@ Service worker 更新至 `ftmc-v2-15`，避免 revert 暫時回到舊快取版�
 四套 V2 路線資料、警示待處理項目及 V1 檔案均未修改，不新增 JSON 欄位。Service worker 更新至 `ftmc-v2-19`。僅本機修改與 FlashTeens 本機提交，不 push。
 
 `npm run build`、116 項單元測試與完整 `npm run verify` 均通過；65 個 V1 檔案符合唯讀雜湊基準。既有批次編輯、離線、方向文字、轉乘圖、站點／路線 rendering 與手機手勢回歸檢查全部通過。
+
+
+## Shared AI Context and Public V2 Verification (2026-10-21)
+
+- Added `AGENTS.md`, a shared `.agents/README.md`, seven domain-rule files, a decision index, and four accepted decision records. The 14 context Markdown files use English and include code-quality requirements, structural boundaries, and bounded pre-change architecture checkpoints. Relative links and required sections were checked. Decision records distinguish current contracts from historical implementations and rejected alternatives.
+- `.gitignore` now allows only the shared context entry/rules/decision Markdown paths while continuing to ignore local skills, lock metadata, personal context, and tool caches. No private V1 code or workstation-specific prerequisite was added to shared context.
+- Contributor identity is contributor-specific; the originating owner session still uses FlashTeens. Local-only changes/commits and no unauthorized push/deployment remain the workflow. Runtime packages and the Node/Docker paths are unchanged.
+- To make the public-V2 requirement executable, `scripts/verification-context.js` selects the optional legacy file audit. Missing default V1 input now skips only that final audit with an explicit coverage statement; full V2 browser/API/offline/editor checks still run. `--skip-legacy` selects V2-only verification; `--require-legacy` or an explicit `LEGACY_ROOT` requires an available directory unless explicitly skipped. Conflicting flags and explicitly unavailable required sources fail. Existing V1 parity cases remain separate and unchanged.
+- Added four audit-mode tests. With no V1 configured: `npm test` reported 120 total, 112 passed, 8 optional V1 comparisons skipped, 0 failed. With the read-only V1 checkout configured: 120 passed, 0 skipped, 0 failed. These counts are this run's evidence, not permanent requirements.
+- `npm run build` passed. Default `npm run verify` without a V1 checkout passed all V2 browser/API/mobile/offline/editor scenarios and explicitly skipped the unavailable V1 file audit. `--api-only --skip-legacy` also passed with an intentionally unavailable configured V1 path. A separate `--api-only --require-legacy` run with the real read-only checkout passed API/HTML checks and all 65 protected legacy hashes.
+- README distance-display rows were aligned with the author's existing disabled RoFT distance flags. Historical stored-slope and migration descriptions now point to current rules. Network JSON, application/runtime behavior, schema, private V1 source, and existing hash baselines were not changed.
+- Inspection also found the pre-existing exact-string service-worker revision replacement mismatch between `server/index.js` and the manually incremented `public/sw.js` version. The offline rules document that cache-version inspection is required; this task did not claim to fix that separate runtime issue.
+- No Docker image build or deployment was performed. This work is a local commit only; no push.

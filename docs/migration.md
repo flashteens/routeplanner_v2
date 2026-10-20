@@ -52,3 +52,13 @@ Preview 資料夾未從正式入口連入，但使用者明確要求遷移，因
 新路由使用 heap 的 Dijkstra，節點包含站別、路線方向與是否已行經路段。查詢 comparator 為 JSON 中的非負權重及依序比較規則，不使用 eval。各系統保留自己的平手排序規則。
 
 `tests/routing.test.js` 檢查所有 UI 支援選項下展開的邊集合與舊版相同，再用明確案例及固定抽樣站對，比對所有查詢模式的可達性與總時間。`docs/legacy-hashes.json` 保存首次實作前全部舊檔 SHA-256；`npm run verify` 逐檔檢查舊專案保持唯讀。
+
+
+## Current Contract Note (2026-10-20)
+
+- This document records migration history. Current agent rules are in [AGENTS.md](../AGENTS.md) and [.agents/](../.agents/README.md); current schema behavior is in [data-format.md](data-format.md).
+- The historical stored-slope representation above has been superseded for current exports by `delayWhenUnfamiliar` and the shared familiarity formula. Old downloaded slopes remain readable for compatibility.
+- Only V2 is public. Private V1 source is optional extra verification evidence and is not a runtime or public-contribution prerequisite. V2 fixture tests and browser/API/editor/offline verification remain usable without it.
+- `npm run verify -- --skip-legacy` explicitly runs V2-only verification. An absent default V1 directory is reported as an optional skipped audit; `--require-legacy` or an explicit `LEGACY_ROOT` enables strict source availability checking unless explicitly skipped.
+- Migration reconstructs data and may overwrite later author edits to networks, catalog, and layout. It is not an installation/build step or an automatic way to refresh the published maps.
+- Legacy hash baselines have narrowly documented updates for independently committed author changes predating later tasks. Such records do not authorize altering private files or refreshing hashes to conceal a write.

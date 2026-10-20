@@ -24,8 +24,8 @@ npm start
 
 | 系統 | 網址 | 顯示里程 | 顯示票價 |
 | --- | --- | --- | --- |
-| FTMC（預設） | `/?conf=ftmc` | 是 | 否 |
-| FTMC Preview | `/?conf=ftmc_preview` | 是 | 否 |
+| FTMC（預設） | `/?conf=ftmc` | 否 | 否 |
+| FTMC Preview | `/?conf=ftmc_preview` | 否 | 否 |
 | TRTC | `/?conf=trtc` | 否 | 是 |
 | Newisle | `/?conf=newisle` | 是 | 否 |
 
@@ -100,7 +100,7 @@ PLAYWRIGHT_BROWSERS_PATH="$PWD/.browser-cache" npx playwright install chromium -
 npm run verify
 ```
 
-`npm test` 比對所有支援選項下未修改的舊版路段、時間、方向與抽樣查詢條件；RoFT 已修正路線則驗證北環順序、同月台換車、YYL 合併、B1 下車限制、線形及編輯預設值；另驗證座標搜尋、站名、票價及參數。`npm run verify` 啟動獨立的本機服務，驗證 API / HTML 與瀏覽器互動、離線功能、單一系統快取及 JSON 編輯。瀏覽器截圖寫入 `test-results/`，最後比對所有舊版檔案 SHA-256。只驗證 API 可用 `npm run verify -- --api-only`。
+`npm test` 比對所有支援選項下未修改的舊版路段、時間、方向與抽樣查詢條件；RoFT 已修正路線則驗證北環順序、同月台換車、YYL 合併、B1 下車限制、線形及編輯預設值；另驗證座標搜尋、站名、票價及參數。`npm run verify` 啟動獨立的本機服務，驗證 API / HTML 與瀏覽器互動、離線功能、單一系統快取及 JSON 編輯。瀏覽器截圖寫入 `test-results/`，若有可用的舊專案，最後另比對舊版檔案 SHA-256；未提供時明確略過這項額外稽核，V2 檢查仍完整執行。只驗證 API 可用 `npm run verify -- --api-only`。
 
 部署或 CI 請先 build。瀏覽器截圖需要測試環境提供中日文字型；WSL 的驗證腳本會自動以唯讀方式使用主機既有的微軟正黑體與 Meiryo，不複製或發布字型。Playwright 與 browser cache 只供開發驗證，不是正式執行需求。
 
@@ -131,3 +131,31 @@ LEGACY_ROOT=../routeplanner_old_copy/htdocs/mcsubwaymap npm run verify
 編輯器支援車站與路段 CSV 批次修改：先預覽所有新增／修改／刪除，再確認套用為一組可復原操作；新增站會參考附近遊戲座標估算圖中位置。清單不包含完整地圖資料，備份請下載 JSON。地圖上的警示與頁尾清單協助找出尚未完成的車站連接，僅編輯器可見。
 
 選取路段後新增可延續上一段設定（不複製轉折點），未完成的起訖站／轉乘目標先保留為草稿，補齊後才加入地圖及 JSON。車站與轉乘圖可快速往返；清單選取會平移地圖到項目位置，保留縮放。批次新站位置推估採水平 XZ 的局部線性換算，不使用遊戲高度。
+
+
+## Contributor and AI Context
+
+Read [AGENTS.md](AGENTS.md) and the [shared context index](.agents/README.md) before changing architecture or domain behavior. These documents separate current rules from historical migration/verification records and record rejected approaches. Local skill installations and personal agent settings remain ignored.
+
+Only V2 is public. Private V1 files are not required to build, run, or verify V2-owned behavior:
+
+```sh
+npm ci
+npm test
+npm run build
+PLAYWRIGHT_BROWSERS_PATH="$PWD/.browser-cache" npx playwright install chromium --only-shell
+npm run verify -- --skip-legacy
+```
+
+`npm test` reports V1-only comparisons as skipped when the legacy directory is absent; all V2 fixture tests still run. Browser/API integration checks complement independent routing fixtures; they do not replace them. `--skip-legacy` skips only the optional V1 file audit, not V2 browser/API/offline/editor checks. Default `npm run verify` also supports an absent default V1 checkout and reports its missing audit explicitly.
+
+For additional private-source comparisons, configure a read-only V1 checkout:
+
+```sh
+LEGACY_ROOT=/path/to/private/v1 npm test
+LEGACY_ROOT=/path/to/private/v1 npm run verify -- --require-legacy
+```
+
+An explicitly configured but unavailable legacy directory fails `npm run verify` unless `--skip-legacy` is selected. A present but incomplete or changed V1 checkout is not silently accepted. `--require-legacy` and `--skip-legacy` cannot be combined. `--api-only` remains an API/HTML subset and is not full UI verification.
+
+Use local changes and local commits; do not push or deploy without explicit task-specific authorization. Use the actual contributor's approved Git identity, not another contributor's pseudonym by default. Migration and the historical locale generator can overwrite hand-maintained content; inspect their coverage and output diff before any authorized regeneration.

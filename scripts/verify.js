@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
 import crypto from 'node:crypto';
+import {legacyAuditMode} from './verification-context.js';
 import {root,oldRoot} from './legacy.js';
 import {findRoute} from '../shared/router.js';
 import {validateNetwork} from '../shared/network.js';
@@ -19,12 +20,14 @@ import {nextEdgeId} from '../shared/editor-defaults.js';
 import {stationAppearance,labelDirection} from '../shared/station-symbol.js';
 
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= path.join(root,'.browser-cache');
+const legacyAudit=legacyAuditMode({directory:oldRoot,explicit:Boolean(process.env.LEGACY_ROOT),skip:process.argv.includes('--skip-legacy'),required:process.argv.includes('--require-legacy')});
 const port=Number(process.env.VERIFY_PORT || 3030),origin=`http://127.0.0.1:${port}`;
 const server=spawn(process.execPath,['server/index.js'],{cwd:root,env:{...process.env,PORT:String(port),HOST:'127.0.0.1',NODE_ENV:'production'},stdio:['ignore','pipe','pipe']});
 let log='';server.stdout.on('data',chunk=>log+=chunk);server.stderr.on('data',chunk=>log+=chunk);
 let browser;
 const errors=[];
 async function checkOld(){
+  if(!legacyAudit.enabled){console.log(`Selected V2 checks completed; skipped optional V1 file audit (${legacyAudit.reason}).`);return;}
   // Git metadata can change between machines; preserve the original website hashes.
   const hashes=JSON.parse(await fs.readFile(root+'docs/legacy-hashes.json','utf8')).filter(item=>!item.file.startsWith('.git/'));
   for(const item of hashes){const actual=crypto.createHash('sha256').update(await fs.readFile(path.join(oldRoot,item.file))).digest('hex');assert.equal(actual,item.sha256,`Legacy file changed: ${item.file}`);}

@@ -5,5 +5,13 @@ test-results/
 *.log
 .npm-cache/
 .browser-cache/
-.agents/
+# Shared agent rules are versioned; tools and personal context remain local.
+.agents/*
+!.agents/README.md
+!.agents/rules/
+!.agents/decisions/
+.agents/rules/*
+!.agents/rules/*.md
+.agents/decisions/*
+!.agents/decisions/*.md
 skills-lock.json
